@@ -1,0 +1,12 @@
+title: My Blog
+description: Notes on code, tools, and experiments
+theme: minima
+url: "https://yourname.github.io"
+baseurl: ""
+
+plugins:
+  - jekyll-feed
+
+header_pages:
+  - about.md
+  - tags.md

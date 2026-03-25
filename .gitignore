@@ -1,0 +1,8 @@
+.tmp/*
+!.tmp/
+!.tmp/.gitkeep
+.bundle/
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
