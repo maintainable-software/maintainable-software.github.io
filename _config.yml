@@ -1,7 +1,7 @@
-title: My Blog
-description: Notes on code, tools, and experiments
+title: Jan-Gerke's Blog
+description: Notes on docs-first product development, AI-assisted engineering, and software design.
 theme: minima
-url: "https://yourname.github.io"
+url: "https://mohammer5.github.io"
 baseurl: ""
 
 plugins:
