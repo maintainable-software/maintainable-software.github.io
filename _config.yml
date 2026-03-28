@@ -1,8 +1,11 @@
-title: Jan-Gerke's Blog
+title: maintainable.software
 description: Notes on docs-first product development, AI-assisted engineering, and software design.
 theme: minima
 url: "https://mohammer5.github.io"
 baseurl: ""
+author:
+  name: "Jan-Gerke Salomon"
+  url: "/me/"
 
 plugins:
   - jekyll-feed

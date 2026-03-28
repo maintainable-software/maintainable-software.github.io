@@ -19,7 +19,7 @@
         </a>
 
         <nav class="site-nav" aria-label="Main navigation">
-          <a href="{{ '/' | relative_url }}" {% if page.url == '/' %}aria-current="page"{% endif %}>Posts</a>
+          <a href="{{ '/posts/' | relative_url }}" {% if page.url == '/posts/' %}aria-current="page"{% endif %}>Posts</a>
           {% for path in site.header_pages %}
             {% assign nav_page = site.pages | where: "path", path | first %}
             {% if nav_page and nav_page.title != 'Tags' %}
@@ -35,6 +35,9 @@
     </main>
 
     <footer class="site-footer">
+      <div class="site-footer__inner">
+        <a href="{{ '/imprint' | relative_url }}">Imprint</a>
+      </div>
     </footer>
   </body>
 </html>

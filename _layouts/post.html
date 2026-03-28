@@ -9,7 +9,7 @@ layout: default
       <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
         {{ page.date | date: "%-d %b, %Y" }}
       </time>
-      <span>{{ content | number_of_words | divided_by: 180 | plus: 1 }} min read</span>
+      <span class="post-meta__author"><a href="{{ '/me/' | relative_url }}" rel="author">Jan-Gerke Salomon</a></span>
     </p>
 
     {% if page.tags %}

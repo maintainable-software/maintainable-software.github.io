@@ -1,21 +1,19 @@
 ---
 layout: page
-title: About me
+title: About
 permalink: /about/
 ---
 
-This blog is where I write about product development, software design, and working with AI without turning either the product or the process into hand-wavy abstraction.
+## Who am I?
 
-The topics are mostly practical:
+I am Jan-Gerke Salomon, a software engineer with 15 years of experience under his belt. I mainly focus on how to maintain high quality in software projects from beginning to end, both in terms of the process itself and in terms of software and code quality.
 
-- docs-first product development
-- semantics before implementation
-- workflow contracts for AI-assisted work
-- verification, handover, and continuity in engineering systems
-- building tools that stay inspectable instead of becoming clever too early
+What matters most to me is that, independing on the topic, the context always stays in view and a holistic approach is applied, so that not only the engineer's perspective is considered, but also the business perspective and the human being.
 
-I am less interested in AI as a magic generator than in AI as a serious copilot for product and systems work. That means I care about clear definitions, explicit boundaries, and decisions that can survive a fresh session, a repo handover, or a difficult implementation phase.
+## What is this blog about?
 
-So this will not be a blog of generic productivity claims. I want to write about concrete methods: how to define the decision surface before coding, how to make repositories easier for humans and agents to navigate, how to keep abstractions thin, and how to verify what a system can actually claim.
+Agentic engineering is on the rise, but it's such a new topic that high quality information is rare while the internet is already full of anti-patterns disguised as advice.
+On this blog I share how I use AI, the approaches I think are good and/or bad and how to tackle agentic engineering in such a way that the result is a maintainable and resilient software.
+I am less interested in AI as a magic code generator, but as a serious copilot for product and systems work.
 
-If a pattern shows up repeatedly in my work, I want to make it explicit here.
+The goal is to provide deep insight, convey in-depth understanding and the capability to apply advanced topics and approaches to any codebase.
