@@ -1,3 +1,12 @@
+import { buildPageMetadata } from "@/lib/siteMetadata";
+
+export const metadata = buildPageMetadata({
+  title: "Imprint and legal information | maintainable.software",
+  description:
+    "Legal notice and contact details for maintainable.software and Jan-Gerke Salomon.",
+  path: "/imprint/"
+});
+
 export default function ImprintPage() {
   return (
     <article className="content-shell page-shell">

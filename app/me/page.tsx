@@ -1,4 +1,12 @@
 import styles from "./page.module.css";
+import { buildPageMetadata } from "@/lib/siteMetadata";
+
+export const metadata = buildPageMetadata({
+  title: "Jan-Gerke Salomon | maintainable.software",
+  description:
+    "Profile of Jan-Gerke Salomon, an independent software engineer focused on agentic engineering, software architecture, and maintainable full-stack delivery.",
+  path: "/me/"
+});
 
 const overviewColumns = [
   [

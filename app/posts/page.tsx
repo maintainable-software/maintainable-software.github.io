@@ -1,5 +1,13 @@
 import Link from "next/link";
 import { getAllPosts } from "@/lib/posts";
+import { buildPageMetadata } from "@/lib/siteMetadata";
+
+export const metadata = buildPageMetadata({
+  title: "All posts | maintainable.software",
+  description:
+    "Browse published essays on agentic engineering, software architecture, docs-first product development, and maintainable delivery.",
+  path: "/posts/"
+});
 
 export default function PostsPage() {
   const posts = getAllPosts();

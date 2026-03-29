@@ -1,3 +1,12 @@
+import { buildPageMetadata } from "@/lib/siteMetadata";
+
+export const metadata = buildPageMetadata({
+  title: "About maintainable.software",
+  description:
+    "What maintainable.software covers: agentic engineering, AI-assisted software work, and maintainable, resilient systems.",
+  path: "/about/"
+});
+
 export default function AboutPage() {
   return (
     <article className="content-shell page-shell">
