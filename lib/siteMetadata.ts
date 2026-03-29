@@ -1,17 +1,11 @@
 import type { Metadata } from "next";
-
-const SITE_NAME = "maintainable.software";
-const SITE_URL = "https://maintainable.software";
+import { SITE_NAME, toAbsoluteUrl } from "@/lib/site";
 
 type BuildPageMetadataOptions = {
   title: string;
   description: string;
   path: string;
 };
-
-function toAbsoluteUrl(path: string): string {
-  return new URL(path, SITE_URL).toString();
-}
 
 export function buildPageMetadata({
   title,

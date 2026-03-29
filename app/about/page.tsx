@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { buildPageMetadata } from "@/lib/siteMetadata";
 
 export const metadata = buildPageMetadata({
@@ -30,6 +31,14 @@ export default function AboutPage() {
           The goal is to provide deep insight, convey in-depth understanding and
           the capability to apply advanced topics and approaches to any
           codebase.
+        </p>
+
+        <h2>Publication and author</h2>
+        <p>
+          <strong>maintainable.software</strong> is the publication page. The
+          canonical author page lives at <Link href="/me/">/me/</Link>, where
+          Jan-Gerke Salomon&apos;s background, experience, and external profiles are
+          collected in one place.
         </p>
       </div>
     </article>

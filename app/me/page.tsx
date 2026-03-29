@@ -1,3 +1,5 @@
+import { AUTHOR_NAME, AUTHOR_TITLE, SITE_NAME } from "@/lib/site";
+import { buildPersonJsonLd } from "@/lib/structuredData";
 import styles from "./page.module.css";
 import { buildPageMetadata } from "@/lib/siteMetadata";
 
@@ -129,19 +131,30 @@ const profileNotes = [
 ];
 
 export default function MePage() {
+  const personJsonLd = buildPersonJsonLd();
+
   return (
     <article className={styles.page} data-page="me">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(personJsonLd)
+        }}
+      />
+
       <header className={styles.hero}>
-        <p className={styles.kicker}>Independent Software Engineer</p>
-        <h1 className={styles.title}>Jan-Gerke Salomon</h1>
+        <p className={styles.kicker}>
+          {AUTHOR_TITLE} and author of {SITE_NAME}
+        </p>
+        <h1 className={styles.title}>{AUTHOR_NAME}</h1>
         <p className={styles.subtitle}>
           Agentic engineering, software architecture, full-stack delivery, and
           maintainable systems.
         </p>
         <p className={styles.lede}>
-          Independent since 2025, working across databases, backend, APIs, and
-          frontend while using coding agents as leverage for architecture,
-          execution, review, and product-quality work.
+          I write {SITE_NAME} and work independently across databases, backend,
+          APIs, and frontend while using coding agents as leverage for
+          architecture, execution, review, and product-quality work.
         </p>
 
         <ul className={styles.heroFacts}>

@@ -1,13 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import {
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_URL
+} from "@/lib/site";
+import {
+  buildOrganizationJsonLd,
+  buildWebsiteJsonLd
+} from "@/lib/structuredData";
 import "./globals.css";
 import classes from './layout.module.css'
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://maintainable.software"),
-  title: "maintainable.software",
-  description:
-    "Notes on docs-first product development, AI-assisted engineering, and software design."
+  metadataBase: new URL(SITE_URL),
+  title: SITE_NAME,
+  description: SITE_DESCRIPTION
 };
 
 function Header() {
@@ -50,9 +58,24 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const websiteJsonLd = buildWebsiteJsonLd();
+  const organizationJsonLd = buildOrganizationJsonLd();
+
   return (
     <html lang="en">
       <body className="site-shell">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteJsonLd)
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationJsonLd)
+          }}
+        />
         <Header />
 
         <main className="site-main">
