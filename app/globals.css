@@ -366,6 +366,48 @@ h6 {
   color: #666;
 }
 
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.pagination__status,
+.pagination__links,
+.pagination__link {
+  font-family: var(--font-ui);
+}
+
+.pagination__status {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.pagination__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pagination__link {
+  color: var(--link);
+  font-size: 0.92rem;
+  text-decoration: none;
+}
+
+.pagination__link:hover {
+  color: var(--link-hover);
+}
+
+.pagination__link--disabled {
+  color: var(--muted);
+}
+
 .content-shell {
   padding: 10px 0 0;
 }
