@@ -4,6 +4,9 @@ title: "The importance of Context Engineering and Session management"
 header_kicker: "Howto successful Agentic Engineering - Part 3"
 date: 2026-03-28
 published: false
+series_slug: "how-to-succeed-with-agentic-engineering"
+series_title: "How to Succeed with Agentic Engineering"
+series_order: 3
 image: "/assets/images/posts/agentic-engineering-part-3-context-engineering.png"
 tags: []
 ---

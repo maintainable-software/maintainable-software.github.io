@@ -9,6 +9,9 @@ type Frontmatter = {
   date: string | Date;
   updated?: string | Date;
   published?: boolean;
+  series_slug?: string;
+  series_title?: string;
+  series_order?: number;
   tags?: string[];
   teaser?: string;
   header_kicker?: string;
@@ -87,6 +90,28 @@ export function getAllTags(options: GetAllPostsOptions = {}) {
   }
 
   return [...tagMap.entries()].sort(([a], [b]) => a.localeCompare(b));
+}
+
+export function getSeriesPosts(
+  seriesSlug: string,
+  options: GetAllPostsOptions = {}
+) {
+  return getAllPosts(options)
+    .filter((post) => post.series_slug === seriesSlug)
+    .sort((a, b) => {
+      const aOrder = a.series_order ?? Number.MAX_SAFE_INTEGER;
+      const bOrder = b.series_order ?? Number.MAX_SAFE_INTEGER;
+
+      if (aOrder !== bOrder) {
+        return aOrder - bOrder;
+      }
+
+      if (a.date === b.date) {
+        return 0;
+      }
+
+      return a.date < b.date ? -1 : 1;
+    });
 }
 
 export function formatDisplayDate(dateString: string) {

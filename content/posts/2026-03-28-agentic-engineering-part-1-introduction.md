@@ -6,6 +6,9 @@ description: "Introduction to agentic engineering: where AI already helps in sof
 date: 2026-03-28
 updated: 2026-03-29
 published: true
+series_slug: "how-to-succeed-with-agentic-engineering"
+series_title: "How to Succeed with Agentic Engineering"
+series_order: 1
 author: "Jan-Gerke Salomon"
 author_url: "/me/"
 canonical_url: "https://maintainable.software/agentic-engineering-part-1-introduction/"

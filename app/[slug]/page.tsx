@@ -16,6 +16,7 @@ import {
   formatDisplayDate,
   getAllPosts,
   getPostBySlug,
+  getSeriesPosts,
   type Post
 } from "@/lib/posts";
 
@@ -161,6 +162,9 @@ export default async function PostPage({ params }: PageProps) {
     }
   ]);
   const summary = post.excerpt || getPostDescription(post);
+  const seriesPosts = post.series_slug
+    ? getSeriesPosts(post.series_slug, { includeDrafts: true })
+    : [];
   const relatedPosts = getRelatedPosts(post);
 
   return (
@@ -226,7 +230,51 @@ export default async function PostPage({ params }: PageProps) {
         <MarkdownContent content={post.content} />
       </div>
 
-      {relatedPosts.length > 0 ? (
+      {seriesPosts.length > 0 ? (
+        <aside className="post-series" aria-labelledby="post-series-title">
+          <p className="post-series__kicker">Series</p>
+          <h2 id="post-series-title">
+            {post.series_title ?? "Series installments"}
+          </h2>
+          <ol className="post-series__list">
+            {seriesPosts.map((seriesPost) => {
+              const isCurrentPost = seriesPost.slug === post.slug;
+              const isPublished = seriesPost.published === true;
+              const itemLabel = seriesPost.series_order
+                ? `Part ${seriesPost.series_order}`
+                : "Installment";
+              const itemStatus = isCurrentPost
+                ? "Current installment"
+                : isPublished
+                  ? "Published"
+                  : "Coming later";
+
+              return (
+                <li className="post-series__item" key={seriesPost.slug}>
+                  <p className="post-series__part">{itemLabel}</p>
+                  <div className="post-series__body">
+                    <h3>
+                      {isCurrentPost || !isPublished ? (
+                        seriesPost.title
+                      ) : (
+                        <Link href={`/${seriesPost.slug}/`}>
+                          {seriesPost.title}
+                        </Link>
+                      )}
+                    </h3>
+                    <p className="post-series__status">{itemStatus}</p>
+                    {seriesPost.excerpt ? (
+                      <p className="post-series__summary">
+                        {seriesPost.excerpt}
+                      </p>
+                    ) : null}
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+        </aside>
+      ) : relatedPosts.length > 0 ? (
         <aside className="post-related" aria-labelledby="related-posts-title">
           <h2 id="related-posts-title">Related posts</h2>
           <ul className="post-related__list">

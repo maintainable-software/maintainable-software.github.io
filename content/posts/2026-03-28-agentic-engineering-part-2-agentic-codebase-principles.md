@@ -6,6 +6,9 @@ description: "How to design a maintainable agentic codebase: locality, blast rad
 date: 2026-03-28
 updated: 2026-03-29
 published: true
+series_slug: "how-to-succeed-with-agentic-engineering"
+series_title: "How to Succeed with Agentic Engineering"
+series_order: 2
 author: "Jan-Gerke Salomon"
 author_url: "/me/"
 canonical_url: "https://maintainable.software/agentic-engineering-part-2-agentic-codebase-principles/"
