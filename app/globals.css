@@ -375,6 +375,16 @@ h6 {
   border-bottom: 1px solid var(--line);
 }
 
+.post-header {
+  display: grid;
+  gap: 12px;
+}
+
+.post-header .content-header__kicker {
+  margin-bottom: 0;
+  text-align: left;
+}
+
 .content-header__kicker {
   margin: 0 0 12px;
   font-family: var(--font-ui);
@@ -393,6 +403,52 @@ h6 {
   font-size: 2.2rem;
   line-height: 1.3;
   margin-bottom: 8px;
+}
+
+.post-summary {
+  max-width: 52rem;
+  margin: 0;
+  color: var(--text);
+  font-size: 1.08rem;
+  line-height: 1.6;
+}
+
+.post-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 14px 18px;
+  margin: 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.post-fact {
+  margin: 0;
+}
+
+.post-fact dt {
+  margin: 0;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.post-fact dd {
+  margin: 4px 0 0;
+  color: var(--text-strong);
+  font-family: var(--font-ui);
+  font-size: 0.94rem;
+}
+
+.post-fact dd a {
+  color: var(--link);
+}
+
+.post-fact dd a:hover {
+  color: var(--link-hover);
 }
 
 .post-content p {
@@ -445,7 +501,7 @@ h6 {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin: 10px 0 0;
+  margin: 0;
 }
 
 .post-tags a {
@@ -524,6 +580,57 @@ h6 {
   text-decoration: none;
 }
 
+.post-related {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.post-related h2,
+.post-related h3 {
+  font-family: var(--font-ui);
+}
+
+.post-related h2 {
+  margin: 0 0 14px;
+  color: var(--text-strong);
+  font-size: 1.28rem;
+}
+
+.post-related__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.post-related__item {
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+
+.post-related__item:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.post-related__item h3 {
+  margin: 0;
+  font-size: 1.02rem;
+}
+
+.post-related__meta {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: 0.84rem;
+}
+
+.post-related__summary {
+  margin: 8px 0 0;
+  color: #666;
+  max-width: 46rem;
+}
+
 blockquote {
   margin: 1.2rem 0;
   padding-left: 1rem;
@@ -578,5 +685,9 @@ hr {
 
   .site-footer__inner {
     min-height: 40px;
+  }
+
+  .post-facts {
+    grid-template-columns: 1fr;
   }
 }

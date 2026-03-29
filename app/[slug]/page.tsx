@@ -56,6 +56,35 @@ function getImageUrl(post: Post): string | undefined {
   return post.image ? toAbsoluteUrl(post.image) : undefined;
 }
 
+function getRelatedPosts(post: Post): Post[] {
+  const currentTags = new Set(post.tags ?? []);
+  const relatedPosts = getAllPosts()
+    .filter((candidate) => candidate.slug !== post.slug)
+    .map((candidate) => ({
+      post: candidate,
+      sharedTagCount: (candidate.tags ?? []).filter((tag) =>
+        currentTags.has(tag)
+      ).length
+    }))
+    .filter(({ sharedTagCount }) => sharedTagCount > 0)
+    .sort((a, b) => {
+      if (a.sharedTagCount !== b.sharedTagCount) {
+        return b.sharedTagCount - a.sharedTagCount;
+      }
+
+      return a.post.date < b.post.date ? 1 : -1;
+    })
+    .map(({ post: relatedPost }) => relatedPost);
+
+  if (relatedPosts.length > 0) {
+    return relatedPosts.slice(0, 3);
+  }
+
+  return getAllPosts()
+    .filter((candidate) => candidate.slug !== post.slug)
+    .slice(0, 3);
+}
+
 function buildBlogPostingJsonLd(post: Post) {
   const canonicalUrl = getCanonicalUrl(post);
   const description = getPostDescription(post);
@@ -154,6 +183,8 @@ export default async function PostPage({ params }: PageProps) {
   const authorName = getAuthorName(post);
   const authorUrl = post.author_url ?? DEFAULT_AUTHOR_PATH;
   const postJsonLd = buildBlogPostingJsonLd(post);
+  const summary = post.excerpt || getPostDescription(post);
+  const relatedPosts = getRelatedPosts(post);
 
   return (
     <article className="content-shell post-shell post">
@@ -169,14 +200,33 @@ export default async function PostPage({ params }: PageProps) {
           <p className="content-header__kicker">{post.header_kicker}</p>
         ) : null}
         <h1 className="post-title">{post.title}</h1>
-        <p className="post-meta">
-          <time dateTime={post.date}>{formatDisplayDate(post.date)}</time>
-          <span className="post-meta__author">
-            <Link href={authorUrl} rel="author">
-              {authorName}
-            </Link>
-          </span>
-        </p>
+        {summary ? <p className="post-summary">{summary}</p> : null}
+        <dl className="post-facts">
+          <div className="post-fact">
+            <dt>Published</dt>
+            <dd>
+              <time dateTime={post.date}>{formatDisplayDate(post.date)}</time>
+            </dd>
+          </div>
+          {post.updated ? (
+            <div className="post-fact">
+              <dt>Updated</dt>
+              <dd>
+                <time dateTime={post.updated}>
+                  {formatDisplayDate(post.updated)}
+                </time>
+              </dd>
+            </div>
+          ) : null}
+          <div className="post-fact">
+            <dt>Author</dt>
+            <dd>
+              <Link href={authorUrl} rel="author">
+                {authorName}
+              </Link>
+            </dd>
+          </div>
+        </dl>
 
         {post.tags && post.tags.length > 0 ? (
           <p className="post-tags">
@@ -192,6 +242,31 @@ export default async function PostPage({ params }: PageProps) {
       <div className="content-body post-content">
         <MarkdownContent content={post.content} />
       </div>
+
+      {relatedPosts.length > 0 ? (
+        <aside className="post-related" aria-labelledby="related-posts-title">
+          <h2 id="related-posts-title">Related posts</h2>
+          <ul className="post-related__list">
+            {relatedPosts.map((relatedPost) => (
+              <li className="post-related__item" key={relatedPost.slug}>
+                <h3>
+                  <Link href={`/${relatedPost.slug}/`}>{relatedPost.title}</Link>
+                </h3>
+                <p className="post-related__meta">
+                  <time dateTime={relatedPost.date}>
+                    {formatDisplayDate(relatedPost.date)}
+                  </time>
+                </p>
+                {relatedPost.excerpt ? (
+                  <p className="post-related__summary">
+                    {relatedPost.excerpt}
+                  </p>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        </aside>
+      ) : null}
     </article>
   );
 }

@@ -14,6 +14,20 @@ tags: [agentic-engineering, coding-agents, software-architecture, maintainabilit
 teaser: With AI writing much larger volumes of code much faster, defects can now propagate through a codebase at a pace that used to require an entire team. The core problem is not that coding agents are incapable; it is that they do not hold the whole system in working memory at once, so they need legible structure, reliable constraints, and feedback loops that let them verify their own work.
 ---
 
+<aside>
+
+This is the second article in a four-part series on agentic engineering.
+
+[Part 1](/agentic-engineering-part-1-introduction/) introduces the three skills and explains why they are different
+
+[Part 2](/agentic-engineering-part-2-agentic-codebase-principles/) focuses on codebase design: the architectural and verification properties that make a repository easier for agents to explore and modify safely
+
+Part 3, on session and context management, is coming later and will cover how to keep only relevant information in play and carry work cleanly across sessions
+
+Part 4, on agent configuration, is coming later and will cover how standing instructions, tools, permissions, and reusable artifacts shape agent behavior before the work begins
+
+</aside>
+
 ## Introduction
 
 With AI writing much larger volumes of code much faster, defects can now propagate through a codebase at a pace that used to require an entire team. The core problem is not that coding agents are incapable; it is that they do not hold the whole system in working memory at once, so they need legible structure, reliable constraints, and feedback loops that let them verify their own work. [[6]](#ref-6) [[7]](#ref-7) [[16]](#ref-16) [[20]](#ref-20)

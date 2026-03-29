@@ -29,9 +29,9 @@ how agentic engineering can be tackled to produce maintainable, inspectable and 
 
 [Part 2](/agentic-engineering-part-2-agentic-codebase-principles/) focuses on codebase design: the architectural and verification properties that make a repository easier for agents to explore and modify safely
 
-Part 3, on session and context management, will be published later and will cover how to keep only relevant information in play and carry work cleanly across sessions
+Part 3, on session and context management, is coming later and will cover how to keep only relevant information in play and carry work cleanly across sessions
 
-Part 4, on agent configuration, will be published later and will cover how standing instructions, tools, permissions, and reusable artifacts shape agent behavior before the work begins
+Part 4, on agent configuration, is coming later and will cover how standing instructions, tools, permissions, and reusable artifacts shape agent behavior before the work begins
 
 </aside>
 
