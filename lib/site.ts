@@ -25,3 +25,6 @@ export function toAbsoluteUrl(pathOrUrl: string): string {
 }
 
 export const AUTHOR_URL = toAbsoluteUrl(AUTHOR_PATH);
+export const WEBSITE_ID = toAbsoluteUrl("/#website");
+export const ORGANIZATION_ID = toAbsoluteUrl("/#organization");
+export const PERSON_ID = toAbsoluteUrl("/me/#author");

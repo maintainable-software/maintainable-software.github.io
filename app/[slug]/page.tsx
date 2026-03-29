@@ -3,16 +3,21 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MarkdownContent } from "@/components/MarkdownContent";
 import {
+  AUTHOR_NAME,
+  AUTHOR_PATH,
+  SITE_NAME,
+  toAbsoluteUrl
+} from "@/lib/site";
+import {
+  buildBlogPostingJsonLd,
+  buildBreadcrumbJsonLd
+} from "@/lib/structuredData";
+import {
   formatDisplayDate,
   getAllPosts,
   getPostBySlug,
   type Post
 } from "@/lib/posts";
-
-const SITE_NAME = "maintainable.software";
-const SITE_URL = "https://maintainable.software";
-const DEFAULT_AUTHOR = "Jan-Gerke Salomon";
-const DEFAULT_AUTHOR_PATH = "/me/";
 
 type PageParams = {
   slug: string;
@@ -21,10 +26,6 @@ type PageParams = {
 type PageProps = {
   params: Promise<PageParams>;
 };
-
-function toAbsoluteUrl(urlOrPath: string): string {
-  return new URL(urlOrPath, SITE_URL).toString();
-}
 
 function getPostOrNotFound(slug: string): Post {
   const post = getPostBySlug(slug);
@@ -45,11 +46,11 @@ function getCanonicalUrl(post: Post): string {
 }
 
 function getAuthorName(post: Post): string {
-  return post.author ?? DEFAULT_AUTHOR;
+  return post.author ?? AUTHOR_NAME;
 }
 
 function getAuthorUrl(post: Post): string {
-  return toAbsoluteUrl(post.author_url ?? DEFAULT_AUTHOR_PATH);
+  return toAbsoluteUrl(post.author_url ?? AUTHOR_PATH);
 }
 
 function getImageUrl(post: Post): string | undefined {
@@ -83,40 +84,6 @@ function getRelatedPosts(post: Post): Post[] {
   return getAllPosts()
     .filter((candidate) => candidate.slug !== post.slug)
     .slice(0, 3);
-}
-
-function buildBlogPostingJsonLd(post: Post) {
-  const canonicalUrl = getCanonicalUrl(post);
-  const description = getPostDescription(post);
-  const authorName = getAuthorName(post);
-  const authorUrl = getAuthorUrl(post);
-  const imageUrl = getImageUrl(post);
-
-  return {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: post.title,
-    description,
-    datePublished: post.date,
-    dateModified: post.updated ?? post.date,
-    author: {
-      "@type": "Person",
-      name: authorName,
-      url: authorUrl
-    },
-    publisher: {
-      "@type": "Organization",
-      name: SITE_NAME,
-      url: SITE_URL
-    },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": canonicalUrl
-    },
-    url: canonicalUrl,
-    image: imageUrl ? [imageUrl] : undefined,
-    keywords: post.tags
-  };
 }
 
 export function generateStaticParams() {
@@ -181,8 +148,18 @@ export default async function PostPage({ params }: PageProps) {
   const { slug } = await params;
   const post = getPostOrNotFound(slug);
   const authorName = getAuthorName(post);
-  const authorUrl = post.author_url ?? DEFAULT_AUTHOR_PATH;
+  const authorUrl = post.author_url ?? AUTHOR_PATH;
   const postJsonLd = buildBlogPostingJsonLd(post);
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    {
+      name: "Home",
+      path: "/"
+    },
+    {
+      name: post.title,
+      path: `/${post.slug}/`
+    }
+  ]);
   const summary = post.excerpt || getPostDescription(post);
   const relatedPosts = getRelatedPosts(post);
 
@@ -192,6 +169,12 @@ export default async function PostPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(postJsonLd)
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd)
         }}
       />
 
