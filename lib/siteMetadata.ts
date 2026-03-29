@@ -34,3 +34,19 @@ export function buildPageMetadata({
     }
   };
 }
+
+export function buildNoIndexPageMetadata(
+  options: BuildPageMetadataOptions
+): Metadata {
+  return {
+    ...buildPageMetadata(options),
+    robots: {
+      index: false,
+      follow: true,
+      googleBot: {
+        index: false,
+        follow: true
+      }
+    }
+  };
+}

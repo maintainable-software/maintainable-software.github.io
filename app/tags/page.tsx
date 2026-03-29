@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { getAllTags } from "@/lib/posts";
-import { buildPageMetadata } from "@/lib/siteMetadata";
+import { buildNoIndexPageMetadata } from "@/lib/siteMetadata";
 
-export const metadata = buildPageMetadata({
+export const metadata = buildNoIndexPageMetadata({
   title: "Topics and tags | maintainable.software",
   description:
     "Browse published posts by topic, including agentic engineering, software architecture, docs-first product development, and software design.",

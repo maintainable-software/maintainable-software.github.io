@@ -1,6 +1,6 @@
-import { buildPageMetadata } from "@/lib/siteMetadata";
+import { buildNoIndexPageMetadata } from "@/lib/siteMetadata";
 
-export const metadata = buildPageMetadata({
+export const metadata = buildNoIndexPageMetadata({
   title: "Imprint and legal information | maintainable.software",
   description:
     "Legal notice and contact details for maintainable.software and Jan-Gerke Salomon.",
