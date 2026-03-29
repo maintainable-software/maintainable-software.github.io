@@ -57,6 +57,7 @@
 
 .footer {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
   width: var(--layout-shell-width, min(var(--max), 100%));
   margin: 0 auto;
@@ -76,6 +77,11 @@
   }
 }
 
+.footerNav {
+  display: flex;
+  align-items: center;
+}
+
 .footerLink {
   flex-shrink: 1;
   text-decoration: none;
@@ -89,4 +95,11 @@
   &:hover {
     text-decoration: underline;
   }
+}
+
+.footerDivider {
+  padding-inline: 4px;
+  line-height: 33px;
+  font-size: 0.82rem;
+  color: var(--layout-shell-nav, var(--text-strong));
 }

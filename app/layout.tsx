@@ -36,7 +36,17 @@ function Header() {
 function Footer() {
   return (
     <footer className={classes.footer}>
-      <Link className={classes.footerLink} href="/imprint/">Imprint</Link>
+      <nav className={classes.footerNav} aria-label="Footer links">
+        <Link className={classes.footerLink} href="/me/">
+          About me
+        </Link>
+        <span className={classes.footerDivider} aria-hidden="true">
+          |
+        </span>
+        <Link className={classes.footerLink} href="/imprint/">
+          Imprint
+        </Link>
+      </nav>
     </footer>
   )
 }
