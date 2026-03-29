@@ -1,29 +1,50 @@
 import styles from "./page.module.css";
 
-const summaryTags = [
-  "15 years of experience",
-  "Independent since 2025",
-  "Full stack: DB, backend, APIs, frontend",
-  "Agentic engineering and architecture",
+const overviewColumns = [
+  [
+    {
+      label: "Current focus",
+      value: "Agentic engineering, software architecture, and maintainable delivery",
+    },
+    {
+      label: "Foundation",
+      value: "15 years in software engineering with deep frontend roots and strong systems judgment",
+    },
+  ],
+  [
+    {
+      label: "Working scope",
+      value: "Independent full-stack work across databases, backend, APIs, and frontend",
+    },
+    {
+      label: "Latest long-term role",
+      value: "DHIS2, University of Oslo through December 2024",
+    },
+  ],
 ];
 
-const snapshotItems = [
+const recentTrajectory = [
   {
-    label: "Primary focus",
-    value: "Agentic engineering, architecture, and maintainable delivery",
+    company: "Independent Software Engineer",
+    role: "Self-employed",
+    dates: "2025 - Present",
+    description:
+      "Working full stack across databases, backend, APIs, and frontend, with growing focus on agentic workflows, architecture, and directing coding agents toward maintainable results.",
   },
   {
-    label: "Current work",
-    value: "Independent full-stack work across databases, backend, APIs, and frontend",
+    company: "DHIS 2, University of Oslo",
+    role: "Senior Frontend Engineer",
+    dates: "2019 - Dec 2024",
+    description:
+      "Open source health platform used in 70+ countries; introduced Cypress, led app rewrites, and improved UI and testing libraries.",
   },
-  {
-    label: "Engineering foundation",
-    value: "15 years in software engineering with deep frontend roots and strong systems judgment",
-  },
-  {
-    label: "Working style",
-    value: "Holistic, context-aware, pragmatic, explicit about tradeoffs",
-  },
+];
+
+const heroFacts = [
+  "15 years of experience",
+  "Independent since 2025",
+  "Full stack across DB, backend, APIs, and frontend",
+  "Deep frontend foundation with strong systems judgment",
 ];
 
 const experienceItems = [
@@ -64,19 +85,32 @@ const strengths = [
   "Thinks about product quality beyond code alone, including communication, knowledge sharing, and agile fundamentals.",
 ];
 
-const toolbox = [
-  "React",
-  "Redux",
-  "RxJS",
-  "Apollo",
-  "react-query",
-  "Cypress",
-  "Jest",
-  "TypeScript",
-  "GraphQL",
-  "Neo4j",
-  "Linux",
-  "NixOS",
+const capabilityGroups = [
+  {
+    label: "Agentic work",
+    items: [
+      "Agentic workflows",
+      "Architecture",
+      "Execution review",
+      "Maintainable delivery",
+    ],
+  },
+  {
+    label: "Full-stack scope",
+    items: ["Databases", "Backend", "APIs", "Frontend"],
+  },
+  {
+    label: "Engineering foundation",
+    items: [
+      "React",
+      "TypeScript",
+      "GraphQL",
+      "Cypress",
+      "Jest",
+      "Linux",
+      "NixOS",
+    ],
+  },
 ];
 
 const profileNotes = [
@@ -88,25 +122,200 @@ const profileNotes = [
 
 export default function MePage() {
   return (
-    <article className={styles.page}>
+    <article className={styles.page} data-page="me">
       <header className={styles.hero}>
-        <section className={styles.introCard} aria-labelledby="me-title">
-          <p className={styles.kicker}>Independent Software Engineer</p>
-          <h1 id="me-title" className={styles.title}>
-            Jan-Gerke Salomon
-          </h1>
-          <p className={styles.subtitle}>
-            Agentic engineering, software architecture, full-stack delivery,
-            and maintainable systems.
-          </p>
+        <p className={styles.kicker}>Independent Software Engineer</p>
+        <h1 className={styles.title}>Jan-Gerke Salomon</h1>
+        <p className={styles.subtitle}>
+          Agentic engineering, software architecture, full-stack delivery, and
+          maintainable systems.
+        </p>
+        <p className={styles.lede}>
+          Independent since 2025, working across databases, backend, APIs, and
+          frontend while using coding agents as leverage for architecture,
+          execution, review, and product-quality work.
+        </p>
 
-          <ul className={styles.tagRow} aria-label="Profile summary">
-            {summaryTags.map((tag) => (
-              <li className={styles.tag} key={tag}>
-                {tag}
-              </li>
+        <ul className={styles.heroFacts}>
+          {heroFacts.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+
+        <ul className={`${styles.linkList} ${styles.heroLinks}`}>
+          <li>
+            <a href="mailto:jgs.salomon+githubpages@gmail.com">Email</a>
+          </li>
+          <li>
+            <a
+              href="https://github.com/Mohammer5"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GitHub
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://www.linkedin.com/in/jan-gerke-salomon/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              LinkedIn
+            </a>
+          </li>
+        </ul>
+      </header>
+
+      <section
+        className={`${styles.overview} ${styles.toneOverview}`}
+        aria-labelledby="overview-title"
+      >
+        <div className={styles.overviewIntro}>
+          <h2 id="overview-title" className={styles.sectionTitle}>
+            Current profile
+          </h2>
+          <p className={styles.sectionIntro}>
+            The short version: current focus, current scope, and proof of
+            seniority.
+          </p>
+        </div>
+
+        <div className={styles.overviewColumns}>
+          {overviewColumns.map((column) => {
+            const [primary, secondary] = column;
+
+            return (
+              <section className={styles.overviewColumn} key={primary.label}>
+                <h3 className={styles.columnLabel}>{primary.label}</h3>
+                <p className={styles.overviewLead}>{primary.value}</p>
+
+                <div className={styles.overviewBlock}>
+                  <p className={styles.overviewMeta}>{secondary.label}</p>
+                  <p className={styles.overviewDetail}>{secondary.value}</p>
+                </div>
+              </section>
+            );
+          })}
+
+          <section
+            className={styles.trajectoryColumn}
+            aria-labelledby="trajectory-title"
+          >
+            <h3 id="trajectory-title" className={styles.columnLabel}>
+              Recent trajectory
+            </h3>
+
+            <ol className={styles.trajectoryList}>
+              {recentTrajectory.map((item) => (
+                <li className={styles.trajectoryItem} key={item.company}>
+                  <p className={styles.trajectoryDates}>{item.dates}</p>
+                  <div className={styles.trajectoryBody}>
+                    <h4>{item.company}</h4>
+                    <p className={styles.trajectoryRole}>{item.role}</p>
+                    <p>{item.description}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </section>
+        </div>
+      </section>
+
+      <section
+        className={`${styles.experienceSection} ${styles.toneExperience}`}
+        aria-labelledby="experience-title"
+      >
+        <div className={styles.sectionHeader}>
+          <h2 id="experience-title" className={styles.sectionTitle}>
+            Selected experience
+          </h2>
+          <p className={styles.sectionIntro}>
+            Frontend-heavy foundation, now applied across full-stack delivery
+            and agentic workflows.
+          </p>
+        </div>
+
+        <ol className={styles.experienceList}>
+          {experienceItems.map((item) => (
+            <li className={styles.experienceItem} key={item.company}>
+              <p className={styles.experienceDates}>{item.dates}</p>
+              <div className={styles.experienceBody}>
+                <h3>{item.company}</h3>
+                <p className={styles.experienceRole}>{item.role}</p>
+                <p>{item.description}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <div className={styles.supportGrid}>
+        <section
+          className={`${styles.supportSection} ${styles.tonePractice}`}
+          aria-labelledby="strengths-title"
+        >
+          <div className={styles.sectionHeader}>
+            <h2 id="strengths-title" className={styles.sectionTitle}>
+              What I optimize for
+            </h2>
+          </div>
+
+          <ul className={styles.bulletList}>
+            {strengths.map((item) => (
+              <li key={item}>{item}</li>
             ))}
           </ul>
+        </section>
+
+        <section
+          className={`${styles.supportSection} ${styles.toneCapability}`}
+          aria-labelledby="capabilities-title"
+        >
+          <div className={styles.sectionHeader}>
+            <h2 id="capabilities-title" className={styles.sectionTitle}>
+              Capabilities
+            </h2>
+          </div>
+
+          <dl className={styles.capabilityList}>
+            {capabilityGroups.map((group) => (
+              <div className={styles.capabilityGroup} key={group.label}>
+                <dt>{group.label}</dt>
+                <dd>{group.items.join(", ")}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      </div>
+
+      <div className={styles.lowerGrid}>
+        <section
+          className={`${styles.supportSection} ${styles.toneBackground}`}
+          aria-labelledby="background-title"
+        >
+          <div className={styles.sectionHeader}>
+            <h2 id="background-title" className={styles.sectionTitle}>
+              Background
+            </h2>
+          </div>
+
+          <ul className={styles.noteList}>
+            {profileNotes.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </section>
+
+        <section
+          className={`${styles.detailSection} ${styles.toneApproach}`}
+          aria-labelledby="approach-title"
+        >
+          <div className={styles.sectionHeader}>
+            <h2 id="approach-title" className={styles.sectionTitle}>
+              Approach
+            </h2>
+          </div>
 
           <div className={styles.copy}>
             <p>
@@ -123,108 +332,6 @@ export default function MePage() {
               also the business perspective and the human being.
             </p>
           </div>
-        </section>
-
-        <aside className={styles.snapshotCard} aria-labelledby="snapshot-title">
-          <div className={styles.cardHeader}>
-            <h2 id="snapshot-title" className={styles.cardTitle}>
-              At a glance
-            </h2>
-            <p className={styles.cardIntro}>
-              Current positioning, strengths, and scope.
-            </p>
-          </div>
-
-          <dl className={styles.snapshotList}>
-            {snapshotItems.map((item) => (
-              <div className={styles.snapshotRow} key={item.label}>
-                <dt>{item.label}</dt>
-                <dd>{item.value}</dd>
-              </div>
-            ))}
-          </dl>
-
-          <ul className={styles.linkList}>
-            <li>
-              <a href="mailto:jgs.salomon+githubpages@gmail.com">Email</a>
-            </li>
-            <li>
-              <a
-                href="https://github.com/Mohammer5"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://www.linkedin.com/in/jan-gerke-salomon/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                LinkedIn
-              </a>
-            </li>
-          </ul>
-        </aside>
-      </header>
-
-      <div className={styles.panelGrid}>
-        <section className={`${styles.card} ${styles.experienceCard}`}>
-          <div className={styles.cardHeader}>
-            <h2 className={styles.cardTitle}>Selected experience</h2>
-            <p className={styles.cardIntro}>
-              Built on a frontend-heavy foundation, now applied across
-              full-stack delivery and agentic workflows.
-            </p>
-          </div>
-
-          <ol className={styles.experienceList}>
-            {experienceItems.map((item) => (
-              <li className={styles.experienceItem} key={item.company}>
-                <div className={styles.experienceHead}>
-                  <h3>{item.company}</h3>
-                  <p>
-                    {item.role} · {item.dates}
-                  </p>
-                </div>
-                <p>{item.description}</p>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        <section className={styles.card}>
-          <div className={styles.cardHeader}>
-            <h2 className={styles.cardTitle}>Why I am effective</h2>
-          </div>
-
-          <ul className={styles.bulletList}>
-            {strengths.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </section>
-
-        <section className={styles.card}>
-          <div className={styles.cardHeader}>
-            <h2 className={styles.cardTitle}>Toolbox and profile notes</h2>
-          </div>
-
-          <ul className={styles.toolboxList}>
-            {toolbox.map((item) => (
-              <li className={styles.toolboxTag} key={item}>
-                {item}
-              </li>
-            ))}
-          </ul>
-
-          <ul className={styles.noteList}>
-            {profileNotes.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
         </section>
       </div>
     </article>

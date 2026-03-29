@@ -47,7 +47,7 @@ The current app publishes every Markdown file under `content/posts/`. That is th
 - Part 3 and Part 4 do not appear anywhere publicly.
 - No internal links point to unpublished pages.
 
-## Phase 2: Add Crawl and Index Controls
+## Phase 2: Add Crawl and Index Controls (done)
 
 ### Why second
 

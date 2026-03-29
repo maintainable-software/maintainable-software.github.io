@@ -160,6 +160,25 @@ body.site-shell {
   line-height: 1.55;
 }
 
+body.site-shell:has([data-page="me"]) {
+  --layout-shell-width: 100%;
+  --layout-shell-padding-inline: max(24px, calc((100vw - 1280px) / 2));
+  --bg: #222222;
+  --text: #d4d7da;
+  --text-strong: #f4efe7;
+  --muted: #8c949a;
+  --line: #3c3c3c;
+  --link: #79b6e3;
+  --link-hover: #d7edf7;
+  --layout-shell-surface: var(--bg);
+  --layout-shell-line: #3c3c3c;
+  --layout-shell-strong: #74b4e4;
+  --layout-shell-brand: #74b4e4;
+  --layout-shell-brand-hover: #ffffff;
+  --layout-shell-nav: #d6dde2;
+  background: var(--bg);
+}
+
 a {
   color: #2a7ae2;
   text-decoration: none;
