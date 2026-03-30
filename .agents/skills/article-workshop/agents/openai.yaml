@@ -1,0 +1,7 @@
+interface:
+  display_name: "Article Workshop"
+  short_description: "Collaborative section-by-section editing"
+  default_prompt: "Use $article-workshop to review this draft section by section and improve it without filler."
+
+policy:
+  allow_implicit_invocation: false
