@@ -66,10 +66,10 @@
   background: var(--layout-shell-surface, transparent);
   border-top: 2px solid var(--layout-shell-line, var(--line));
   border-bottom: 5px solid var(--layout-shell-strong, #424242);
-  /* position: sticky;
+  position: sticky;
   bottom: 0;
   z-index: 10;
-  background: white; */
+  background: white;
 
   @media (max-width: 884px) {
     width: 100%;
