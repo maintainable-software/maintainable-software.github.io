@@ -212,7 +212,13 @@ carries real costs, so the goal is not ideological purity but better trade-offs.
 
 ### Source-code architecture: Domain-oriented top-level modules with vertical slices inside them
 
-<!-- @TODO: Explain what "Domain-oriented top-level modules" architecture is (= Screaming architecture) -->
+Domain-oriented top-level modules mean the first thing you see in `src/`
+reflects business capabilities, not technical layers. The tree should "scream"
+the domain (`billing`, `identity`, `catalog`, `publishing`) rather than
+framework concerns (`controllers`, `services`, `utils`). This is close to
+Screaming Architecture: the structure tells you what the system does before it
+tells you which tools it uses. Technical concerns still exist, but they live
+inside each domain boundary instead of becoming the global organizing principle.
 
 Vertical slices are easy to misunderstand. In the narrow sense used by Jimmy
 Bogard, a slice is not just a business noun like `user` or `billing`. It is a
@@ -281,6 +287,80 @@ to belong to the same concern; loosely coupled modules make the agent’s inferr
 contract more stable because fewer unrelated files silently participate in the
 behavior. [[6]](#ref-6) [[7]](#ref-7)
 
+The most dangerous forms of coupling are the ones that defeat local reasoning. A
+file may look self-contained, yet its behavior depends on conventions, side
+effects, or assumptions defined elsewhere. In practice, the worst offenders are
+not ordinary call relationships but hidden forms of dependency that make changes
+propagate unpredictably. [[25]](#ref-25) [[28]](#ref-28) [[30]](#ref-30)
+
+**Global-state coupling** is one of the most severe forms. A module reads or
+mutates shared process-wide state—configuration registries, caches, feature
+flags, singletons, ambient context, mutable globals—and therefore depends on
+facts that do not appear in its interface. The result is that behavior cannot be
+understood from the module and its direct inputs alone. This is damaging in any
+codebase, but especially in an agentic one: retrieval may surface the file that
+performs the work without surfacing the file that quietly sets the state it
+relies on. [[24]](#ref-24) [[25]](#ref-25) [[19]](#ref-19) [[20]](#ref-20)
+
+**Temporal coupling** is similarly corrosive. Here, correctness depends on
+operations occurring in the right order: initialize this before calling that,
+call `begin` before `commit`, populate a cache before reading from it, attach
+middleware before issuing requests. The dependency is real, but it is encoded in
+sequence rather than in types or explicit contracts. Temporal coupling often
+survives code review because each individual step looks valid in isolation.
+Failures appear only when a caller omits or reorders one of the hidden
+preconditions. [[26]](#ref-26)
+
+**Control coupling** becomes severe when one module passes flags, modes, or
+discriminator values that instruct another module which branch of behavior to
+execute. At small scale this seems harmless; at larger scale it means the caller
+must know too much about the callee’s internal decision structure. A boolean
+like `is_preview` or `skip_validation`, or a mode string like `"fast"` versus
+`"safe"`, often signals that one abstraction is doing several jobs at once. The
+interface stops describing a capability and starts exposing internal policy.
+[[24]](#ref-24) [[29]](#ref-29)
+
+**Semantic coupling through shared conventions** is worse still because it is
+hard to see. Two modules may appear decoupled at the syntax level while
+depending on naming schemes, magic string formats, directory layouts,
+error-message text, undocumented JSON shapes, or implied units and meanings.
+Nothing in the type system or function signature may reveal the dependency, but
+changing the convention still breaks the system. This is one of the most common
+failure modes in generated code, where separate files independently “agree” on a
+format that was never explicitly defined anywhere. [[25]](#ref-25)
+[[30]](#ref-30)
+
+**Content coupling** is the most obviously severe. One module reaches into
+another’s internals, depends on private fields, patches hidden structures, or
+relies on incidental implementation details instead of a published interface.
+This creates brittle software because the client is no longer coupled to
+behavior alone; it is coupled to representation. Even small internal refactors
+become externally breaking changes. If low coupling means clients depend only on
+what a module promises, content coupling is its direct opposite. [[24]](#ref-24)
+
+A related category is **cross-cutting policy coupling**: authorization, logging,
+retries, transactions, validation, or feature-flag decisions spread across many
+modules instead of being centralized behind stable boundaries. This makes the
+“real” behavior of the system emerge from the combination of many files, each
+carrying a fragment of the rule. Such systems are hard to test, hard to change
+safely, and hard to retrieve correctly because no single file states the whole
+policy. [[27]](#ref-27) [[8]](#ref-8)
+
+What makes these forms of coupling especially costly is that they expand the
+hidden context required for correct change. In a healthy design, modifying a
+behavior should require understanding a small, explicit neighborhood of code. In
+a badly coupled design, the true neighborhood is larger than it appears. Humans
+compensate with experience; agents compensate by opening more files. Both become
+less reliable as more of the contract lives offstage. [[25]](#ref-25)
+[[28]](#ref-28) [[30]](#ref-30) [[19]](#ref-19) [[20]](#ref-20)
+
+The practical priority, then, is not to eliminate all dependency. It is to
+eliminate the dependency forms that smuggle knowledge across boundaries: ambient
+state, sequencing requirements, mode flags, unowned conventions, and reliance on
+internals. These are the couplings that most directly destroy cohesion, widen
+change impact, and reduce the quality of reasoning that a codebase permits.
+[[24]](#ref-24) [[25]](#ref-25) [[30]](#ref-30)
+
 The trade-off is that stronger interfaces can increase friction at boundaries. A
 team that aggressively decomposes everything may gain cleaner contracts but lose
 flow through excess coordination.
@@ -295,6 +375,30 @@ concrete: a giant manual, a sprawling abstraction layer, or a maze of special
 cases all crowd out the relevant signal. [[6]](#ref-6) [[7]](#ref-7)
 
 > “You must pick your battles in design.” — Larman
+
+A common source of unnecessary complexity is **premature abstraction**:
+introducing interfaces, wrappers, or generic mechanisms before the underlying
+variation is real. This often feels like prudence, but it can turn one simple
+path into several layers of indirection that every future reader must traverse.
+In practice, an abstraction earns its keep only when it removes repeated change
+or protects a volatility that has actually shown up. [[2]](#ref-2)
+[[24]](#ref-24) [[25]](#ref-25)
+
+Unnecessary complexity also accumulates through **special cases**: feature
+flags, compatibility branches, fallback paths, and one-off exceptions that
+survive long after the original need has passed. Each exception may be locally
+reasonable, yet together they widen the amount of context required to understand
+the normal path. For agents especially, this is costly: every additional branch,
+wrapper, or tool surface competes with the core signal needed to complete the
+task. [[26]](#ref-26) [[7]](#ref-7) [[27]](#ref-27)
+
+For agentic engineering, unnecessary complexity has a direct token cost.
+Abstractions that are harmless for humans in a small codebase become expensive
+when an agent must retrieve, interpret, and reconcile them across many files and
+tool definitions. Simplicity is therefore not only a design preference but a
+context-management strategy: fewer layers, fewer exceptions, and fewer invented
+concepts leave more room for the information that actually determines behavior.
+[[6]](#ref-6) [[7]](#ref-7) [[27]](#ref-27)
 
 That does not mean “never abstract.” It means introducing indirection where it
 protects meaningful variation, not where it merely advertises cleverness. If the
@@ -332,29 +436,117 @@ observable outcomes rather than internal implementation first. It pushes teams
 to define what the system should do in concrete scenarios before they get lost
 in technical details. That matters for agents because evaluation loops only work
 well when the expected behavior is stated in a form the agent can verify.
-[[16]](#ref-16) [[17]](#ref-17)
+[[16]](#ref-16) [[17]](#ref-17) [[31]](#ref-31) [[32]](#ref-32)
 
 BDD also helps reduce prompt ambiguity. Instead of telling an AI coding agent to
 “fix pricing,” you can point it to concrete scenarios, acceptance checks, or
 contract tests that define success without over-specifying the implementation.
-[[10]](#ref-10) [[17]](#ref-17)
+[[10]](#ref-10) [[17]](#ref-17) [[31]](#ref-31)
+
+In agentic engineering, that is the key shift: the engineer does not merely ask
+for code, but supplies the behavior that should be preserved or produced. A good
+BDD scenario tells the agent what counts as success from the outside—what a user
+sees, what a downstream system receives, what a CLI prints, what an API returns,
+or what side effects are allowed. This makes the expected behavior explicit
+instead of forcing the agent to infer it from scattered code, comments, and
+conventions. [[7]](#ref-7) [[17]](#ref-17) [[31]](#ref-31)
+
+This is especially useful for application-critical paths. Checkout flows, signup
+gates, refund handling, entitlement checks, invoicing, access control, or other
+business-critical behavior should be specified in terms of externally observable
+outcomes. For non-UI systems, the same rule applies: a CLI tool can be specified
+by exit codes, stdout/stderr, filesystem changes, or emitted artifacts; a queue
+worker by consumed inputs and produced outputs; an API by its request/response
+contract. For both humans and agents, the behavior is often more important than
+the implementation because the business fails when the observable result is
+wrong, even if the code is elegant. [[10]](#ref-10) [[31]](#ref-31)
+[[32]](#ref-32)
+
+Feature files are useful here because they give agents a compact, legible
+representation of intent. A good scenario names the business rule, sets the
+relevant context, performs one meaningful action, and asserts an observable
+outcome. The point is not to mirror every implementation detail, but to define
+the contract clearly enough that the agent can build, test, and repair against
+it. [[31]](#ref-31) [[33]](#ref-33)
+
+For example, a pricing rule might be expressed as:
+
+```gherkin
+Feature: Promotional pricing
+
+  Scenario: Returning customers receive the renewal discount
+    Given a customer with an active subscription renewal
+    And a renewal discount of 20 percent is configured
+    When the renewal price is calculated
+    Then the final price should include the 20 percent discount
+```
+
+A CLI behavior might be expressed as:
+
+```gherkin
+Feature: Invoice export
+
+  Scenario: Exporting invoices as CSV
+    Given an account with 3 invoices
+    When I run `billing export --format csv`
+    Then the command should exit with code 0
+    And stdout should contain a CSV header row
+    And the exported file should contain 3 invoice rows
+```
+
+An API contract might be expressed as:
+
+```gherkin
+Feature: Entitlement checks
+
+  Scenario: Access is denied without the required entitlement
+    Given a user without the `reports:read` entitlement
+    When the user requests `GET /reports/monthly`
+    Then the response status should be 403
+    And the response body should explain that access is denied
+```
 
 The trade-off is ceremony. When scenarios become rote documentation rather than
-decision-making tools, they add maintenance cost without improving feedback.
+decision-making tools, they add maintenance cost without improving feedback. BDD
+helps most when it captures the behaviors that matter, stays close to observable
+outcomes, and remains tied to executable checks rather than drifting into
+narrative paperwork. [[31]](#ref-31) [[33]](#ref-33)
 
 ### Avoiding premature generalization
+
+Generalization is different from abstraction. An abstraction reduces something
+to its essential form; a generalization consolidates multiple concrete cases
+behind a shared module, interface, configuration surface, or reusable mechanism.
+The risk is not merely that detail gets hidden, but that behaviors which only
+appear similar are forced to live under one shared structure before there is
+enough evidence that they truly belong together. [[1]](#ref-1) [[2]](#ref-2)
+[[34]](#ref-34) [[35]](#ref-35)
 
 Avoiding premature generalization means refusing to introduce shared
 abstractions, flexible configuration layers, or generic building blocks before
 there is enough evidence that the behavior is truly shared. It is usually
-cheaper to extract later than to maintain the wrong abstraction too early.
-[[1]](#ref-1) [[2]](#ref-2)
+cheaper to extract later than to maintain the wrong generalization too early.
+[[1]](#ref-1) [[2]](#ref-2) [[34]](#ref-34) [[36]](#ref-36)
+
+The failure mode is that early consolidation often creates a false common core.
+Code paths that only look alike at first begin to diverge under real use, and
+the shared layer then accumulates flags, branches, and configuration to preserve
+the illusion of uniformity. Instead of reducing complexity, the generalized
+module becomes the place where unrelated variation is forced to coexist.
+[[34]](#ref-34) [[35]](#ref-35)
 
 This matters disproportionately in agentic codebases because speculative
-abstractions expand the search space. An agent confronted with a premature
-“platform” layer has to infer whether the true behavior lives in the feature
-code, the generic framework, the configuration surface, or all three.
-[[6]](#ref-6) [[7]](#ref-7)
+generalization expands the search space and obscures the source of truth. An
+agent confronted with a premature “platform” layer has to infer whether the true
+behavior lives in the feature code, the generic framework, the configuration
+surface, or all three. What looks like reuse to the designer often looks like
+ambiguity to the agent. [[6]](#ref-6) [[7]](#ref-7)
+
+A safer approach is to let duplication survive a little longer while the real
+axes of variation become clear. Once repeated behavior is stable, extraction is
+more likely to produce a shared seam that matches reality instead of a
+generalized layer that has to be constantly patched to fit new cases.
+[[34]](#ref-34) [[35]](#ref-35) [[36]](#ref-36)
 
 When extraction is actually needed, patterns such as branch by abstraction let
 teams move toward a shared seam gradually instead of forcing a big-bang
@@ -369,6 +561,28 @@ change, and verify long before the performance gain is actually needed. For
 agents, this usually manifests as extra caches, specialized execution paths, and
 implicit invariants that are poorly documented and hard to validate locally.
 [[16]](#ref-16) [[17]](#ref-17)
+
+A useful test is whether the performance requirement is explicit enough to be
+checked. A latency ceiling, memory budget, throughput target, or infrastructure
+cost constraint can be measured and enforced; an imagined future bottleneck
+cannot. Premature optimization becomes less likely when performance concerns are
+expressed as budgets and profiling targets rather than as architectural
+folklore. [[37]](#ref-37) [[38]](#ref-38) [[39]](#ref-39)
+
+The main danger is not only extra code, but extra invariants. Caches must stay
+coherent, fast paths must remain behaviorally equivalent to slow paths, pooled
+resources must be released correctly, and concurrent execution paths must
+preserve assumptions that are rarely obvious from the interface. These hidden
+constraints increase the amount of context required for safe change, which makes
+them especially costly in agentic codebases. [[6]](#ref-6) [[7]](#ref-7)
+[[40]](#ref-40)
+
+When performance is truly a first-class requirement, the right response is not
+speculative cleverness but explicit feedback loops: benchmarks, profilers,
+latency SLOs, regression thresholds, and tests for the critical path. That gives
+agents something concrete to optimize against while preserving a codebase whose
+structure still reflects the product rather than a guessed bottleneck.
+[[17]](#ref-17) [[37]](#ref-37) [[38]](#ref-38) [[39]](#ref-39)
 
 That does not rule out performance-first design for real hot paths. It means
 that performance work should be driven by measured constraints and reinforced by
@@ -387,6 +601,25 @@ the repository allows; if the structure permits arbitrary cross-layer edits, the
 architecture is already telling the agent that those edits are acceptable.
 [[6]](#ref-6) [[19]](#ref-19)
 
+Mechanical enforcement turns architectural preference into executable policy.
+Dependency direction, layer isolation, and anti-corruption seams should be
+checked continuously rather than remembered socially. Otherwise the architecture
+exists only as documentation and slowly degrades under normal delivery pressure.
+[[41]](#ref-41) [[42]](#ref-42) [[43]](#ref-43)
+
+This matters even more in agentic environments because agents act inside the
+affordances the repository exposes. If import rules, layer contracts, or cycle
+checks are absent, the codebase is implicitly declaring that cross-boundary
+edits are allowed. Mechanical checks therefore do more than protect architecture
+after the fact; they shape the action space the agent can safely explore.
+[[7]](#ref-7) [[19]](#ref-19) [[44]](#ref-44)
+
+In practice, the goal is not architectural purity for its own sake, but fast
+feedback. A violated dependency rule should fail locally and in CI in the same
+way a failing test does. That makes boundaries cheap to preserve and prevents
+erosion from becoming visible only after the codebase has already drifted.
+[[41]](#ref-41) [[42]](#ref-42) [[43]](#ref-43)
+
 ### Architecture fitness functions
 
 Architecture fitness functions make structural expectations executable. Instead
@@ -396,6 +629,20 @@ appear, or contracts are violated. That turns architectural quality from an
 aspiration into a continuously verified property and gives both humans and
 agents much faster feedback when a change pushes the codebase in the wrong
 direction. [[6]](#ref-6)
+
+Architecture fitness functions are not limited to dependency rules. They can
+also encode performance budgets, resiliency expectations, security constraints,
+naming and packaging conventions, or other structural properties that the system
+must preserve as it evolves. The key idea is that architectural intent becomes a
+set of executable checks rather than a document that only matters when someone
+remembers to read it. [[41]](#ref-41) [[45]](#ref-45) [[46]](#ref-46)
+
+For agentic engineering, this changes the role of the repository. The codebase
+is no longer just source material for generation; it becomes part of the
+feedback harness. A fitness function gives the agent a fast, objective signal
+that a change preserved or violated a system-level property, which is far more
+useful than relying on architecture to survive through prompts, memory, or code
+review alone. [[6]](#ref-6) [[17]](#ref-17) [[44]](#ref-44)
 
 ### Small, targeted verification loops
 
@@ -407,6 +654,28 @@ or workflow can be verified quickly and repeatedly, with broader system tests
 reserved for the places where they are genuinely needed. [[10]](#ref-10)
 [[13]](#ref-13) [[17]](#ref-17)
 
+Small verification loops are valuable not only because they are faster, but
+because they produce tighter diagnosis. When a narrow test fails, the likely
+cause is closer to the change, the rerun cost is lower, and the engineer or
+agent can iterate without dragging unrelated parts of the system into the loop.
+That is one reason healthy test portfolios bias toward smaller tests and use
+broader end-to-end checks more selectively. [[10]](#ref-10) [[47]](#ref-47)
+[[48]](#ref-48)
+
+This also depends on mapping changes to the right validation surface. A
+maintainable codebase should make it obvious which tests cover a given unit,
+slice, contract, or critical workflow so that affected-scope verification can be
+run by default. In agentic engineering, that mapping matters even more: if every
+edit falls back to the same broad suite, the repository is giving the agent slow
+and noisy feedback when it most needs precise signals. [[13]](#ref-13)
+[[17]](#ref-17) [[49]](#ref-49)
+
+The broader principle is to reserve wide integration or end-to-end verification
+for the risks that actually require it: cross-system behavior, infrastructure
+boundaries, or business-critical paths whose correctness cannot be established
+at a smaller scope. Everything else should be pulled down into faster loops
+where possible. [[47]](#ref-47) [[48]](#ref-48)
+
 ### Ownership-aligned boundaries
 
 Boundary quality improves when the conceptual structure of the system lines up
@@ -417,6 +686,29 @@ themselves. The goal is not to fragment the system for its own sake, but to
 decompose it so that the unit of ownership, the unit of change, and the unit of
 understanding reinforce each other instead of pulling apart. [[5]](#ref-5)
 [[21]](#ref-21)
+
+Ownership alignment is also a coordination strategy. When a boundary matches a
+team’s day-to-day responsibility, decisions about naming, documentation,
+interfaces, and change sequencing are more likely to stay consistent inside that
+area. When the boundary and the ownership model diverge, the software may still
+look modular on paper while the real work crosses teams, handoffs, and approval
+paths. That usually means the true cost of change is higher than the structure
+suggests. [[5]](#ref-5) [[21]](#ref-21) [[50]](#ref-50) [[52]](#ref-52)
+
+This is closely related to Conway’s Law: systems tend to mirror the
+communication structure of the organization that builds them. If a supposedly
+bounded part of the system requires constant coordination across unrelated
+owners, the boundary is probably wrong, incomplete, or socially unenforced. In
+that case, the unit of understanding in the code and the unit of collaboration
+in the organization are pulling in different directions. [[50]](#ref-50)
+[[21]](#ref-21)
+
+For agentic engineering, ownership-aligned boundaries improve more than human
+workflow; they improve context quality. A bounded area with clear ownership is
+more likely to have coherent conventions, localized documentation, and a stable
+source of truth, all of which make it easier for an agent to determine where a
+change belongs and what assumptions it must preserve. [[7]](#ref-7)
+[[17]](#ref-17) [[51]](#ref-51)
 
 ## FAQ: maintainable codebases for AI coding agents
 
@@ -533,3 +825,60 @@ neglecting them visible much sooner. [[6]](#ref-6) [[7]](#ref-7) [[16]](#ref-16)
     [Jimmy Bogard, “Vertical Slice Architecture.”](https://www.jimmybogard.com/vertical-slice-architecture/)
 23. <a id="ref-23"></a>
     [Herbert Graca, “Packaging & namespacing.”](https://herbertograca.com/2017/08/31/packaging-code/)
+24. <a id="ref-24"></a>
+    [W. P. Stevens, G. J. Myers, and L. L. Constantine, “Structured Design,” _IBM Systems Journal_, 1974.](https://dl.acm.org/doi/10.1147/sj.132.0115)
+25. <a id="ref-25"></a>
+    [N. Ajienka, A. Capiluppi, and S. Counsell, “Managing Hidden Dependencies in OO Software: A Study Based on Open Source Projects,” _ACM/IEEE International Symposium on Empirical Software Engineering and Measurement (ESEM)_, 2017.](https://doi.org/10.1109/ESEM.2017.21)
+26. <a id="ref-26"></a>
+    [S. Amann, H. A. Nguyen, S. Nadi, T. N. Nguyen, and M. Mezini, “A Systematic Evaluation of Static API-Misuse Detectors,” _IEEE Transactions on Software Engineering_, 2019.](https://www.computer.org/csdl/journal/ts/2019/12/08338426/13rRUzphDzB)
+27. <a id="ref-27"></a>
+    [G. Kiczales et al., “Aspect-Oriented Programming,” _European Conference on Object-Oriented Programming (ECOOP)_, 1997.](https://dl.acm.org/doi/10.1145/263698.263754)
+28. <a id="ref-28"></a>
+    [H. Gall, K. Hajek, and M. Jazayeri, “Detection of Logical Coupling Based on Product Release History,” _International Conference on Software Maintenance (ICSM)_, 1998.](https://plg.uwaterloo.ca/~migod/846/papers/gall-coupling.pdf)
+29. <a id="ref-29"></a>
+    [Martin Fowler, “Flag Argument,” 2011.](https://martinfowler.com/bliki/FlagArgument.html)
+30. <a id="ref-30"></a>
+    [M. Cataldo, A. Mockus, J. A. Roberts, and J. D. Herbsleb, “Software Dependencies, Work Dependencies, and Their Impact on Failures,” _IEEE Transactions on Software Engineering_, 2009.](https://cse.unl.edu/~witty/papers/TSE_2008_11_0361_R1.pdf)
+31. <a id="ref-24"></a> [Cucumber, “BDD.”](https://cucumber.io/docs/bdd/)
+32. <a id="ref-25"></a>
+    [OpenAI Developers, “Testing Agent Skills Systematically with Evals.”](https://developers.openai.com/blog/eval-skills/)
+33. <a id="ref-26"></a>
+    [Cucumber, “Gherkin Reference.”](https://cucumber.io/docs/gherkin/reference/)
+34. <a id="ref-34"></a>
+    [Sandi Metz, “The Wrong Abstraction.”](https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction)
+35. <a id="ref-35"></a>
+    [John Ousterhout, _A Philosophy of Software Design_, 2nd ed., 2021.](https://web.stanford.edu/~ouster/cgi-bin/aposd2ndEdExtract.pdf)
+36. <a id="ref-36"></a>
+    [Kent C. Dodds, “AHA Programming.”](https://kentcdodds.com/blog/aha-programming)
+37. <a id="ref-37"></a>
+    [Donald E. Knuth, “Structured Programming with go to Statements,” _Computing Surveys_, 1974.](https://pic.plover.com/knuth-GOTO.pdf)
+38. <a id="ref-38"></a>
+    [Martin Fowler, “Yet Another Optimization Article,” _IEEE Software_, 2002.](https://www.martinfowler.com/ieeeSoftware/yetOptimization.pdf)
+39. <a id="ref-39"></a>
+    [Katie Hempenius, “Performance Budgets 101.”](https://web.dev/articles/performance-budgets-101)
+40. <a id="ref-40"></a>
+    [Google SRE, “Service Level Objectives.”](https://sre.google/sre-book/service-level-objectives/)
+41. <a id="ref-41"></a>
+    [Neal Ford, Rebecca Parsons, and Patrick Kua, _Building Evolutionary Architectures_, sample chapter.](https://www.thoughtworks.com/content/dam/thoughtworks/documents/books/bk_building_evolutionary_architectures_en.pdf)
+42. <a id="ref-42"></a>
+    [ArchUnit, “User Guide.”](https://www.archunit.org/userguide/html/000_Index.html)
+43. <a id="ref-43"></a>
+    [Import Linter, “Layers.”](https://import-linter.readthedocs.io/en/latest/contract_types/layers/)
+44. <a id="ref-44"></a>
+    [Anthropic, “Harness design for long-running application development.”](https://www.anthropic.com/engineering/harness-design-long-running-apps)
+45. <a id="ref-45"></a>
+    [Thoughtworks Technology Radar, “Architectural fitness function.”](https://www.thoughtworks.com/radar/techniques/architectural-fitness-function)
+46. <a id="ref-46"></a>
+    [Thoughtworks, “Fitness function-driven development.”](https://www.thoughtworks.com/insights/articles/fitness-function-driven-development)
+47. <a id="ref-47"></a>
+    [Martin Fowler, “Test Pyramid.”](https://martinfowler.com/bliki/TestPyramid.html)
+48. <a id="ref-48"></a>
+    [Google Testing Blog, “Just Say No to More End-to-End Tests.”](https://testing.googleblog.com/2015/04/just-say-no-to-more-end-to-end-tests.html)
+49. <a id="ref-49"></a>
+    [Software Engineering at Google, Chapter 12: Unit Testing.](https://abseil.io/resources/swe-book/html/ch12.html)
+50. <a id="ref-50"></a>
+    [Martin Fowler, “Conway’s Law.”](https://martinfowler.com/bliki/ConwaysLaw.html)
+51. <a id="ref-51"></a>
+    [Team Topologies, “Key Concepts.”](https://teamtopologies.com/key-concepts)
+52. <a id="ref-52"></a>
+    [Martin Fowler, “Products Over Projects.”](https://martinfowler.com/articles/products-over-projects.html)
