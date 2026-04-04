@@ -27,7 +27,7 @@ export default function ImprintPage() {
         <p>
           Telefon: +49 176 38636269
           <br />
-          E-Mail: jgs.salomon@gmail.com
+          E-Mail: jgs.salomon@maintainable.software
         </p>
 
         <h2>Umsatzsteuer-ID</h2>

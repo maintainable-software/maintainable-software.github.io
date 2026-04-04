@@ -168,7 +168,7 @@ export default function MePage() {
 
         <ul className={`${styles.linkList} ${styles.heroLinks}`}>
           <li>
-            <a href="mailto:jgs.salomon+githubpages@gmail.com">Email</a>
+            <a href="mailto:jgs.salomon@maintainable.software">Email</a>
           </li>
           <li>
             <a
