@@ -1,13 +1,13 @@
 ---
 layout: post
 title: "How to Design a Maintainable Codebase for AI Coding Agents"
-header_kicker: "Howto successful Agentic Engineering - Part 2"
+header_kicker: "How to Succeed with Agentic Engineering - Part 2"
 description:
-  "Learn how to structure a maintainable codebase for AI coding agents using
-  locality, small blast radius, clear boundaries, navigability, and narrow test
-  loops."
+  "Learn the agentic engineering principles that make a codebase maintainable
+  for AI coding agents: locality, small blast radius, clear boundaries,
+  navigability, repository-local docs, and narrow test loops."
 date: 2026-03-28
-updated: 2026-04-01
+updated: 2026-04-04
 published: true
 series_slug: "how-to-succeed-with-agentic-engineering"
 series_title: "How to Succeed with Agentic Engineering"
@@ -25,19 +25,21 @@ tags:
     maintainability,
   ]
 teaser:
-  Learn how to design a maintainable codebase for AI coding agents. The key
+  Learn how to design a maintainable, AI-agent-friendly codebase. The key
   principles are locality, small blast radius, boundary integrity, navigability,
-  and narrow verification scope, so coding agents can understand, change, and
-  validate software safely.
+  repository-local documentation, and narrow verification scope, so coding
+  agents can understand, change, and validate software safely.
 ---
 
-## Introduction
+## Why codebase design matters for AI coding agents
 
-With AI writing much larger volumes of code much faster, defects can now
-propagate through a codebase at a pace that used to require an entire team. The
-core problem is not that coding agents are incapable; it is that they do not
-hold the whole system in working memory at once, so they need legible structure,
-reliable constraints, and feedback loops that let them verify their own work.
+A maintainable codebase for AI coding agents is one that lets an unfamiliar
+agent find the right context, make a narrow change, and verify that change
+without loading the whole system into working memory. As AI writes much larger
+volumes of code much faster, defects can now propagate through a codebase at a
+pace that used to require an entire team. The core problem is not that coding
+agents are incapable; it is that they need legible structure, reliable
+constraints, and feedback loops that let them verify their own work.
 [[6]](#ref-6) [[7]](#ref-7) [[16]](#ref-16) [[20]](#ref-20)
 
 That shifts the engineering problem. Instead of asking only whether humans can
@@ -50,12 +52,12 @@ drown in a giant undifferentiated prompt. [[6]](#ref-6) [[7]](#ref-7)
 
 > “Give Codex a map, not a 1,000-page instruction manual.” — OpenAI
 
-A maintainable codebase for AI coding agents is one where changes stay local,
-side effects remain contained, boundaries are explicit, the structure is easy to
-navigate, and verification can happen in narrow loops. In practice, that means
-software architecture with strong module boundaries, clear repository-local
-documentation, small blast radius, and fast targeted tests that let both humans
-and coding agents validate changes safely.
+In short, a maintainable codebase for AI coding agents is one where changes stay
+local, side effects remain contained, boundaries are explicit, the structure is
+easy to navigate, and verification can happen in narrow loops. In practice, that
+means software architecture with strong module boundaries, clear
+repository-local documentation, small blast radius, and fast targeted tests that
+let both humans and coding agents validate changes safely.
 
 The approaches below are not the only way to achieve a maintainable codebase.
 The point is to compare design choices by the way they affect a few underlying
@@ -82,6 +84,11 @@ following properties?”
 | **Boundary integrity** | Makes contracts and responsibilities legible                             | Agents infer the wrong contract from local evidence                 |
 | **Navigability**       | Helps an unfamiliar agent find the right files and entry points quickly  | Agents waste context budget exploring irrelevant parts of the repo  |
 | **Rebuild/test scope** | Enables narrow verification loops and fast self-correction               | Every change requires broad builds or slow end-to-end validation    |
+
+A quick diagnostic is simple: can a new coding agent find the relevant behavior,
+change one bounded area, and run the smallest meaningful verification loop
+without guessing? If not, the codebase is asking for more hidden context than an
+agent can reliably hold.
 
 ### Locality
 
@@ -210,7 +217,7 @@ The following approaches are useful not because they are fashionable, but
 because they improve one or more of the characteristics above. Each one also
 carries real costs, so the goal is not ideological purity but better trade-offs.
 
-### Source-code architecture: Domain-oriented top-level modules with vertical slices inside them
+### Domain-oriented modules with vertical slices
 
 Domain-oriented top-level modules mean the first thing you see in `src/`
 reflects business capabilities, not technical layers. The tree should "scream"
@@ -272,7 +279,7 @@ coordination. But for AI-assisted development, the domain-plus-slice hybrid is
 usually safer than either a flat slice list or recursive domain nesting alone.
 [[5]](#ref-5) [[23]](#ref-23)
 
-### Coupling & Cohesion
+### Coupling and cohesion
 
 Coupling and cohesion describe whether code that belongs together actually lives
 together, and whether unrelated things are kept apart. High cohesion means a
@@ -405,7 +412,7 @@ protects meaningful variation, not where it merely advertises cleverness. If the
 abstraction does not reduce the cost of future change, it often raises the cost
 of navigation, testing, and debugging instead. [[2]](#ref-2)
 
-### Docs-driven Agentic Engineering (DEA)
+### Docs-driven agentic engineering (DEA)
 
 Docs-driven Agentic Engineering (DEA) means making semantics, boundaries,
 workflows, and decision-relevant context explicit in durable documentation
@@ -429,7 +436,7 @@ close to code, review them with code changes, and make key architecture and
 workflow documents measurable for freshness or verification status.
 [[6]](#ref-6) [[9]](#ref-9)
 
-### BDD
+### Behavior-driven development (BDD)
 
 BDD, in the broad sense, means describing behavior from the perspective of
 observable outcomes rather than internal implementation first. It pushes teams
@@ -710,7 +717,7 @@ source of truth, all of which make it easier for an agent to determine where a
 change belongs and what assumptions it must preserve. [[7]](#ref-7)
 [[17]](#ref-17) [[49]](#ref-49)
 
-## FAQ: maintainable codebases for AI coding agents
+## FAQ about maintainable codebases for AI coding agents
 
 ### What makes a codebase AI-agent-friendly?
 
