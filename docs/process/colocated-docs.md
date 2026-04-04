@@ -1,7 +1,7 @@
 # Colocated Docs
 
-[co-located docs](../DICTIONARY.md#co-located-docs) are optional Markdown files that live next to one concrete
-source or configuration file.
+[co-located docs](../DICTIONARY.md#co-located-docs) are optional Markdown files
+that live next to one concrete source or configuration file.
 
 Naming convention:
 

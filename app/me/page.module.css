@@ -68,7 +68,8 @@
 .hero {
   gap: 16px;
   padding-bottom: 26px;
-  border-bottom: 2px solid color-mix(in srgb, var(--tone-hero) 26%, var(--line) 74%);
+  border-bottom: 2px solid
+    color-mix(in srgb, var(--tone-hero) 26%, var(--line) 74%);
 }
 
 .kicker {
@@ -165,7 +166,8 @@
 .overview {
   gap: 18px;
   padding-bottom: 28px;
-  border-bottom: 2px solid color-mix(in srgb, var(--tone-overview) 20%, var(--line) 80%);
+  border-bottom: 2px solid
+    color-mix(in srgb, var(--tone-overview) 20%, var(--line) 80%);
 }
 
 .overviewIntro,
@@ -181,11 +183,19 @@
   width: 58px;
   height: 3px;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--section-accent, var(--tone-hero)) 84%, white 16%);
+  background: color-mix(
+    in srgb,
+    var(--section-accent, var(--tone-hero)) 84%,
+    white 16%
+  );
 }
 
 .sectionTitle {
-  color: color-mix(in srgb, var(--section-accent, var(--page-heading)) 76%, var(--page-heading) 24%);
+  color: color-mix(
+    in srgb,
+    var(--section-accent, var(--page-heading)) 76%,
+    var(--page-heading) 24%
+  );
   font-family: var(--font-ui);
   font-size: 1.24rem;
   font-weight: 800;
@@ -194,7 +204,11 @@
 
 .sectionIntro {
   max-width: 44rem;
-  color: color-mix(in srgb, var(--section-accent, var(--page-muted)) 26%, var(--page-muted) 74%);
+  color: color-mix(
+    in srgb,
+    var(--section-accent, var(--page-muted)) 26%,
+    var(--page-muted) 74%
+  );
   font-family: var(--font-ui);
   font-size: 0.96rem;
   line-height: 1.4;
@@ -214,7 +228,8 @@
   gap: 16px;
   min-width: 0;
   padding-top: 16px;
-  border-top: 3px solid color-mix(in srgb, var(--section-accent, var(--line)) 56%, white 44%);
+  border-top: 3px solid
+    color-mix(in srgb, var(--section-accent, var(--line)) 56%, white 44%);
 }
 
 .trajectoryColumn {
@@ -228,7 +243,11 @@
 .experienceRole,
 .trajectoryRole,
 .capabilityGroup dt {
-  color: color-mix(in srgb, var(--section-accent, var(--page-soft)) 72%, var(--page-soft) 28%);
+  color: color-mix(
+    in srgb,
+    var(--section-accent, var(--page-soft)) 72%,
+    var(--page-soft) 28%
+  );
   font-family: var(--font-ui);
   font-size: 0.82rem;
   font-weight: 800;
@@ -251,7 +270,8 @@
   display: grid;
   gap: 6px;
   padding-top: 14px;
-  border-top: 1px solid color-mix(in srgb, var(--section-accent, var(--line)) 18%, var(--line) 82%);
+  border-top: 1px solid
+    color-mix(in srgb, var(--section-accent, var(--line)) 18%, var(--line) 82%);
 }
 
 .overviewDetail {
@@ -276,7 +296,8 @@
 }
 
 .trajectoryItem + .trajectoryItem {
-  border-top: 1px solid color-mix(in srgb, var(--section-accent) 18%, var(--line) 82%);
+  border-top: 1px solid
+    color-mix(in srgb, var(--section-accent) 18%, var(--line) 82%);
 }
 
 .trajectoryBody,
@@ -288,7 +309,8 @@
 
 .trajectoryBody {
   padding-left: 18px;
-  border-left: 2px solid color-mix(in srgb, var(--section-accent) 44%, #2a2a2a 56%);
+  border-left: 2px solid
+    color-mix(in srgb, var(--section-accent) 44%, #2a2a2a 56%);
 }
 
 .trajectoryBody::before,
@@ -304,7 +326,8 @@
   width: 10px;
   height: 10px;
   background: var(--section-accent);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--section-accent) 20%, #222222 80%);
+  box-shadow: 0 0 0 4px
+    color-mix(in srgb, var(--section-accent) 20%, #222222 80%);
 }
 
 .trajectoryBody h4,
@@ -337,12 +360,14 @@
 }
 
 .experienceItem + .experienceItem {
-  border-top: 1px solid color-mix(in srgb, var(--section-accent) 18%, var(--line) 82%);
+  border-top: 1px solid
+    color-mix(in srgb, var(--section-accent) 18%, var(--line) 82%);
 }
 
 .experienceBody {
   padding-left: 24px;
-  border-left: 3px solid color-mix(in srgb, var(--section-accent) 44%, #2a2a2a 56%);
+  border-left: 3px solid
+    color-mix(in srgb, var(--section-accent) 44%, #2a2a2a 56%);
 }
 
 .experienceBody::before {
@@ -351,7 +376,8 @@
   width: 12px;
   height: 12px;
   background: var(--section-accent);
-  box-shadow: 0 0 0 5px color-mix(in srgb, var(--section-accent) 18%, #222222 82%);
+  box-shadow: 0 0 0 5px
+    color-mix(in srgb, var(--section-accent) 18%, #222222 82%);
 }
 
 .experienceBody h3 {
@@ -381,7 +407,8 @@
 .detailSection {
   gap: 16px;
   padding-top: 20px;
-  border-top: 2px solid color-mix(in srgb, var(--section-accent, var(--line)) 20%, var(--line) 80%);
+  border-top: 2px solid
+    color-mix(in srgb, var(--section-accent, var(--line)) 20%, var(--line) 80%);
 }
 
 .bulletList,
@@ -425,7 +452,8 @@
   gap: 18px;
   align-items: start;
   padding-top: 12px;
-  border-top: 1px solid color-mix(in srgb, var(--section-accent, var(--line)) 18%, var(--line) 82%);
+  border-top: 1px solid
+    color-mix(in srgb, var(--section-accent, var(--line)) 18%, var(--line) 82%);
 }
 
 .capabilityGroup:first-child {

@@ -2,22 +2,17 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MarkdownContent } from "@/components/MarkdownContent";
-import {
-  AUTHOR_NAME,
-  AUTHOR_PATH,
-  SITE_NAME,
-  toAbsoluteUrl
-} from "@/lib/site";
+import { AUTHOR_NAME, AUTHOR_PATH, SITE_NAME, toAbsoluteUrl } from "@/lib/site";
 import {
   buildBlogPostingJsonLd,
-  buildBreadcrumbJsonLd
+  buildBreadcrumbJsonLd,
 } from "@/lib/structuredData";
 import {
   formatDisplayDate,
   getAllPosts,
   getPostBySlug,
   getSeriesPosts,
-  type Post
+  type Post,
 } from "@/lib/posts";
 
 type PageParams = {
@@ -65,8 +60,8 @@ function getRelatedPosts(post: Post): Post[] {
     .map((candidate) => ({
       post: candidate,
       sharedTagCount: (candidate.tags ?? []).filter((tag) =>
-        currentTags.has(tag)
-      ).length
+        currentTags.has(tag),
+      ).length,
     }))
     .filter(({ sharedTagCount }) => sharedTagCount > 0)
     .sort((a, b) => {
@@ -91,8 +86,10 @@ export function generateStaticParams() {
   return getAllPosts().map((post) => ({ slug: post.slug }));
 }
 
+export const dynamic = "force-static";
+
 export async function generateMetadata({
-  params
+  params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const post = getPostOrNotFound(slug);
@@ -109,13 +106,13 @@ export async function generateMetadata({
     authors: [
       {
         name: authorName,
-        url: authorUrl
-      }
+        url: authorUrl,
+      },
     ],
     creator: authorName,
     publisher: SITE_NAME,
     alternates: {
-      canonical: canonicalUrl
+      canonical: canonicalUrl,
     },
     openGraph: {
       type: "article",
@@ -131,17 +128,17 @@ export async function generateMetadata({
         ? [
             {
               url: imageUrl,
-              alt: post.title
-            }
+              alt: post.title,
+            },
           ]
-        : undefined
+        : undefined,
     },
     twitter: {
       card: imageUrl ? "summary_large_image" : "summary",
       title: post.title,
       description,
-      images: imageUrl ? [imageUrl] : undefined
-    }
+      images: imageUrl ? [imageUrl] : undefined,
+    },
   };
 }
 
@@ -154,12 +151,12 @@ export default async function PostPage({ params }: PageProps) {
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
     {
       name: "Home",
-      path: "/"
+      path: "/",
     },
     {
       name: post.title,
-      path: `/${post.slug}/`
-    }
+      path: `/${post.slug}/`,
+    },
   ]);
   const summary = post.excerpt || getPostDescription(post);
   const seriesPosts = post.series_slug
@@ -172,13 +169,13 @@ export default async function PostPage({ params }: PageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(postJsonLd)
+          __html: JSON.stringify(postJsonLd),
         }}
       />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbJsonLd)
+          __html: JSON.stringify(breadcrumbJsonLd),
         }}
       />
 
@@ -281,7 +278,9 @@ export default async function PostPage({ params }: PageProps) {
             {relatedPosts.map((relatedPost) => (
               <li className="post-related__item" key={relatedPost.slug}>
                 <h3>
-                  <Link href={`/${relatedPost.slug}/`}>{relatedPost.title}</Link>
+                  <Link href={`/${relatedPost.slug}/`}>
+                    {relatedPost.title}
+                  </Link>
                 </h3>
                 <p className="post-related__meta">
                   <time dateTime={relatedPost.date}>
@@ -289,9 +288,7 @@ export default async function PostPage({ params }: PageProps) {
                   </time>
                 </p>
                 {relatedPost.excerpt ? (
-                  <p className="post-related__summary">
-                    {relatedPost.excerpt}
-                  </p>
+                  <p className="post-related__summary">{relatedPost.excerpt}</p>
                 ) : null}
               </li>
             ))}

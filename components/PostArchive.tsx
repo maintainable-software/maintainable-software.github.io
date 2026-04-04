@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { formatDisplayDate, type Post } from "@/lib/posts";
+import { formatDisplayDate } from "@/lib/date";
+import type { Post } from "@/lib/posts";
 
 type PostArchiveProps = {
   posts: Post[];
@@ -9,14 +10,14 @@ type PostArchiveProps = {
 };
 
 function getPageHref(page: number): string {
-  return page === 1 ? "/" : `/page/${page}/`;
+  return page === 1 ? "/" : `/archive/${page}/`;
 }
 
 export function PostArchive({
   posts,
   currentPage,
   totalPages,
-  showIntro = false
+  showIntro = false,
 }: PostArchiveProps) {
   const previousPageHref =
     currentPage > 1 ? getPageHref(currentPage - 1) : undefined;

@@ -9,8 +9,8 @@ This repository uses an indexed docs system.
 - Path: `docs/README.md`
 - Summary: Human entrypoint for the repository docs tree, explaining what this
   documentation area is for and how to approach it.
-- Read when: You need the mental model for the repository's documentation
-  system rather than just the routing metadata.
+- Read when: You need the mental model for the repository's documentation system
+  rather than just the routing metadata.
 - Tags: docs, overview, mental-model, entrypoint
 
 ### Docs Status

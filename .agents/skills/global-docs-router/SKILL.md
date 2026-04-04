@@ -56,9 +56,9 @@ Use this skill for every substantive prompt before implementation work starts.
 
 ## Canonical References
 
-Read [docs/_index.md](/home/gerkules/development/personal/blog.maintainable.software/docs/_index.md) for the root global docs index.
+Read [docs/\_index.md](/home/gerkules/development/personal/blog.maintainable.software/docs/_index.md) for the root global docs index.
 Read [docs/DICTIONARY.md](/home/gerkules/development/personal/blog.maintainable.software/docs/DICTIONARY.md) when repository terminology matters to the task.
-Read [docs/process/_index.md](/home/gerkules/development/personal/blog.maintainable.software/docs/process/_index.md) for process docs routing.
+Read [docs/process/\_index.md](/home/gerkules/development/personal/blog.maintainable.software/docs/process/_index.md) for process docs routing.
 Read [docs/process/conceptual-simplicity.md](/home/gerkules/development/personal/blog.maintainable.software/docs/process/conceptual-simplicity.md) when the task depends on conceptual boundaries, module responsibilities, or anti-complecting rules.
 Read [docs/process/docs-routing.md](/home/gerkules/development/personal/blog.maintainable.software/docs/process/docs-routing.md) when the repository follows the indexed global docs system.
 Read [docs/process/transitional-docs.md](/home/gerkules/development/personal/blog.maintainable.software/docs/process/transitional-docs.md) when the global docs tree is only partially normalized.

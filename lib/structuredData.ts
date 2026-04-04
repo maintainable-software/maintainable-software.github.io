@@ -12,7 +12,7 @@ import {
   SITE_NAME,
   SITE_URL,
   WEBSITE_ID,
-  toAbsoluteUrl
+  toAbsoluteUrl,
 } from "@/lib/site";
 
 function buildPersonReference() {
@@ -20,7 +20,7 @@ function buildPersonReference() {
     "@type": "Person",
     "@id": PERSON_ID,
     name: AUTHOR_NAME,
-    url: AUTHOR_URL
+    url: AUTHOR_URL,
   };
 }
 
@@ -29,7 +29,7 @@ function buildOrganizationReference() {
     "@type": "Organization",
     "@id": ORGANIZATION_ID,
     name: SITE_NAME,
-    url: SITE_URL
+    url: SITE_URL,
   };
 }
 
@@ -44,7 +44,7 @@ export function buildPersonJsonLd() {
     url: AUTHOR_URL,
     sameAs: AUTHOR_SAME_AS,
     knowsAbout: AUTHOR_KNOWS_ABOUT,
-    mainEntityOfPage: AUTHOR_URL
+    mainEntityOfPage: AUTHOR_URL,
   };
 }
 
@@ -56,7 +56,7 @@ export function buildOrganizationJsonLd() {
     name: SITE_NAME,
     url: SITE_URL,
     description: SITE_DESCRIPTION,
-    founder: buildPersonReference()
+    founder: buildPersonReference(),
   };
 }
 
@@ -70,7 +70,7 @@ export function buildWebsiteJsonLd() {
     description: SITE_DESCRIPTION,
     publisher: buildOrganizationReference(),
     about: AUTHOR_KNOWS_ABOUT,
-    inLanguage: "en"
+    inLanguage: "en",
   };
 }
 
@@ -102,14 +102,14 @@ export function buildBlogPostingJsonLd(post: Post) {
     publisher: buildOrganizationReference(),
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": canonicalUrl
+      "@id": canonicalUrl,
     },
     isPartOf: {
-      "@id": WEBSITE_ID
+      "@id": WEBSITE_ID,
     },
     url: canonicalUrl,
     image: imageUrl ? [imageUrl] : undefined,
-    keywords: post.tags
+    keywords: post.tags,
   };
 }
 
@@ -126,7 +126,7 @@ export function buildBreadcrumbJsonLd(items: BreadcrumbItem[]) {
       "@type": "ListItem",
       position: index + 1,
       name: item.name,
-      item: toAbsoluteUrl(item.path)
-    }))
+      item: toAbsoluteUrl(item.path),
+    })),
   };
 }

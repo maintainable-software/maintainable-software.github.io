@@ -35,12 +35,13 @@ maintained.
 ### Conceptual Simplicity
 
 - Path: `docs/process/conceptual-simplicity.md`
-- Summary: Defines the repository's anti-[complecting](../DICTIONARY.md#complecting)
-  rules for docs structure, terminology boundaries, and system-part
-  responsibilities.
+- Summary: Defines the repository's
+  anti-[complecting](../DICTIONARY.md#complecting) rules for docs structure,
+  terminology boundaries, and system-part responsibilities.
 - Read when: The task affects architecture, [module](../DICTIONARY.md#module)
   boundaries, system decomposition, terminology boundaries, or how docs should
-  be structured to preserve [conceptual simplicity](../DICTIONARY.md#conceptual-simplicity).
+  be structured to preserve
+  [conceptual simplicity](../DICTIONARY.md#conceptual-simplicity).
 - Tags: docs, process, simplicity, complexity, boundaries
 
 ### Docs Routing
@@ -67,8 +68,8 @@ maintained.
 
 - Path: `docs/DICTIONARY.md`
 - Summary: Defines the canonical repository terminology used by this
-  repository's own docs tree, split between product concepts and
-  meta/internal terms.
+  repository's own docs tree, split between product concepts and meta/internal
+  terms.
 - Read when: The task depends on repository terminology, term consistency,
   ambiguous concepts or internal language, or docs changes that introduce,
   rename, redefine, or remove important terms.

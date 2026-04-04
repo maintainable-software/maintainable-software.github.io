@@ -3,8 +3,8 @@
 The repository documentation system separates:
 
 - [global docs](../DICTIONARY.md#global-docs) under `docs/`
-- optional [co-located docs](../DICTIONARY.md#co-located-docs) in `*.docs.md` files next to specific source or
-  configuration files
+- optional [co-located docs](../DICTIONARY.md#co-located-docs) in `*.docs.md`
+  files next to specific source or configuration files
 
 Recommended ownership:
 

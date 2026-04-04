@@ -6,7 +6,7 @@ export const metadata = buildNoIndexPageMetadata({
   title: "Topics and tags | maintainable.software",
   description:
     "Browse published posts by topic, including agentic engineering, software architecture, docs-first product development, and software design.",
-  path: "/tags/"
+  path: "/tags/",
 });
 
 export default function TagsPage() {
@@ -44,7 +44,7 @@ export default function TagsPage() {
                         day: "2-digit",
                         month: "short",
                         year: "numeric",
-                        timeZone: "Asia/Manila"
+                        timeZone: "Asia/Manila",
                       }).format(new Date(post.date))}
                     </small>
                   </li>

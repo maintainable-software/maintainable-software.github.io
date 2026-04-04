@@ -11,8 +11,8 @@ Preferred shape:
 
 Routing rules:
 
-- `docs/_index.md` is the only always-read entry point for [global docs](../DICTIONARY.md#global-docs) when
-  global docs are needed
+- `docs/_index.md` is the only always-read entry point for
+  [global docs](../DICTIONARY.md#global-docs) when global docs are needed
 - area `_index.md` files define local discoverability
 - `README.md` is the human entrypoint for a docs folder and should explain what
   the area is, why it exists, and the core mental model
@@ -38,7 +38,7 @@ Routing rules:
 - if routing or reading reveals a meaningful contradiction or mismatch, it
   should be surfaced clearly even when contradiction-finding was not the user's
   primary request
-- [co-located docs](../DICTIONARY.md#co-located-docs) are not part of the global routing tree and are discovered by
-  adjacency when concrete files are opened
+- [co-located docs](../DICTIONARY.md#co-located-docs) are not part of the global
+  routing tree and are discovered by adjacency when concrete files are opened
 
 This pattern exists to minimize prompt noise while preserving discoverability.

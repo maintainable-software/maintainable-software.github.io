@@ -58,9 +58,9 @@ repository truth that should be reflected in `docs/`.
 
 ## Canonical References
 
-Read [docs/_index.md](/home/gerkules/development/personal/blog.maintainable.software/docs/_index.md) for the root global docs index.
+Read [docs/\_index.md](/home/gerkules/development/personal/blog.maintainable.software/docs/_index.md) for the root global docs index.
 Read [docs/DICTIONARY.md](/home/gerkules/development/personal/blog.maintainable.software/docs/DICTIONARY.md) when repository terminology changes are part of the task.
-Read [docs/process/_index.md](/home/gerkules/development/personal/blog.maintainable.software/docs/process/_index.md) for process docs routing.
+Read [docs/process/\_index.md](/home/gerkules/development/personal/blog.maintainable.software/docs/process/_index.md) for process docs routing.
 Read [docs/process/conceptual-simplicity.md](/home/gerkules/development/personal/blog.maintainable.software/docs/process/conceptual-simplicity.md) when shaping docs around responsibilities, modules, or anti-complecting rules.
 Read [docs/process/docs-system.md](/home/gerkules/development/personal/blog.maintainable.software/docs/process/docs-system.md) for the indexed global docs model.
 Read [docs/process/colocated-docs.md](/home/gerkules/development/personal/blog.maintainable.software/docs/process/colocated-docs.md) to distinguish co-located docs from global docs.

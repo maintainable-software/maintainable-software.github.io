@@ -6,7 +6,7 @@ export const metadata = buildNoIndexPageMetadata({
   title: "All posts | maintainable.software",
   description:
     "Browse published essays on agentic engineering, software architecture, docs-first product development, and maintainable delivery.",
-  path: "/posts/"
+  path: "/posts/",
 });
 
 export default function PostsPage() {

@@ -64,7 +64,7 @@ export function getAllPosts(options: GetAllPostsOptions = {}): Post[] {
         updated: normalizeOptionalDate(frontmatter.updated),
         slug: getSlugFromFilename(fileName),
         content,
-        excerpt: frontmatter.teaser ?? ""
+        excerpt: frontmatter.teaser ?? "",
       };
     })
     .filter((post) => includeDrafts || post.published === true)
@@ -73,7 +73,7 @@ export function getAllPosts(options: GetAllPostsOptions = {}): Post[] {
 
 export function getPostBySlug(
   slug: string,
-  options: GetAllPostsOptions = {}
+  options: GetAllPostsOptions = {},
 ): Post | undefined {
   return getAllPosts(options).find((post) => post.slug === slug);
 }
@@ -94,7 +94,7 @@ export function getAllTags(options: GetAllPostsOptions = {}) {
 
 export function getSeriesPosts(
   seriesSlug: string,
-  options: GetAllPostsOptions = {}
+  options: GetAllPostsOptions = {},
 ) {
   return getAllPosts(options)
     .filter((post) => post.series_slug === seriesSlug)
@@ -119,6 +119,6 @@ export function formatDisplayDate(dateString: string) {
     day: "numeric",
     month: "short",
     year: "numeric",
-    timeZone: "Asia/Manila"
+    timeZone: "Asia/Manila",
   }).format(new Date(dateString));
 }

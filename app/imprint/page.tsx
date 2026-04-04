@@ -4,7 +4,7 @@ export const metadata = buildNoIndexPageMetadata({
   title: "Imprint and legal information | maintainable.software",
   description:
     "Legal notice and contact details for maintainable.software and Jan-Gerke Salomon.",
-  path: "/imprint/"
+  path: "/imprint/",
 });
 
 export default function ImprintPage() {
@@ -39,9 +39,8 @@ export default function ImprintPage() {
 
         <h2>Verbraucherstreitbeilegung/Universalschlichtungsstelle</h2>
         <p>
-          Wir sind nicht bereit oder verpflichtet, an
-          Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle
-          teilzunehmen.
+          Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren
+          vor einer Verbraucherschlichtungsstelle teilzunehmen.
         </p>
       </div>
     </article>

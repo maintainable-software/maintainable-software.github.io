@@ -69,6 +69,6 @@ understanding the repository.
 ## Canonical References
 
 Read [docs/DICTIONARY.md](/home/gerkules/development/personal/blog.maintainable.software/docs/DICTIONARY.md) for the canonical term definitions.
-Read [docs/_index.md](/home/gerkules/development/personal/blog.maintainable.software/docs/_index.md) for root docs routing.
+Read [docs/\_index.md](/home/gerkules/development/personal/blog.maintainable.software/docs/_index.md) for root docs routing.
 Read [docs/process/conceptual-simplicity.md](/home/gerkules/development/personal/blog.maintainable.software/docs/process/conceptual-simplicity.md) when terminology needs to preserve clear conceptual boundaries.
 Read [docs/process/docs-system.md](/home/gerkules/development/personal/blog.maintainable.software/docs/process/docs-system.md) for the repository docs model.

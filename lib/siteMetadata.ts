@@ -10,7 +10,7 @@ type BuildPageMetadataOptions = {
 export function buildPageMetadata({
   title,
   description,
-  path
+  path,
 }: BuildPageMetadataOptions): Metadata {
   const canonicalUrl = toAbsoluteUrl(path);
 
@@ -18,25 +18,25 @@ export function buildPageMetadata({
     title,
     description,
     alternates: {
-      canonical: canonicalUrl
+      canonical: canonicalUrl,
     },
     openGraph: {
       type: "website",
       url: canonicalUrl,
       title,
       description,
-      siteName: SITE_NAME
+      siteName: SITE_NAME,
     },
     twitter: {
       card: "summary",
       title,
-      description
-    }
+      description,
+    },
   };
 }
 
 export function buildNoIndexPageMetadata(
-  options: BuildPageMetadataOptions
+  options: BuildPageMetadataOptions,
 ): Metadata {
   return {
     ...buildPageMetadata(options),
@@ -45,8 +45,8 @@ export function buildNoIndexPageMetadata(
       follow: true,
       googleBot: {
         index: false,
-        follow: true
-      }
-    }
+        follow: true,
+      },
+    },
   };
 }

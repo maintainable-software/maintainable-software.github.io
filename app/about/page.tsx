@@ -5,7 +5,7 @@ export const metadata = buildPageMetadata({
   title: "About maintainable.software",
   description:
     "What maintainable.software covers: agentic engineering, AI-assisted software work, and maintainable, resilient systems.",
-  path: "/about/"
+  path: "/about/",
 });
 
 export default function AboutPage() {
@@ -18,12 +18,12 @@ export default function AboutPage() {
       <div className="content-body">
         <h2>What is this blog about?</h2>
         <p>
-          Agentic engineering is on the rise, but it&apos;s such a new topic that
-          high quality information is rare while the internet is already full of
-          anti-patterns disguised as advice. On this blog I share how I use AI,
-          the approaches I think are good and/or bad and how to tackle agentic
-          engineering in such a way that the result is a maintainable and
-          resilient software. I am less interested in AI as a magic code
+          Agentic engineering is on the rise, but it&apos;s such a new topic
+          that high quality information is rare while the internet is already
+          full of anti-patterns disguised as advice. On this blog I share how I
+          use AI, the approaches I think are good and/or bad and how to tackle
+          agentic engineering in such a way that the result is a maintainable
+          and resilient software. I am less interested in AI as a magic code
           generator, but as a serious copilot for product and systems work.
         </p>
 
@@ -37,8 +37,8 @@ export default function AboutPage() {
         <p>
           <strong>maintainable.software</strong> is the publication page. The
           canonical author page lives at <Link href="/me/">/me/</Link>, where
-          Jan-Gerke Salomon&apos;s background, experience, and external profiles are
-          collected in one place.
+          Jan-Gerke Salomon&apos;s background, experience, and external profiles
+          are collected in one place.
         </p>
       </div>
     </article>

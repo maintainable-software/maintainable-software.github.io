@@ -3,10 +3,11 @@ import { getTotalPostPages, getPostsForPage } from "@/lib/postPagination";
 import { buildPageMetadata } from "@/lib/siteMetadata";
 
 export const metadata = buildPageMetadata({
-  title: "maintainable.software | Agentic engineering and maintainable delivery",
+  title:
+    "maintainable.software | Agentic engineering and maintainable delivery",
   description:
     "Essays on agentic engineering, software architecture, docs-first product development, and maintainable software delivery.",
-  path: "/"
+  path: "/",
 });
 
 export default function HomePage() {

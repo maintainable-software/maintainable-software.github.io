@@ -1,21 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  SITE_DESCRIPTION,
-  SITE_NAME,
-  SITE_URL
-} from "@/lib/site";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import {
   buildOrganizationJsonLd,
-  buildWebsiteJsonLd
+  buildWebsiteJsonLd,
 } from "@/lib/structuredData";
 import "./globals.css";
-import classes from './layout.module.css'
+import classes from "./layout.module.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: SITE_NAME,
-  description: SITE_DESCRIPTION
+  description: SITE_DESCRIPTION,
 };
 
 function Header() {
@@ -26,11 +22,15 @@ function Header() {
       </Link>
 
       <nav className={classes.siteNav} aria-label="Main navigation">
-        <Link className={classes.link} href="/posts/">Posts</Link>
-        <Link className={classes.link} href="/about/">About</Link>
+        <Link className={classes.link} href="/posts/">
+          Posts
+        </Link>
+        <Link className={classes.link} href="/about/">
+          About
+        </Link>
       </nav>
     </header>
-  )
+  );
 }
 
 function Footer() {
@@ -48,7 +48,7 @@ function Footer() {
         </Link>
       </nav>
     </footer>
-  )
+  );
 }
 
 function _Footer() {
@@ -60,11 +60,11 @@ function _Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }
 
 export default function RootLayout({
-  children
+  children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
@@ -77,13 +77,13 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(websiteJsonLd)
+            __html: JSON.stringify(websiteJsonLd),
           }}
         />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(organizationJsonLd)
+            __html: JSON.stringify(organizationJsonLd),
           }}
         />
         <Header />

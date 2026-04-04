@@ -29,7 +29,10 @@
   font-weight: 800;
 
   &:hover {
-    color: var(--layout-shell-brand-hover, var(--layout-shell-brand, var(--text-strong)));
+    color: var(
+      --layout-shell-brand-hover,
+      var(--layout-shell-brand, var(--text-strong))
+    );
   }
 }
 
@@ -46,7 +49,8 @@
   text-decoration: none;
   font-family: var(--font-ui);
 
-  &, &:visited {
+  &,
+  &:visited {
     color: var(--layout-shell-nav, var(--text-strong));
   }
 
@@ -88,7 +92,8 @@
   line-height: 33px;
   font-size: 0.82rem;
 
-  &, &:visited {
+  &,
+  &:visited {
     color: var(--layout-shell-nav, var(--text-strong));
   }
 

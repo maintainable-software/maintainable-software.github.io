@@ -37,10 +37,10 @@
 - Keep terminology precise: prefer one important term per concept, avoid
   near-synonyms that blur boundaries, and update `docs/DICTIONARY.md` when
   terminology changes.
-- Keep actual product concepts distinct from the meta and internal terms used
-  to scope, design, implement, operate, or document them. If a shared
-  dictionary needs both, separate them structurally instead of flattening them
-  into one undifferentiated list.
+- Keep actual product concepts distinct from the meta and internal terms used to
+  scope, design, implement, operate, or document them. If a shared dictionary
+  needs both, separate them structurally instead of flattening them into one
+  undifferentiated list.
 - Apply these rules consistently when creating docs and when implementing the
   system, not only when a task explicitly mentions simplicity.
 

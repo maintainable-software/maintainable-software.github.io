@@ -7,24 +7,27 @@ export const metadata = buildPageMetadata({
   title: "Jan-Gerke Salomon | maintainable.software",
   description:
     "Profile of Jan-Gerke Salomon, an independent software engineer focused on agentic engineering, software architecture, and maintainable full-stack delivery.",
-  path: "/me/"
+  path: "/me/",
 });
 
 const overviewColumns = [
   [
     {
       label: "Current focus",
-      value: "Agentic engineering, software architecture, and maintainable delivery",
+      value:
+        "Agentic engineering, software architecture, and maintainable delivery",
     },
     {
       label: "Foundation",
-      value: "15 years in software engineering with deep frontend roots and strong systems judgment",
+      value:
+        "15 years in software engineering with deep frontend roots and strong systems judgment",
     },
   ],
   [
     {
       label: "Working scope",
-      value: "Independent full-stack work across databases, backend, APIs, and frontend",
+      value:
+        "Independent full-stack work across databases, backend, APIs, and frontend",
     },
     {
       label: "Latest long-term role",
@@ -138,7 +141,7 @@ export default function MePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(personJsonLd)
+          __html: JSON.stringify(personJsonLd),
         }}
       />
 
@@ -349,8 +352,8 @@ export default function MePage() {
             <p>
               What matters most to me is that, regardless of the topic, the
               context always stays in view and a holistic approach is applied,
-              so that not only the engineer&apos;s perspective is considered, but
-              also the business perspective and the human being.
+              so that not only the engineer&apos;s perspective is considered,
+              but also the business perspective and the human being.
             </p>
           </div>
         </section>

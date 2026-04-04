@@ -36,9 +36,10 @@ link important uses, and remove stale links to removed entries.
 
 ## Preserve Conceptual Simplicity Across Docs And Implementation
 
-The repository treats [conceptual simplicity](../DICTIONARY.md#conceptual-simplicity)
-as more important than technical or editorial convenience. Docs should not
-merge distinct responsibilities just because they are adjacent in workflow or
+The repository treats
+[conceptual simplicity](../DICTIONARY.md#conceptual-simplicity) as more
+important than technical or editorial convenience. Docs should not merge
+distinct responsibilities just because they are adjacent in workflow or
 convenient to explain together. The same rule should guide implementation
 boundaries.
 
@@ -47,5 +48,5 @@ boundaries.
 When a system area has clear conceptual parts, the docs should use one focused
 document per [system part](../DICTIONARY.md#system-part) plus a separate
 [composition](../DICTIONARY.md#composition) document rather than one umbrella
-document that mixes responsibilities. This keeps the docs usable as a design
-aid rather than only as prose.
+document that mixes responsibilities. This keeps the docs usable as a design aid
+rather than only as prose.
