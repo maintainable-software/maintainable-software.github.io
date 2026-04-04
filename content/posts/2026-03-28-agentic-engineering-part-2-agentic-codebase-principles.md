@@ -567,7 +567,7 @@ checked. A latency ceiling, memory budget, throughput target, or infrastructure
 cost constraint can be measured and enforced; an imagined future bottleneck
 cannot. Premature optimization becomes less likely when performance concerns are
 expressed as budgets and profiling targets rather than as architectural
-folklore. [[37]](#ref-37) [[38]](#ref-38) [[39]](#ref-39)
+folklore. [[37]](#ref-37) [[38]](#ref-38)
 
 The main danger is not only extra code, but extra invariants. Caches must stay
 coherent, fast paths must remain behaviorally equivalent to slow paths, pooled
@@ -575,7 +575,7 @@ resources must be released correctly, and concurrent execution paths must
 preserve assumptions that are rarely obvious from the interface. These hidden
 constraints increase the amount of context required for safe change, which makes
 them especially costly in agentic codebases. [[6]](#ref-6) [[7]](#ref-7)
-[[40]](#ref-40)
+[[37]](#ref-37)
 
 When performance is truly a first-class requirement, the right response is not
 speculative cleverness but explicit feedback loops: benchmarks, profilers,
@@ -605,20 +605,20 @@ Mechanical enforcement turns architectural preference into executable policy.
 Dependency direction, layer isolation, and anti-corruption seams should be
 checked continuously rather than remembered socially. Otherwise the architecture
 exists only as documentation and slowly degrades under normal delivery pressure.
-[[41]](#ref-41) [[42]](#ref-42) [[43]](#ref-43)
+[[40]](#ref-40) [[41]](#ref-41) [[42]](#ref-42)
 
 This matters even more in agentic environments because agents act inside the
 affordances the repository exposes. If import rules, layer contracts, or cycle
 checks are absent, the codebase is implicitly declaring that cross-boundary
 edits are allowed. Mechanical checks therefore do more than protect architecture
 after the fact; they shape the action space the agent can safely explore.
-[[7]](#ref-7) [[19]](#ref-19) [[44]](#ref-44)
+[[7]](#ref-7) [[19]](#ref-19) [[43]](#ref-43)
 
 In practice, the goal is not architectural purity for its own sake, but fast
 feedback. A violated dependency rule should fail locally and in CI in the same
 way a failing test does. That makes boundaries cheap to preserve and prevents
 erosion from becoming visible only after the codebase has already drifted.
-[[41]](#ref-41) [[42]](#ref-42) [[43]](#ref-43)
+[[40]](#ref-40) [[41]](#ref-41) [[42]](#ref-42)
 
 ### Architecture fitness functions
 
@@ -635,14 +635,14 @@ also encode performance budgets, resiliency expectations, security constraints,
 naming and packaging conventions, or other structural properties that the system
 must preserve as it evolves. The key idea is that architectural intent becomes a
 set of executable checks rather than a document that only matters when someone
-remembers to read it. [[41]](#ref-41) [[45]](#ref-45) [[46]](#ref-46)
+remembers to read it. [[40]](#ref-40) [[44]](#ref-44)
 
 For agentic engineering, this changes the role of the repository. The codebase
 is no longer just source material for generation; it becomes part of the
 feedback harness. A fitness function gives the agent a fast, objective signal
 that a change preserved or violated a system-level property, which is far more
 useful than relying on architecture to survive through prompts, memory, or code
-review alone. [[6]](#ref-6) [[17]](#ref-17) [[44]](#ref-44)
+review alone. [[6]](#ref-6) [[17]](#ref-17) [[43]](#ref-43)
 
 ### Small, targeted verification loops
 
@@ -660,7 +660,7 @@ cause is closer to the change, the rerun cost is lower, and the engineer or
 agent can iterate without dragging unrelated parts of the system into the loop.
 That is one reason healthy test portfolios bias toward smaller tests and use
 broader end-to-end checks more selectively. [[10]](#ref-10) [[47]](#ref-47)
-[[48]](#ref-48)
+[[46]](#ref-46)
 
 This also depends on mapping changes to the right validation surface. A
 maintainable codebase should make it obvious which tests cover a given unit,
@@ -668,13 +668,13 @@ slice, contract, or critical workflow so that affected-scope verification can be
 run by default. In agentic engineering, that mapping matters even more: if every
 edit falls back to the same broad suite, the repository is giving the agent slow
 and noisy feedback when it most needs precise signals. [[13]](#ref-13)
-[[17]](#ref-17) [[49]](#ref-49)
+[[17]](#ref-17) [[47]](#ref-47)
 
 The broader principle is to reserve wide integration or end-to-end verification
 for the risks that actually require it: cross-system behavior, infrastructure
 boundaries, or business-critical paths whose correctness cannot be established
 at a smaller scope. Everything else should be pulled down into faster loops
-where possible. [[47]](#ref-47) [[48]](#ref-48)
+where possible. [[45]](#ref-45) [[46]](#ref-46)
 
 ### Ownership-aligned boundaries
 
@@ -693,14 +693,14 @@ interfaces, and change sequencing are more likely to stay consistent inside that
 area. When the boundary and the ownership model diverge, the software may still
 look modular on paper while the real work crosses teams, handoffs, and approval
 paths. That usually means the true cost of change is higher than the structure
-suggests. [[5]](#ref-5) [[21]](#ref-21) [[50]](#ref-50) [[52]](#ref-52)
+suggests. [[5]](#ref-5) [[21]](#ref-21) [[48]](#ref-48)
 
 This is closely related to Conway’s Law: systems tend to mirror the
 communication structure of the organization that builds them. If a supposedly
 bounded part of the system requires constant coordination across unrelated
 owners, the boundary is probably wrong, incomplete, or socially unenforced. In
 that case, the unit of understanding in the code and the unit of collaboration
-in the organization are pulling in different directions. [[50]](#ref-50)
+in the organization are pulling in different directions. [[48]](#ref-48)
 [[21]](#ref-21)
 
 For agentic engineering, ownership-aligned boundaries improve more than human
@@ -708,7 +708,7 @@ workflow; they improve context quality. A bounded area with clear ownership is
 more likely to have coherent conventions, localized documentation, and a stable
 source of truth, all of which make it easier for an agent to determine where a
 change belongs and what assumptions it must preserve. [[7]](#ref-7)
-[[17]](#ref-17) [[51]](#ref-51)
+[[17]](#ref-17) [[49]](#ref-49)
 
 ## FAQ: maintainable codebases for AI coding agents
 
@@ -839,10 +839,10 @@ neglecting them visible much sooner. [[6]](#ref-6) [[7]](#ref-7) [[16]](#ref-16)
     [Martin Fowler, “Flag Argument,” 2011.](https://martinfowler.com/bliki/FlagArgument.html)
 30. <a id="ref-30"></a>
     [M. Cataldo, A. Mockus, J. A. Roberts, and J. D. Herbsleb, “Software Dependencies, Work Dependencies, and Their Impact on Failures,” _IEEE Transactions on Software Engineering_, 2009.](https://cse.unl.edu/~witty/papers/TSE_2008_11_0361_R1.pdf)
-31. <a id="ref-24"></a> [Cucumber, “BDD.”](https://cucumber.io/docs/bdd/)
-32. <a id="ref-25"></a>
+31. <a id="ref-31"></a> [Cucumber, “BDD.”](https://cucumber.io/docs/bdd/)
+32. <a id="ref-32"></a>
     [OpenAI Developers, “Testing Agent Skills Systematically with Evals.”](https://developers.openai.com/blog/eval-skills/)
-33. <a id="ref-26"></a>
+33. <a id="ref-33"></a>
     [Cucumber, “Gherkin Reference.”](https://cucumber.io/docs/gherkin/reference/)
 34. <a id="ref-34"></a>
     [Sandi Metz, “The Wrong Abstraction.”](https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction)
@@ -851,34 +851,28 @@ neglecting them visible much sooner. [[6]](#ref-6) [[7]](#ref-7) [[16]](#ref-16)
 36. <a id="ref-36"></a>
     [Kent C. Dodds, “AHA Programming.”](https://kentcdodds.com/blog/aha-programming)
 37. <a id="ref-37"></a>
-    [Donald E. Knuth, “Structured Programming with go to Statements,” _Computing Surveys_, 1974.](https://pic.plover.com/knuth-GOTO.pdf)
-38. <a id="ref-38"></a>
     [Martin Fowler, “Yet Another Optimization Article,” _IEEE Software_, 2002.](https://www.martinfowler.com/ieeeSoftware/yetOptimization.pdf)
-39. <a id="ref-39"></a>
+38. <a id="ref-38"></a>
     [Katie Hempenius, “Performance Budgets 101.”](https://web.dev/articles/performance-budgets-101)
-40. <a id="ref-40"></a>
+39. <a id="ref-39"></a>
     [Google SRE, “Service Level Objectives.”](https://sre.google/sre-book/service-level-objectives/)
-41. <a id="ref-41"></a>
+40. <a id="ref-40"></a>
     [Neal Ford, Rebecca Parsons, and Patrick Kua, _Building Evolutionary Architectures_, sample chapter.](https://www.thoughtworks.com/content/dam/thoughtworks/documents/books/bk_building_evolutionary_architectures_en.pdf)
-42. <a id="ref-42"></a>
+41. <a id="ref-41"></a>
     [ArchUnit, “User Guide.”](https://www.archunit.org/userguide/html/000_Index.html)
-43. <a id="ref-43"></a>
+42. <a id="ref-42"></a>
     [Import Linter, “Layers.”](https://import-linter.readthedocs.io/en/latest/contract_types/layers/)
-44. <a id="ref-44"></a>
+43. <a id="ref-43"></a>
     [Anthropic, “Harness design for long-running application development.”](https://www.anthropic.com/engineering/harness-design-long-running-apps)
-45. <a id="ref-45"></a>
-    [Thoughtworks Technology Radar, “Architectural fitness function.”](https://www.thoughtworks.com/radar/techniques/architectural-fitness-function)
-46. <a id="ref-46"></a>
+44. <a id="ref-44"></a>
     [Thoughtworks, “Fitness function-driven development.”](https://www.thoughtworks.com/insights/articles/fitness-function-driven-development)
-47. <a id="ref-47"></a>
+45. <a id="ref-45"></a>
     [Martin Fowler, “Test Pyramid.”](https://martinfowler.com/bliki/TestPyramid.html)
-48. <a id="ref-48"></a>
+46. <a id="ref-46"></a>
     [Google Testing Blog, “Just Say No to More End-to-End Tests.”](https://testing.googleblog.com/2015/04/just-say-no-to-more-end-to-end-tests.html)
-49. <a id="ref-49"></a>
+47. <a id="ref-47"></a>
     [Software Engineering at Google, Chapter 12: Unit Testing.](https://abseil.io/resources/swe-book/html/ch12.html)
-50. <a id="ref-50"></a>
+48. <a id="ref-48"></a>
     [Martin Fowler, “Conway’s Law.”](https://martinfowler.com/bliki/ConwaysLaw.html)
-51. <a id="ref-51"></a>
+49. <a id="ref-49"></a>
     [Team Topologies, “Key Concepts.”](https://teamtopologies.com/key-concepts)
-52. <a id="ref-52"></a>
-    [Martin Fowler, “Products Over Projects.”](https://martinfowler.com/articles/products-over-projects.html)
