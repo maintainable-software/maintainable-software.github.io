@@ -3,9 +3,9 @@ layout: post
 title: "How to Design a Maintainable Codebase for AI Coding Agents"
 header_kicker: "How to Succeed with Agentic Engineering - Part 2"
 description:
-  "Learn the agentic engineering principles that make a codebase maintainable
-  for AI coding agents: locality, small blast radius, clear boundaries,
-  navigability, repository-local docs, and narrow test loops."
+  "Learn how to structure a maintainable codebase for AI coding agents using
+  locality, small blast radius, clear boundaries, navigability, cohesive
+  modules, ownership-aligned boundaries, and restrained complexity."
 date: 2026-03-28
 updated: 2026-04-04
 published: true
@@ -27,8 +27,8 @@ tags:
 teaser:
   Learn how to design a maintainable, AI-agent-friendly codebase. The key
   principles are locality, small blast radius, boundary integrity, navigability,
-  repository-local documentation, and narrow verification scope, so coding
-  agents can understand, change, and validate software safely.
+  cohesive modules, ownership-aligned boundaries, and restrained complexity, so
+  coding agents can build a correct local model and change software safely.
 ---
 
 ## Why codebase design matters for AI coding agents
@@ -52,12 +52,13 @@ drown in a giant undifferentiated prompt. [[6]](#ref-6) [[7]](#ref-7)
 
 > “Give Codex a map, not a 1,000-page instruction manual.” — OpenAI
 
-In short, a maintainable codebase for AI coding agents is one where changes stay
-local, side effects remain contained, boundaries are explicit, the structure is
-easy to navigate, and verification can happen in narrow loops. In practice, that
-means software architecture with strong module boundaries, clear
-repository-local documentation, small blast radius, and fast targeted tests that
-let both humans and coding agents validate changes safely.
+In short, a maintainable codebase for AI coding agents starts with structure:
+changes should stay local, side effects should remain contained, boundaries
+should be explicit, and the codebase should stay simple enough that an agent can
+build a correct local model without exploring the whole system. This article
+focuses on those structural properties. The next article covers the supporting
+systems around that structure: documentation, executable guardrails, and
+verification loops.
 
 The approaches below are not the only way to achieve a maintainable codebase.
 The point is to compare design choices by the way they affect a few underlying
@@ -412,113 +413,6 @@ protects meaningful variation, not where it merely advertises cleverness. If the
 abstraction does not reduce the cost of future change, it often raises the cost
 of navigation, testing, and debugging instead. [[2]](#ref-2)
 
-### Docs-driven agentic engineering (DEA)
-
-Docs-driven Agentic Engineering (DEA) means making semantics, boundaries,
-workflows, and decision-relevant context explicit in durable documentation
-before they are scattered across code, chat history, and individual assumptions.
-In practice, that gives both humans and agents a stable source of truth instead
-of forcing them to reconstruct intent from partial implementation details.
-[[6]](#ref-6) [[9]](#ref-9)
-
-> “Documentation is often so tightly coupled to code that it should… be treated
-> as code.” — Software Engineering at Google
-
-Docs are not only explanatory artifacts, they are navigation and control
-surfaces for agents. OpenAI uses repository knowledge as the system of record;
-Cognition recommends adding repo-specific knowledge and playbooks; and Google’s
-documentation chapter argues for ownership, review, source control, and
-freshness checks. [[6]](#ref-6) [[9]](#ref-9) [[18]](#ref-18)
-
-The trade-off is maintenance overhead. Stale documentation can produce false
-confidence faster than no documentation at all. The antidote is to keep docs
-close to code, review them with code changes, and make key architecture and
-workflow documents measurable for freshness or verification status.
-[[6]](#ref-6) [[9]](#ref-9)
-
-### Behavior-driven development (BDD)
-
-BDD, in the broad sense, means describing behavior from the perspective of
-observable outcomes rather than internal implementation first. It pushes teams
-to define what the system should do in concrete scenarios before they get lost
-in technical details. That matters for agents because evaluation loops only work
-well when the expected behavior is stated in a form the agent can verify.
-[[16]](#ref-16) [[17]](#ref-17) [[31]](#ref-31) [[32]](#ref-32)
-
-BDD also helps reduce prompt ambiguity. Instead of telling an AI coding agent to
-“fix pricing,” you can point it to concrete scenarios, acceptance checks, or
-contract tests that define success without over-specifying the implementation.
-[[10]](#ref-10) [[17]](#ref-17) [[31]](#ref-31)
-
-In agentic engineering, that is the key shift: the engineer does not merely ask
-for code, but supplies the behavior that should be preserved or produced. A good
-BDD scenario tells the agent what counts as success from the outside—what a user
-sees, what a downstream system receives, what a CLI prints, what an API returns,
-or what side effects are allowed. This makes the expected behavior explicit
-instead of forcing the agent to infer it from scattered code, comments, and
-conventions. [[7]](#ref-7) [[17]](#ref-17) [[31]](#ref-31)
-
-This is especially useful for application-critical paths. Checkout flows, signup
-gates, refund handling, entitlement checks, invoicing, access control, or other
-business-critical behavior should be specified in terms of externally observable
-outcomes. For non-UI systems, the same rule applies: a CLI tool can be specified
-by exit codes, stdout/stderr, filesystem changes, or emitted artifacts; a queue
-worker by consumed inputs and produced outputs; an API by its request/response
-contract. For both humans and agents, the behavior is often more important than
-the implementation because the business fails when the observable result is
-wrong, even if the code is elegant. [[10]](#ref-10) [[31]](#ref-31)
-[[32]](#ref-32)
-
-Feature files are useful here because they give agents a compact, legible
-representation of intent. A good scenario names the business rule, sets the
-relevant context, performs one meaningful action, and asserts an observable
-outcome. The point is not to mirror every implementation detail, but to define
-the contract clearly enough that the agent can build, test, and repair against
-it. [[31]](#ref-31) [[33]](#ref-33)
-
-For example, a pricing rule might be expressed as:
-
-```gherkin
-Feature: Promotional pricing
-
-  Scenario: Returning customers receive the renewal discount
-    Given a customer with an active subscription renewal
-    And a renewal discount of 20 percent is configured
-    When the renewal price is calculated
-    Then the final price should include the 20 percent discount
-```
-
-A CLI behavior might be expressed as:
-
-```gherkin
-Feature: Invoice export
-
-  Scenario: Exporting invoices as CSV
-    Given an account with 3 invoices
-    When I run `billing export --format csv`
-    Then the command should exit with code 0
-    And stdout should contain a CSV header row
-    And the exported file should contain 3 invoice rows
-```
-
-An API contract might be expressed as:
-
-```gherkin
-Feature: Entitlement checks
-
-  Scenario: Access is denied without the required entitlement
-    Given a user without the `reports:read` entitlement
-    When the user requests `GET /reports/monthly`
-    Then the response status should be 403
-    And the response body should explain that access is denied
-```
-
-The trade-off is ceremony. When scenarios become rote documentation rather than
-decision-making tools, they add maintenance cost without improving feedback. BDD
-helps most when it captures the behaviors that matter, stays close to observable
-outcomes, and remains tied to executable checks rather than drifting into
-narrative paperwork. [[31]](#ref-31) [[33]](#ref-33)
-
 ### Avoiding premature generalization
 
 Generalization is different from abstraction. An abstraction reduces something
@@ -597,92 +491,6 @@ explicit tests or budgets, not by speculative complexity. Evaluation loops
 against latency targets are a better fit for agents than architecture distorted
 in advance around imagined bottlenecks. [[17]](#ref-17)
 
-### Mechanical boundary enforcement
-
-Good boundaries are not enough if they exist only as intent. In practice,
-healthy agentic codebases enforce dependency directions mechanically through
-linters, structural tests, import rules, or build-time checks, so that
-architectural boundaries do not slowly erode under day-to-day delivery pressure.
-This is especially important for agents because they can follow whatever paths
-the repository allows; if the structure permits arbitrary cross-layer edits, the
-architecture is already telling the agent that those edits are acceptable.
-[[6]](#ref-6) [[19]](#ref-19)
-
-Mechanical enforcement turns architectural preference into executable policy.
-Dependency direction, layer isolation, and anti-corruption seams should be
-checked continuously rather than remembered socially. Otherwise the architecture
-exists only as documentation and slowly degrades under normal delivery pressure.
-[[40]](#ref-40) [[41]](#ref-41) [[42]](#ref-42)
-
-This matters even more in agentic environments because agents act inside the
-affordances the repository exposes. If import rules, layer contracts, or cycle
-checks are absent, the codebase is implicitly declaring that cross-boundary
-edits are allowed. Mechanical checks therefore do more than protect architecture
-after the fact; they shape the action space the agent can safely explore.
-[[7]](#ref-7) [[19]](#ref-19) [[43]](#ref-43)
-
-In practice, the goal is not architectural purity for its own sake, but fast
-feedback. A violated dependency rule should fail locally and in CI in the same
-way a failing test does. That makes boundaries cheap to preserve and prevents
-erosion from becoming visible only after the codebase has already drifted.
-[[40]](#ref-40) [[41]](#ref-41) [[42]](#ref-42)
-
-### Architecture fitness functions
-
-Architecture fitness functions make structural expectations executable. Instead
-of describing the intended design only in prose, the repository contains
-automated checks that fail when slice isolation breaks, forbidden dependencies
-appear, or contracts are violated. That turns architectural quality from an
-aspiration into a continuously verified property and gives both humans and
-agents much faster feedback when a change pushes the codebase in the wrong
-direction. [[6]](#ref-6)
-
-Architecture fitness functions are not limited to dependency rules. They can
-also encode performance budgets, resiliency expectations, security constraints,
-naming and packaging conventions, or other structural properties that the system
-must preserve as it evolves. The key idea is that architectural intent becomes a
-set of executable checks rather than a document that only matters when someone
-remembers to read it. [[40]](#ref-40) [[44]](#ref-44)
-
-For agentic engineering, this changes the role of the repository. The codebase
-is no longer just source material for generation; it becomes part of the
-feedback harness. A fitness function gives the agent a fast, objective signal
-that a change preserved or violated a system-level property, which is far more
-useful than relying on architecture to survive through prompts, memory, or code
-review alone. [[6]](#ref-6) [[17]](#ref-17) [[43]](#ref-43)
-
-### Small, targeted verification loops
-
-A maintainable agentic codebase should make narrow validation the default. If a
-small change requires a giant integration test suite or a full rebuild,
-iteration slows down and safe autonomous work becomes much harder. The healthier
-pattern is to structure the system so that the affected unit, slice, contract,
-or workflow can be verified quickly and repeatedly, with broader system tests
-reserved for the places where they are genuinely needed. [[10]](#ref-10)
-[[13]](#ref-13) [[17]](#ref-17)
-
-Small verification loops are valuable not only because they are faster, but
-because they produce tighter diagnosis. When a narrow test fails, the likely
-cause is closer to the change, the rerun cost is lower, and the engineer or
-agent can iterate without dragging unrelated parts of the system into the loop.
-That is one reason healthy test portfolios bias toward smaller tests and use
-broader end-to-end checks more selectively. [[10]](#ref-10) [[47]](#ref-47)
-[[46]](#ref-46)
-
-This also depends on mapping changes to the right validation surface. A
-maintainable codebase should make it obvious which tests cover a given unit,
-slice, contract, or critical workflow so that affected-scope verification can be
-run by default. In agentic engineering, that mapping matters even more: if every
-edit falls back to the same broad suite, the repository is giving the agent slow
-and noisy feedback when it most needs precise signals. [[13]](#ref-13)
-[[17]](#ref-17) [[47]](#ref-47)
-
-The broader principle is to reserve wide integration or end-to-end verification
-for the risks that actually require it: cross-system behavior, infrastructure
-boundaries, or business-critical paths whose correctness cannot be established
-at a smaller scope. Everything else should be pulled down into faster loops
-where possible. [[45]](#ref-45) [[46]](#ref-46)
-
 ### Ownership-aligned boundaries
 
 Boundary quality improves when the conceptual structure of the system lines up
@@ -716,6 +524,10 @@ more likely to have coherent conventions, localized documentation, and a stable
 source of truth, all of which make it easier for an agent to determine where a
 change belongs and what assumptions it must preserve. [[7]](#ref-7)
 [[17]](#ref-17) [[49]](#ref-49)
+
+The supporting systems around those boundaries matter too, but they deserve
+their own treatment. The next article covers repository-local documentation,
+behavior specs, executable guardrails, and verification loops.
 
 ## FAQ about maintainable codebases for AI coding agents
 
@@ -751,23 +563,6 @@ agent may infer the wrong contract from a local view of the code. Clear
 interfaces, bounded contexts, and explicit ownership reduce ambiguity and make
 the architecture more legible. [[3]](#ref-3) [[6]](#ref-6) [[20]](#ref-20)
 
-### What documentation helps coding agents the most?
-
-The most useful documentation is concise, repo-local, current, and
-action-oriented. Good examples include a short `AGENTS.md`, architecture
-decision records, ownership boundaries, workflow playbooks, and documentation
-tied closely to code changes. The goal is not exhaustive explanation but
-reliable navigation and decision support. [[6]](#ref-6) [[9]](#ref-9)
-[[18]](#ref-18)
-
-### Why do narrow test loops matter for AI-assisted software engineering?
-
-Narrow test loops let agents validate changes quickly and self-correct inside
-their own working loop. If every change requires a broad rebuild or a large
-integration suite, autonomous work becomes slower, less reliable, and more
-dependent on human intervention. [[10]](#ref-10) [[12]](#ref-12) [[13]](#ref-13)
-[[17]](#ref-17)
-
 ### Is this only relevant for teams using coding agents?
 
 No. These characteristics also make codebases easier for humans to understand
@@ -777,12 +572,16 @@ validation. [[6]](#ref-6) [[7]](#ref-7) [[16]](#ref-16)
 
 ## Conclusion
 
-A maintainable codebase for AI coding agents is not one with the most
-abstractions or the most documents. It is one where change can stay local, side
-effects remain contained, boundaries are explicit, the structure is navigable,
-and verification is narrow enough to fit inside the agent’s own loop. Those
-properties are valuable for humans too; agents simply make the cost of
-neglecting them visible much sooner. [[6]](#ref-6) [[7]](#ref-7) [[16]](#ref-16)
+A maintainable codebase for AI coding agents starts with structure. If behavior
+stays local, boundaries are explicit, ownership is legible, and unnecessary
+complexity is kept out, agents can build better local models and change software
+more safely. Those properties are valuable for humans too; agents simply make
+the cost of neglecting them visible much sooner. [[6]](#ref-6) [[7]](#ref-7)
+[[16]](#ref-16)
+
+The next article builds on that structure by covering the surrounding support
+system: documentation, behavioral specs, executable guardrails, and narrow
+feedback loops. [[6]](#ref-6) [[17]](#ref-17)
 
 ## References
 

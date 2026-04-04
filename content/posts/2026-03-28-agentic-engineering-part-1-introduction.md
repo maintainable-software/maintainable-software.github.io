@@ -2,12 +2,12 @@
 layout: post
 title:
   "What AI in Software Engineering Is Really Good At — and Where Its Limits Are"
-header_kicker: "Howto successful Agentic Engineering - Part 1"
+header_kicker: "How to Succeed with Agentic Engineering - Part 1"
 description:
   "Introduction to agentic engineering: where AI already helps in software
   engineering, where coding agents fail, and the three skills developers need."
 date: 2026-03-28
-updated: 2026-03-29
+updated: 2026-04-04
 published: true
 series_slug: "how-to-succeed-with-agentic-engineering"
 series_title: "How to Succeed with Agentic Engineering"
@@ -39,9 +39,9 @@ relationships, and undocumented assumptions play a major role. The productive
 way to work with AI lies exactly in that tension. [[1]](#ref-1) [[2]](#ref-2)
 [[4]](#ref-4) [[6]](#ref-6)
 
-This is the first article in a four-part series. In this series we will
-elaborate how agentic engineering can be tackled to produce maintainable,
-inspectable and reliant cobases.
+This is the first article in a five-part series. In this series, codebase design
+spans two articles: structure in Part 2, then documentation, guardrails, and
+feedback loops in Part 3.
 
 ## Where AI is already strong
 

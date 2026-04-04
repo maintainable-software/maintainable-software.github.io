@@ -1,13 +1,15 @@
 ---
 layout: post
 title: "How to configure the agent effectively"
-header_kicker: "Howto successful Agentic Engineering - Part 4"
+header_kicker: "How to Succeed with Agentic Engineering - Part 5"
+updated: 2026-04-04
 date: 2026-03-28
-published: true
+published: false
 series_slug: "how-to-succeed-with-agentic-engineering"
 series_title: "How to Succeed with Agentic Engineering"
-series_order: 4
-image: "/assets/images/posts/agentic-engineering-part-4-agent-configuration.png"
+series_order: 5
+canonical_url: "https://maintainable.software/agentic-engineering-part-5-agent-configuration/"
+image: "/assets/images/posts/agentic-engineering-part-5-agent-configuration.png"
 tags: []
 ---
 
