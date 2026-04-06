@@ -62,7 +62,6 @@
 .footer {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   width: var(--layout-shell-width, min(var(--max), 100%));
   margin: 0 auto;
   padding-inline: var(--layout-shell-padding-inline, 0);
@@ -81,6 +80,16 @@
   }
 }
 
+.footerInner {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  gap: 24px;
+}
+
 .footerNav {
   display: flex;
   align-items: center;
@@ -91,6 +100,7 @@
   text-decoration: none;
   line-height: 33px;
   font-size: 0.82rem;
+  font-family: var(--font-ui);
 
   &,
   &:visited {

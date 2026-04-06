@@ -36,34 +36,30 @@ function Header() {
 function Footer() {
   return (
     <footer className={classes.footer}>
-      <nav className={classes.footerNav} aria-label="Footer links">
-        <Link className={classes.footerLink} href="/posts/">
-          Posts
-        </Link>
-        <span className={classes.footerDivider} aria-hidden="true">
-          |
-        </span>
-        <Link className={classes.footerLink} href="/me/">
-          About me
-        </Link>
-        <span className={classes.footerDivider} aria-hidden="true">
-          |
-        </span>
-        <Link className={classes.footerLink} href="/imprint/">
-          Imprint
-        </Link>
-      </nav>
-    </footer>
-  );
-}
+      <div className={classes.footerInner}>
+        <nav className={classes.footerNav} aria-label="Footer primary links">
+          <Link className={classes.footerLink} href="/me/">
+            About me
+          </Link>
+        </nav>
 
-function _Footer() {
-  return (
-    <footer className="site-footer">
-      <div className="site-frame">
-        <div className="site-footer__inner">
-          <Link href="/imprint/">Imprint</Link>
-        </div>
+        <nav className={classes.footerNav} aria-label="Footer secondary links">
+          <Link className={classes.footerLink} href="/rss.xml">
+            RSS
+          </Link>
+          <span className={classes.footerDivider} aria-hidden="true">
+            |
+          </span>
+          <Link className={classes.footerLink} href="/posts/">
+            Posts
+          </Link>
+          <span className={classes.footerDivider} aria-hidden="true">
+            |
+          </span>
+          <Link className={classes.footerLink} href="/imprint/">
+            Imprint
+          </Link>
+        </nav>
       </div>
     </footer>
   );
