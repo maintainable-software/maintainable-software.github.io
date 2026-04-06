@@ -2,7 +2,13 @@ import type { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/posts";
 import { toAbsoluteUrl } from "@/lib/site";
 
-const STATIC_ROUTES = ["/", "/about/", "/me/", "/references/"] as const;
+const STATIC_ROUTES = [
+  "/",
+  "/about/",
+  "/me/",
+  "/privacy/",
+  "/references/",
+] as const;
 
 export const dynamic = "force-static";
 

@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import {
   buildOrganizationJsonLd,
   buildWebsiteJsonLd,
 } from "@/lib/structuredData";
+import { TelemetryDeckShell } from "./telemetry-deck";
 import "./globals.css";
 import classes from "./layout.module.css";
 
@@ -16,7 +18,7 @@ export const metadata: Metadata = {
 
 function Header() {
   return (
-    <header className={classes.header}>
+    <header className={classes.header} data-telemetry-area="header">
       <Link className={classes.siteBrand} href="/">
         maintainable.software
       </Link>
@@ -35,7 +37,7 @@ function Header() {
 
 function Footer() {
   return (
-    <footer className={classes.footer}>
+    <footer className={classes.footer} data-telemetry-area="footer">
       <div className={classes.footerInner}>
         <nav className={classes.footerNav} aria-label="Footer primary links">
           <Link className={classes.footerLink} href="/me/">
@@ -46,6 +48,12 @@ function Footer() {
         <nav className={classes.footerNav} aria-label="Footer secondary links">
           <Link className={classes.footerLink} href="/rss.xml">
             RSS
+          </Link>
+          <span className={classes.footerDivider} aria-hidden="true">
+            |
+          </span>
+          <Link className={classes.footerLink} href="/privacy/">
+            Privacy
           </Link>
           <span className={classes.footerDivider} aria-hidden="true">
             |
@@ -68,7 +76,7 @@ function Footer() {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   const websiteJsonLd = buildWebsiteJsonLd();
   const organizationJsonLd = buildOrganizationJsonLd();
@@ -88,13 +96,15 @@ export default function RootLayout({
             __html: JSON.stringify(organizationJsonLd),
           }}
         />
-        <Header />
+        <TelemetryDeckShell>
+          <Header />
 
-        <main className="site-main">
-          <div className="site-frame">{children}</div>
-        </main>
+          <main className="site-main">
+            <div className="site-frame">{children}</div>
+          </main>
 
-        <Footer />
+          <Footer />
+        </TelemetryDeckShell>
       </body>
     </html>
   );

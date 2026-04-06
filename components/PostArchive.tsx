@@ -58,12 +58,14 @@ export function PostArchive({
               </p>
             ) : null}
             <h2>
-              <Link href={`/${post.slug}/`}>{post.title}</Link>
+              <Link data-telemetry-link="post-card" href={`/${post.slug}/`}>
+                {post.title}
+              </Link>
             </h2>
             <p className="post-item__meta">
               <span>{formatDisplayDate(post.date)}</span>
               <span className="post-item__author">
-                <Link href="/me/" rel="author">
+                <Link data-telemetry-link="author" href="/me/" rel="author">
                   Jan-Gerke Salomon
                 </Link>
               </span>
@@ -74,7 +76,11 @@ export function PostArchive({
       </section>
 
       {totalPages > 1 ? (
-        <nav className="pagination" aria-label="Post archive pagination">
+        <nav
+          className="pagination"
+          aria-label="Post archive pagination"
+          data-telemetry-area="archive-pagination"
+        >
           <p className="pagination__status">
             Page {currentPage} of {totalPages}
           </p>

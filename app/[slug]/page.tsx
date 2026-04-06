@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MarkdownContent } from "@/components/MarkdownContent";
+import { TelemetryDeckPostOpenTracker } from "@/app/telemetry-deck";
 import { AUTHOR_NAME, AUTHOR_PATH, SITE_NAME, toAbsoluteUrl } from "@/lib/site";
 import {
   buildBlogPostingJsonLd,
@@ -166,6 +167,14 @@ export default async function PostPage({ params }: PageProps) {
 
   return (
     <article className="content-shell post-shell post">
+      <TelemetryDeckPostOpenTracker
+        post={{
+          slug: post.slug,
+          title: post.title,
+          tags: post.tags,
+          series_slug: post.series_slug,
+        }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -205,7 +214,7 @@ export default async function PostPage({ params }: PageProps) {
           <div className="post-fact">
             <dt>Author</dt>
             <dd>
-              <Link href={authorUrl} rel="author">
+              <Link data-telemetry-link="author" href={authorUrl} rel="author">
                 {authorName}
               </Link>
             </dd>
@@ -213,9 +222,9 @@ export default async function PostPage({ params }: PageProps) {
         </dl>
 
         {post.tags && post.tags.length > 0 ? (
-          <p className="post-tags">
+          <p className="post-tags" data-telemetry-area="tags">
             {post.tags.map((tag) => (
-              <Link href={`/tags/#${tag}`} key={tag}>
+              <Link data-telemetry-link="tag" href={`/tags/#${tag}`} key={tag}>
                 {tag}
               </Link>
             ))}

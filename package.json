@@ -14,6 +14,7 @@
     "commit-msg": "commitlint --edit"
   },
   "dependencies": {
+    "@typedigital/telemetrydeck-react": "^0.5.0",
     "gray-matter": "^4.0.3",
     "next": "^16.0.0",
     "react": "^19.2.0",
