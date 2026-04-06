@@ -22,8 +22,8 @@ function Header() {
       </Link>
 
       <nav className={classes.siteNav} aria-label="Main navigation">
-        <Link className={classes.link} href="/posts/">
-          Posts
+        <Link className={classes.link} href="/references/">
+          References
         </Link>
         <Link className={classes.link} href="/about/">
           About
@@ -37,6 +37,12 @@ function Footer() {
   return (
     <footer className={classes.footer}>
       <nav className={classes.footerNav} aria-label="Footer links">
+        <Link className={classes.footerLink} href="/posts/">
+          Posts
+        </Link>
+        <span className={classes.footerDivider} aria-hidden="true">
+          |
+        </span>
         <Link className={classes.footerLink} href="/me/">
           About me
         </Link>

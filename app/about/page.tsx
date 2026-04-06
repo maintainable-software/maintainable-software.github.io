@@ -100,8 +100,8 @@ export default function AboutPage() {
 
         <h2>Where should you start?</h2>
         <p>
-          Browse <Link href="/posts/">/posts/</Link> for the essays themselves
-          or visit <Link href="/me/">/me/</Link> if you want the author context
+          Browse the <Link href="/">homepage</Link> for the essays themselves or
+          visit <Link href="/me/">/me/</Link> if you want the author context
           behind the publication.
         </p>
       </div>

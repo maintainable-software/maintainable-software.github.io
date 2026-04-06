@@ -74,6 +74,45 @@ export function buildWebsiteJsonLd() {
   };
 }
 
+type CollectionItem = {
+  name: string;
+  url: string;
+  description?: string;
+};
+
+type CollectionPageOptions = {
+  name: string;
+  description?: string;
+  url: string;
+  items: CollectionItem[];
+};
+
+export function buildCollectionPageJsonLd({
+  name,
+  description,
+  url,
+  items,
+}: CollectionPageOptions) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name,
+    description,
+    url: toAbsoluteUrl(url),
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: items.length,
+      itemListElement: items.map((item, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: item.name,
+        url: item.url,
+        description: item.description,
+      })),
+    },
+  };
+}
+
 function getPostDescription(post: Post): string | undefined {
   return (post.description ?? post.excerpt) || undefined;
 }
