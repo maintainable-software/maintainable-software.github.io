@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "Docs-First Product Development"
-date: 2026-03-25
+date: 2026-04-05
+updated: 2026-04-05
 published: false
 tags: [product-development, documentation, ai, software-design]
 ---

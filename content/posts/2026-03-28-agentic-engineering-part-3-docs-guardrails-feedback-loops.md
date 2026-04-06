@@ -7,8 +7,8 @@ description:
   "Learn how repo-local documentation, behavior specs, mechanical boundary
   enforcement, architecture fitness functions, and narrow verification loops
   make AI coding agents safer and more reliable."
-date: 2026-03-28
-updated: 2026-04-04
+date: 2026-04-05
+updated: 2026-04-05
 published: true
 series_slug: "how-to-succeed-with-agentic-engineering"
 series_title: "How to Succeed with Agentic Engineering"

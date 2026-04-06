@@ -5,9 +5,9 @@ description:
   "A repository-local tracked workflow setup for long-running human and agent
   work: why it exists, how it fits into discovery and execution, what failure
   modes it prevents, and how to install it into a new or existing repository."
-date: 2026-04-04
-updated: 2026-04-04
-published: true
+date: 2026-04-05
+updated: 2026-04-05
+published: false
 author: "Jan-Gerke Salomon"
 author_url: "/me/"
 canonical_url: "https://maintainable.software/tracked-workflow-setup-for-agentic-repositories/"

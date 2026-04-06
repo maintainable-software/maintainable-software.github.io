@@ -6,8 +6,8 @@ description:
   "Learn how to structure a maintainable codebase for AI coding agents using
   locality, small blast radius, clear boundaries, navigability, cohesive
   modules, ownership-aligned boundaries, and restrained complexity."
-date: 2026-03-28
-updated: 2026-04-04
+date: 2026-04-05
+updated: 2026-04-05
 published: true
 series_slug: "how-to-succeed-with-agentic-engineering"
 series_title: "How to Succeed with Agentic Engineering"
