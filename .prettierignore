@@ -1,7 +1,0 @@
-CONVERSATION.md
-.agents/skills/
-.codex/
-.codex-post-turn-hook/
-.npm-cache/
-.pnpm-home/
-**/coverage/**
