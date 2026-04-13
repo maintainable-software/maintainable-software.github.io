@@ -86,16 +86,19 @@ export default function PrivacyPage() {
           Diese Website nutzt TelemetryDeck für die Auswertung der
           Webseiten-Nutzung. TelemetryDeck wird so eingesetzt, dass keine
           Cookies gesetzt und keine Fingerprinting-Verfahren verwendet werden.
-          Die Auswertung dient dazu, zu verstehen, welche Inhalte gelesen
-          werden, über welche Wege Besucherinnen und Besucher auf die Website
-          kommen und welche Geräte, Browser und Länder häufig vorkommen.
+          Zur Unterscheidung einzelner Browser-Installationen wird jedoch eine
+          zufällig erzeugte pseudonyme Kennung im Browser gespeichert und bei
+          späteren Aufrufen wiederverwendet. Die Auswertung dient dazu, zu
+          verstehen, welche Inhalte gelesen werden, über welche Wege
+          Besucherinnen und Besucher auf die Website kommen und welche Geräte,
+          Browser und Länder häufig vorkommen.
         </p>
 
         <p>
           Je nach Seite und Aufruf können an TelemetryDeck insbesondere folgende
           Informationen übermittelt werden: aufgerufene URL und Pfad, Referrer,
           UTM-Parameter, Browser, Browser-Version, Betriebssystem, Gerätetyp,
-          Land und Bot-Erkennung.
+          Land, Bot-Erkennung sowie die gehashte pseudonyme Besucherkennung.
         </p>
 
         <p>
@@ -105,9 +108,9 @@ export default function PrivacyPage() {
         </p>
 
         <p>
-          Wenn TelemetryDeck für zusätzliche Funktionen oder andere Werkzeuge
-          verwendet wird, die eine Einwilligung nach dem TDDDG erfordern, werden
-          diese erst nach einer wirksamen Einwilligung aktiviert.
+          Wenn diese TelemetryDeck-Nutzung oder andere Werkzeuge künftig so
+          erweitert werden, dass eine Einwilligung nach dem TDDDG erforderlich
+          ist, werden sie erst nach einer wirksamen Einwilligung aktiviert.
         </p>
 
         <h2>5. Speicherdauer</h2>
@@ -215,16 +218,20 @@ export default function PrivacyPage() {
         <h2>4. TelemetryDeck</h2>
         <p>
           This website uses TelemetryDeck for website analytics. TelemetryDeck
-          is used in a cookie-free way and without fingerprinting. The purpose
-          is to understand which content is read, how visitors arrive at the
-          site, and which devices, browsers, and countries are most common.
+          is used in a cookie-free way and without fingerprinting. To
+          distinguish individual browser installations, a randomly generated
+          pseudonymous identifier is stored in the browser and reused on later
+          visits. The purpose is to understand which content is read, how
+          visitors arrive at the site, and which devices, browsers, and
+          countries are most common.
         </p>
 
         <p>
           Depending on the page and request, TelemetryDeck may receive in
           particular the following information: page URL and path, referrer, UTM
           parameters, browser, browser version, operating system, device type,
-          country, and bot detection.
+          country, bot detection, and the hashed pseudonymous visitor
+          identifier.
         </p>
 
         <p>
@@ -234,9 +241,9 @@ export default function PrivacyPage() {
         </p>
 
         <p>
-          If TelemetryDeck is later used for additional features or for tools
-          that require consent under the TDDDG, those tools will only be
-          activated after valid consent.
+          If this TelemetryDeck setup or other tools are later extended in ways
+          that require consent under the TDDDG, they will only be activated
+          after valid consent.
         </p>
 
         <h2>5. Retention period</h2>

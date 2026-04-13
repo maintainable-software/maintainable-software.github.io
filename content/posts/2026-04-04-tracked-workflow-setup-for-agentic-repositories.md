@@ -6,7 +6,7 @@ description:
   work: why it exists, how it fits into discovery and execution, what failure
   modes it prevents, and how to install it into a new or existing repository."
 date: 2026-04-05
-updated: 2026-04-05
+updated: 2026-04-08
 published: false
 author: "Jan-Gerke Salomon"
 author_url: "/me/"
@@ -213,6 +213,17 @@ unit. One implementation phase may legitimately require several workflows. The
 setup makes that normal instead of treating one broad umbrella workflow as the
 default.
 
+### It gives conceptual simplicity an execution shape
+
+The workflow does not only say "keep the work simple" as an abstract preference.
+It uses concrete boundaries: one owned change by default, explicit out-of-scope
+items, workflow kind, acceptance policy, objective stop conditions, and
+workflow-local `Always`, `Ask first`, and `Never` rules.
+
+That makes anti-complecting operational. If a step starts pulling unrelated
+features, shared abstractions, or future-phase behavior into the same workflow,
+the workflow structure gives the human and the agent a place to notice and stop.
+
 ### It separates coordination from detail
 
 The three root files are deliberately short:
@@ -245,6 +256,7 @@ That means the workflow has to answer questions such as:
 
 - Is this structural or behavioral work?
 - Do we need workflow-local `.feature` files?
+- Which package or app owns executable proof for those files?
 - Are public-boundary acceptance scenarios required?
 - Why is this proof style the right one for this change?
 
@@ -259,6 +271,16 @@ them by default.
 
 That is a very good trade-off. It gives complex workflows room to carry richer
 state without forcing every small workflow to drag along empty scaffolding.
+
+### It separates plan steps from task-level dependency tracking
+
+`plan.md` remains the ordered execution model. `tasks.md` is optional and
+subordinate to that plan.
+
+That matters because a larger workflow step sometimes needs finer dependency
+tracking than the step block itself can hold cleanly. The setup gives that work
+a place to record task IDs, status, owning step, dependencies, and notes without
+turning every small workflow into a task-management system.
 
 ### It gives step execution objective completion gates
 
@@ -280,6 +302,31 @@ That matters because it makes the execution model less hand-wavy. A step is not
 done because it "feels done." It is done when its stop conditions are satisfied,
 the relevant checks have been run, the validation surface has been updated, and
 the workflow state reflects reality.
+
+The rules also make one easy-to-miss gate explicit. If a workflow uses
+workflow-local `.feature` files, those files only count as proof after the
+owning package or app executes them with the right runner and `validation.md`
+records the command.
+
+### It preserves durable proof without bloating the ledger
+
+Some evidence is better referenced by path than pasted into a markdown table.
+The optional `artifacts/` directory exists for logs, exports, screenshots,
+generated outputs, and other durable proof files, while `validation.md` remains
+the place that explains why that evidence matters.
+
+That gives the workflow a cleaner audit trail. A future reader can see both the
+completion claim and the path to the evidence that justified it.
+
+### It makes workflow-local boundaries explicit
+
+Every new workflow's `instructions.md` must include a workflow-local `Always`,
+`Ask first`, and `Never` boundary policy.
+
+That gives the agent a compact operating frame inside the workflow itself:
+preserve the owned scope, keep state current, ask before broadening scope or
+adding shared packages, and never treat rollout commentary as proof or mark a
+step complete without evidence.
 
 ### It supports back-propagation when execution changes the plan
 
@@ -371,6 +418,15 @@ workflow actually needs them.
 
 That keeps the structure expressive without turning it into mandatory ceremony.
 
+The support files also have separate jobs. `tasks.md` tracks finer-grained
+dependencies inside already-declared plan steps. `notes.md` holds longer working
+context that should not crowd the plan. `failure-cases.md` and
+`schema-contracts.md` preserve contract risks and ownership rules when those
+details need their own maintained home. `report.md` can summarize rollout or
+remaining work, but it is not the proof surface. `artifacts/` stores durable
+evidence by path, and `features/` stores workflow-local Gherkin only when the
+acceptance policy calls for it.
+
 The workflow model also makes a second important distinction: root coordination
 surfaces are not workflow-local truth, and workflow-local truth is not a reason
 to ignore root coordination. Both need to stay aligned.
@@ -417,6 +473,16 @@ explicit acceptance scenarios.
 
 Structural workflows usually should not create `.feature` files.
 
+There is also no strict `1 workflow = 1 feature file` rule. A structural
+workflow often has zero `.feature` files. A narrow behavioral workflow may have
+one or more, depending on the acceptance surface it actually owns.
+
+The important tightening is that workflow-local `.feature` files are not proof
+just because they exist in `.workflows/`. They become proof only when the owning
+package or app executes them. In the template rules, frontend packages and apps
+use Cypress with `@badeball/cypress-cucumber-preprocessor`; non-UI packages and
+apps use Jest with `jest-cucumber`.
+
 That avoids a common process mistake: turning BDD artifacts into compulsory
 ceremony even when the change is internal and the better proof style is a
 contract test, boundary check, or repository verification step.
@@ -430,6 +496,11 @@ narrative.
 conditions, the commitments that must be proven, the verification ownership, and
 the checks or evidence that actually satisfied those commitments.
 
+That makes it stronger than a bare list of checks. It should connect planned
+commitments or acceptance outcomes to the evidence that proved them, closely
+enough that a later reader can audit what is satisfied, what is partial, and
+what changed during execution.
+
 `report.md`, when present, is not proof. It is a narrative surface for rollout
 state, replacement notes, or remaining work.
 
@@ -441,6 +512,10 @@ There is another useful detail here: `validation.md` is also where drift should
 be recorded plainly. If a workflow intentionally narrows, defers, or changes one
 planned commitment, the workflow should say so instead of quietly pretending the
 original promise was fully satisfied.
+
+When workflow-local `.feature` files exist, `validation.md` should also record
+which package or app owns the executable proof and which runner command passed.
+That keeps Gherkin from becoming detached prose next to the workflow.
 
 That keeps completion honest.
 
@@ -510,6 +585,15 @@ The right version of this workflow is not:
 
 The good version is lighter than that. It is strict where resumability, proof,
 and scope boundaries matter, and quiet where they do not.
+
+### It avoids breaking historical workflows by accident
+
+New workflows use the narrower single-feature default, but older broader
+workflows remain legacy-valid until they are intentionally replaced, split, or
+retired.
+
+That is important for adoption. A repository can improve its workflow model
+without first paying the cost of migrating every historical workflow folder.
 
 ## How to use the workflow in day-to-day work
 
@@ -581,6 +665,10 @@ If a proof obligation changes or a check is executed, update `validation.md`.
 
 If the active workflow changes, update the root coordination files.
 
+Use `tasks.md`, `notes.md`, `failure-cases.md`, `schema-contracts.md`,
+`report.md`, and `artifacts/` only when the workflow actually needs those
+separate surfaces.
+
 ### 7. Use the smallest proof surface that honestly proves the work
 
 Behavioral work may need public-boundary tests and workflow-local `.feature`
@@ -588,6 +676,9 @@ files.
 
 Structural work often needs contract tests, boundary checks, or repository
 verification rather than acceptance scenarios.
+
+When `.feature` files are present, execute them from the owning package or app
+with the boundary-appropriate runner and record that command in `validation.md`.
 
 The workflow should not invent ceremony it does not need. It should preserve
 enough structure that completion can be trusted and resumed safely.
@@ -625,8 +716,8 @@ workflow is, what files it uses, how new workflows are created, and what example
 shapes look like.
 
 These docs are the conceptual anchor for the setup. They define the stable model
-so that skills and agent configuration are not inventing their own private
-interpretation of the workflow.
+so that skills and tracked workflow instructions are not inventing their own
+private interpretation of the workflow.
 
 ### `AGENTS.md`
 
@@ -634,6 +725,14 @@ This is the always-on rule surface. It tells the agent to preserve tracked
 `.workflows/` state, keep root coordination files aligned, prefer narrow
 workflow scope, declare workflow kind and acceptance policy, and treat
 `validation.md` as the proof surface.
+
+The rules also make the proof boundary harder to miss: workflow-local `.feature`
+files only count as proof after the owning package or app executes them and
+`validation.md` records the command.
+
+They also require workflow-local `Always`, `Ask first`, and `Never` boundaries
+so the operating policy is easy to scan at the point of execution, not only in a
+general process document.
 
 This layer matters because it makes the workflow behavior durable across
 sessions instead of relying on one good prompt at the start of one conversation.
@@ -643,6 +742,11 @@ sessions instead of relying on one good prompt at the start of one conversation.
 These skills provide the operational behavior for creating and resuming tracked
 workflows in Codex. They turn the documented model into concrete workflow
 operations.
+
+The create workflow skill carries the stricter setup forward when it writes new
+workflow instructions and stop conditions. The resume workflow skill loads those
+expectations back into the working context, including the expected feature
+runner.
 
 That is an important step. Documentation alone is useful, but skills make the
 expected workflow executable.
@@ -686,6 +790,14 @@ verification focus, stop conditions, commit rules, and implementation notes.
 That is how the workflow keeps execution from collapsing into "do some work and
 hope the state is obvious later."
 
+### `tasks.md` is a local dependency ledger
+
+When `plan.md` alone would become noisy, a workflow can add `tasks.md` for
+finer-grained dependency tracking inside the current plan steps.
+
+That keeps the main plan readable while still preserving ready, blocked, and
+completed task context for larger workflow steps.
+
 ### `validation.md` is where commitments are proven
 
 The proof surface is not only for listing tests. It is the place where the
@@ -698,6 +810,10 @@ accepted.
 Sometimes pasting generated outputs or logs into `validation.md` is the wrong
 shape. The `artifacts/` directory exists for those cases, with `validation.md`
 pointing at the relevant paths.
+
+The benefit is not archival for its own sake. It lets the workflow keep large or
+machine-generated proof outside the narrative while still making the proof
+reviewable from repository state.
 
 ### The template intentionally ships no concrete workflow instances
 
@@ -821,8 +937,14 @@ That has a few concrete benefits for agentic work:
 - structural and behavioral work can use different evidence styles
 - optional support files stay optional instead of turning into mandatory
   bureaucracy
+- `tasks.md` can capture finer dependency tracking without replacing the plan
+- `artifacts/` can preserve large or generated proof by path
+- `Always`, `Ask first`, and `Never` boundaries make workflow-local policy
+  easier for agents to follow
 - execution discoveries can be propagated back into canonical truth instead of
   creating quiet drift
+- older broader workflows can remain legacy-valid while new workflows use the
+  narrower default
 
 The result is a workflow that is more operational than a project board and more
 durable than a conversation, while still staying much lighter than a full

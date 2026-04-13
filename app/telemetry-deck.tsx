@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import {
   TelemetryDeckProvider,
@@ -49,6 +49,76 @@ type StructuredTelemetryPayload = Record<string, unknown> & {
   linkText?: string;
   interactionKind?: TelemetryInteractionKind;
 };
+
+const TELEMETRY_DECK_APP_ID = "D9A18849-0409-45E3-B270-4F7F345B2CD7";
+const ANONYMOUS_VISITOR_ID_STORAGE_KEY =
+  "maintainable.software.telemetryDeckVisitorId";
+
+type TelemetryDeckInstance = ReturnType<typeof createTelemetryDeck>;
+
+function createAnonymousVisitorId(): string {
+  if (typeof window !== "undefined" && window.crypto?.randomUUID) {
+    return window.crypto.randomUUID();
+  }
+
+  if (typeof window !== "undefined" && window.crypto?.getRandomValues) {
+    const bytes = new Uint8Array(16);
+    window.crypto.getRandomValues(bytes);
+    return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join(
+      "",
+    );
+  }
+
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function readStoredVisitorId(storage: Storage): string | null {
+  try {
+    return storage.getItem(ANONYMOUS_VISITOR_ID_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function writeStoredVisitorId(storage: Storage, visitorId: string): boolean {
+  try {
+    storage.setItem(ANONYMOUS_VISITOR_ID_STORAGE_KEY, visitorId);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function getExistingAnonymousVisitorId(): string | null {
+  const storages = [window.localStorage, window.sessionStorage];
+
+  for (const storage of storages) {
+    const visitorId = readStoredVisitorId(storage);
+    if (visitorId) {
+      return visitorId;
+    }
+  }
+
+  return null;
+}
+
+function persistAnonymousVisitorId(visitorId: string): void {
+  const storages = [window.localStorage, window.sessionStorage];
+
+  for (const storage of storages) {
+    if (writeStoredVisitorId(storage, visitorId)) {
+      return;
+    }
+  }
+}
+
+function createInitialClientUser(): string {
+  if (typeof window === "undefined") {
+    return "server-render";
+  }
+
+  return getExistingAnonymousVisitorId() ?? createAnonymousVisitorId();
+}
 
 function isModifiedClick(event: MouseEvent): boolean {
   return (
@@ -336,15 +406,25 @@ export function TelemetryDeckShell({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  const telemetryDeck = useMemo(
+  const [clientUser] = useState(createInitialClientUser);
+  const telemetryDeck = useMemo<TelemetryDeckInstance>(
     () =>
       createTelemetryDeck({
-        appID: "D9A18849-0409-45E3-B270-4F7F345B2CD7",
-        clientUser: "anonymous",
+        appID: TELEMETRY_DECK_APP_ID,
+        clientUser,
         plugins: [browserPlugin],
       }),
-    [],
+    [clientUser],
   );
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    persistAnonymousVisitorId(clientUser);
+    telemetryDeck.clientUser = clientUser;
+  }, [clientUser, telemetryDeck]);
 
   return (
     <TelemetryDeckProvider telemetryDeck={telemetryDeck}>

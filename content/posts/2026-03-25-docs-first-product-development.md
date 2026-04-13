@@ -2,7 +2,7 @@
 layout: post
 title: "Docs-First Product Development"
 date: 2026-04-05
-updated: 2026-04-05
+updated: 2026-04-09
 published: false
 tags: [product-development, documentation, ai, software-design]
 ---
@@ -178,6 +178,11 @@ I like this layer to be indexed. In practice that means:
 - topic documents stay focused and are discovered through those indexes
 - every `README.md` entry for an existing global doc uses a structured format
 
+The current workflow also surfaces conceptual-simplicity guidance from the docs
+landing page and process docs whenever a task affects boundaries, decomposition,
+terminology, or docs structure. That keeps those decisions in the same routing
+system instead of hiding them in ad hoc prose.
+
 For me, a good entry looks like this:
 
 ```md
@@ -239,6 +244,8 @@ says.
 What I do not want is automatic doc creation everywhere. If no co-located doc
 exists yet, that should usually be left alone unless I explicitly ask for one.
 
+New co-located docs are created manually and only when explicitly requested.
+
 ## How I set this up in a repository
 
 The setup is not complicated, but it does need to be explicit.
@@ -259,6 +266,10 @@ existing global doc should explicitly include:
 This tree should only be for global documentation. If a document is really only
 about one file, it should not be forced into the global docs layer.
 
+The dictionary belongs in that global layer too, but it is now split into
+repository concepts and meta/internal terms so the product vocabulary stays
+separate from the workflow vocabulary.
+
 ### 2. Encode the workflow in repository instructions
 
 The important part is not only having docs. The important part is making the
@@ -275,6 +286,10 @@ In practice, I put rules in `AGENTS.md` that say:
   criteria
 - when modifying global docs under `docs/`, update the relevant `README.md`
   files so routing stays correct
+- when docs in an area change substantively, do a dictionary coverage pass over
+  that area so stable terms and links stay current
+- when a task affects boundaries, decomposition, terminology, or docs structure,
+  route through the conceptual-simplicity guidance before settling the shape
 - ensure each `README.md` entry for an existing global doc includes `Path`,
   `Summary`, `Read when`, and `Tags`
 
@@ -286,18 +301,20 @@ exactly the wrong moments.
 I have found it useful to keep these concerns separate instead of pushing them
 into one overloaded docs skill.
 
-So the workflow ends up with five roles:
+So the workflow ends up with six roles:
 
 - a global docs router
 - a global docs maintainer
+- a business dictionary maintainer
 - a co-located docs reader
 - a co-located docs maintainer
 - a co-located docs creator
 
 That separation matters because the discovery models are different. Global docs
-are index-based. Co-located docs are adjacency-based. Creation is a separate
-judgment call from either reading or updating. Treating them as the same thing
-makes the workflow less clear.
+are index-based. Co-located docs are adjacency-based. Dictionary maintenance is
+coverage-based across an affected docs area. Creation is a separate judgment
+call from either reading or updating. Treating them as the same thing makes the
+workflow less clear.
 
 ### 4. Keep the maintenance rules conservative
 
@@ -309,6 +326,8 @@ So the default maintenance rule I prefer is conservative:
 - read co-located docs when they already exist
 - update them when they are affected
 - do not auto-create them unless explicitly requested
+- keep dictionary maintenance explicit enough to catch surrounding terms and
+  links, not just the one term that happened to be mentioned
 
 That keeps the signal high.
 
@@ -379,6 +398,19 @@ profile for scope questions and contradiction-finding.
   tree.
 - Every `README.md` entry for an existing global doc should explicitly include
   `Path`, `Summary`, `Read when`, and `Tags`.
+
+### Dictionary Maintenance
+
+- `docs/DICTIONARY.md` is the canonical dictionary for the repository
+  terminology used by this repository's own `docs/` tree.
+- It has separate sections for repository concepts and meta/internal terms.
+- When docs or repository instructions introduce, rename, redefine, or remove
+  important repository terms, use the `business-dictionary-maintainer` skill.
+- After substantively changing docs in an area, do a dictionary coverage pass
+  over the affected docs.
+- In `docs/` prose, link repository terms to the matching dictionary entry
+  unless the term is being used as code, CLI syntax, or a file path in
+  backticks.
 
 ### Colocated Docs Maintenance
 
