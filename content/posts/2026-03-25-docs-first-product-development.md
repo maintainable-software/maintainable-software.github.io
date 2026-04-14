@@ -31,7 +31,7 @@ For teams using AI coding agents, docs-first product development means writing
 important product meaning first and implementing only against that documented
 contract. It reduces hidden assumptions, narrows context drift, and gives both
 humans and agents a stable source of truth before code is generated.
-[[1]](#ref-1) [[2]](#ref-2)
+[[1]](#ref-1) [[2]](#ref-2) [[4]](#ref-4)
 
 In this article, I show a practical workflow: a small docs-first structure, a
 conservative maintenance rule for documentation, and a lightweight adoption path
@@ -55,6 +55,7 @@ For the rest of this article, docs-first product development means:
 This is not documentation as ceremony. It is documentation as a control surface.
 
 If the semantics are implicit, they become an implementation accident.
+[[1]](#ref-1) [[2]](#ref-2) [[4]](#ref-4)
 
 ## Why should teams document first when AI coding agents are involved?
 
@@ -72,6 +73,7 @@ Code can hold these decisions eventually, but it usually does so in a way that
 is hard to critique before it hardens. Code rewards momentum. Semantics require
 precision. If meaning is still unstable, implementation pressure often turns
 unfinished ideas into durable behavior. [[1]](#ref-1) [[2]](#ref-2)
+[[4]](#ref-4)
 
 Writing things down first slows decisions down just enough to make them visible
 and reversible.
@@ -86,7 +88,8 @@ Docs-first helps because it forces the abstraction to justify itself in plain
 language before it earns a stable place in the system.
 
 If a concept is not yet understandable in documentation, it is usually not
-stable enough to be generalized safely.
+stable enough to be generalized safely. [[5]](#ref-5) [[6]](#ref-6)
+[[7]](#ref-7)
 
 ### 3) Docs-first materially improves AI collaboration
 
@@ -96,7 +99,7 @@ in chat history, the assistant will fill the gaps with guesses. Some guesses are
 right. That is precisely why they are risky.
 
 A docs-first repository gives the assistant more than patterns; it gives it a
-source of truth.
+source of truth. [[2]](#ref-2) [[3]](#ref-3) [[8]](#ref-8) [[10]](#ref-10)
 
 ### 4) Docs-first improves continuity for resumed work
 
@@ -105,7 +108,7 @@ reset, contributors switch. If the true state is only in memory, continuity is
 fragile.
 
 Documented contracts are what let a team resume without replaying all prior
-context.
+context. [[2]](#ref-2) [[8]](#ref-8) [[9]](#ref-9)
 
 ## What does docs-first not mean?
 
@@ -132,7 +135,8 @@ The workflow is simple and intentionally boring:
 4. [ ] **Implement against the contract.** Code follows the documented decision
        model.
 5. [ ] **Verify and update.** If evidence contradicts assumptions, update docs
-       and then implementation together.
+       and then implementation together. [[2]](#ref-2) [[4]](#ref-4)
+       [[12]](#ref-12)
 
 ### What to do when implementing a sequence
 
@@ -140,11 +144,13 @@ After those five checks, implementation becomes clearer:
 
 - fewer accidental architecture decisions
 - fewer repeated assumptions in follow-up prompts
-- fewer recovery sessions with missing context
+- fewer recovery sessions with missing context [[2]](#ref-2) [[3]](#ref-3)
+  [[12]](#ref-12)
 
 ## How should you structure docs for AI coding agents?
 
-The practical split is between global docs and co-located docs.
+The practical split is between global docs and co-located docs. [[1]](#ref-1)
+[[2]](#ref-2) [[11]](#ref-11)
 
 | Layer           | Where it lives                    | Scope                   | Primary use                                              | Update rule                                    |
 | --------------- | --------------------------------- | ----------------------- | -------------------------------------------------------- | ---------------------------------------------- |
@@ -162,7 +168,7 @@ Global docs are for repository-wide things:
 
 I use `docs/_index.md` as a discovery entry point, area-specific `_index.md`,
 and area-level `README.md` for mental-model context. This keeps the entry path
-explicit.
+explicit. [[1]](#ref-1) [[11]](#ref-11)
 
 ### 2. Co-located docs
 
@@ -190,7 +196,7 @@ This split keeps the contract durable: global docs provide direction, co-located
 docs keep local intent close to change. A short example of this pattern is the
 ecosystem in `docs-driven-development-template` and `workflow-setup`, where
 workflow truth and execution truth are separated and versioned for long-running
-work.
+work. [[3]](#ref-3) [[8]](#ref-8) [[10]](#ref-10) [[11]](#ref-11)
 
 ## How can I adopt this workflow in practice?
 
@@ -203,7 +209,8 @@ For teams already working with agents, this is the practical route:
 2. [ ] define a minimal global docs index with clear routing fields
 3. [ ] decide when and where co-located docs are mandatory
 4. [ ] run one narrow implementation slice end-to-end
-5. [ ] make the failure and acceptance evidence explicit
+5. [ ] make the failure and acceptance evidence explicit [[4]](#ref-4)
+       [[12]](#ref-12)
 
 ### Compact adoption checklist for a new repo slice
 
@@ -219,10 +226,11 @@ For teams already working with agents, this is the practical route:
 ## Why does this split help more in AI-assisted engineering?
 
 AI increases speed, and speed amplifies ambiguity. [[2]](#ref-2) [[3]](#ref-3)
+[[10]](#ref-10)
 
 In a codebase where meaning is not explicit in the repository, ambiguity is
 treated as if it is a low-cost temporary state. For a coding agent, that usually
-becomes a high-cost production risk.
+becomes a high-cost production risk. [[2]](#ref-2) [[3]](#ref-3) [[8]](#ref-8)
 
 This idea connects directly to
 [context engineering and session management](/agentic-engineering-part-4-context-engineering/),
@@ -238,6 +246,7 @@ When done well, docs-first means this:
 - the repo holds meaning in files
 - agents recover context from files, not hidden chat state
 - implementation becomes a safer interpretation of already explicit intent
+  [[2]](#ref-2) [[8]](#ref-8) [[9]](#ref-9)
 
 ## FAQ about docs-first for AI coding agents
 
@@ -249,12 +258,13 @@ first, then harden details as work validates those assumptions.
 ### Why does docs-first matter more for AI coding agents?
 
 Agents can move quickly. They need stable contracts to move safely. Docs-first
-gives them explicit boundaries and reduces prompt-time invention.
+gives them explicit boundaries and reduces prompt-time invention. [[2]](#ref-2)
+[[3]](#ref-3) [[10]](#ref-10)
 
 ### When should a team use global docs versus co-located docs?
 
 Use global docs for shared semantics that span modules. Use co-located docs for
-contract-level details tied to specific code.
+contract-level details tied to specific code. [[1]](#ref-1) [[11]](#ref-11)
 
 ### When should you not create a `*.docs.md` file?
 
@@ -273,16 +283,26 @@ repo that guesses.
 ## References
 
 1. <a id="ref-1"></a>
-   [Software Engineering at Google, Chapter 10: Documentation](https://abseil.io/resources/swe-book/html/ch10.html)
+   [Software Engineering at Google, Chapter 10: Documentation.](https://abseil.io/resources/swe-book/html/ch10.html)
 2. <a id="ref-2"></a>
    [OpenAI, “Harness engineering: leveraging Codex in an agent-first world.”](https://openai.com/index/harness-engineering/)
 3. <a id="ref-3"></a>
    [Anthropic, “Effective context engineering for AI agents.”](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)
 4. <a id="ref-4"></a>
-   [OpenAI Developers, “Building an AI-Native Engineering Team.”](https://developers.openai.com/codex/guides/build-ai-native-engineering-team/)
+   [GitHub Blog, “Spec-driven development with AI: Get started with a new open source toolkit.”](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/)
 5. <a id="ref-5"></a>
-   [How to Give AI Coding Agents Better Docs, Guardrails, and Feedback Loops](https://maintainable.software/agentic-engineering-part-3-docs-guardrails-feedback-loops/)
+   [Sandi Metz, “The Wrong Abstraction.”](https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction)
 6. <a id="ref-6"></a>
-   [A Tracked Workflow Setup for Agentic Repositories](https://maintainable.software/tracked-workflow-setup-for-agentic-repositories/)
+   [Kent C. Dodds, “AHA Programming.”](https://kentcdodds.com/blog/aha-programming)
 7. <a id="ref-7"></a>
-   [docs-driven-development-template README](https://github.com/maintainable-software/docs-driven-development-template/blob/main/README.md)
+   [John Ousterhout, _A Philosophy of Software Design_, 2nd ed., 2021.](https://web.stanford.edu/~ouster/cgi-bin/aposd2ndEdExtract.pdf)
+8. <a id="ref-8"></a>
+   [GitHub Blog, “Building an agentic memory system for GitHub Copilot.”](https://github.blog/ai-and-ml/github-copilot/building-an-agentic-memory-system-for-github-copilot/)
+9. <a id="ref-9"></a>
+   [OpenAI Developers, “Run long-horizon tasks with Codex,” 2026.](https://developers.openai.com/blog/run-long-horizon-tasks-with-codex/)
+10. <a id="ref-10"></a>
+    [Martin Fowler and Birgitta Böckeler, “Context Engineering for Coding Agents,” 2026.](https://martinfowler.com/articles/exploring-gen-ai/context-engineering-coding-agents.html)
+11. <a id="ref-11"></a>
+    [Software Engineering at Google, Chapter 17: Code Search.](https://abseil.io/resources/swe-book/html/ch17.html)
+12. <a id="ref-12"></a>
+    [OpenAI Developers, “Building an AI-Native Engineering Team.”](https://developers.openai.com/codex/guides/build-ai-native-engineering-team/)
