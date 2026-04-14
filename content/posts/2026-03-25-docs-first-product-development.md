@@ -5,7 +5,7 @@ description:
   "Use a docs-first workflow for AI coding agents by defining product meaning
   first, separating global and co-located docs, and giving agents a stable
   source of truth before implementation."
-date: 2026-04-05
+date: 2026-04-14
 updated: 2026-04-14
 published: true
 author: "Jan-Gerke Salomon"
