@@ -451,8 +451,6 @@ h6 {
 }
 
 .content-header {
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--line);
 }
 
 .post-header {
@@ -489,7 +487,7 @@ h6 {
   max-width: 52rem;
   margin: 0;
   color: var(--text);
-  font-size: 1.08rem;
+  font-size: 1.2rem;
   line-height: 1.6;
 }
 
@@ -563,7 +561,11 @@ td {
   border: 1px solid black;
 }
 
-.content-body,
+.content-body {
+  padding-top: 8px;
+  font-size: 1rem;
+}
+
 .post-content {
   padding-top: 14px;
   font-size: 1rem;
@@ -659,6 +661,199 @@ td {
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 8px;
+}
+
+.reference-filters {
+  display: grid;
+  gap: 14px;
+  padding: 18px 0 22px;
+  border-top: 1px solid var(--line);
+  margin-bottom: 28px;
+}
+
+.reference-filters__header h2 {
+  margin: 0 0 6px;
+  font-size: 1.18rem;
+  text-decoration: none;
+}
+
+.reference-filters__summary,
+.reference-filters__hint,
+.reference-empty {
+  margin: 0;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: 0.92rem;
+}
+
+.reference-filters__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.reference-filters__select {
+  position: relative;
+  display: inline-flex;
+  min-width: min(320px, 100%);
+  max-width: 100%;
+}
+
+.reference-filters__select::after {
+  content: "▾";
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.reference-filters__select select {
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 40px 11px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text-strong);
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  appearance: none;
+}
+
+.reference-filters__select select:disabled {
+  color: var(--muted);
+  background: #fafafa;
+}
+
+.reference-filters__clear,
+.reference-chip__remove {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+.reference-filters__clear {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text-strong);
+  cursor: pointer;
+  font-family: var(--font-ui);
+}
+
+.reference-filter-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.reference-entry__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  list-style: none;
+  margin: 0 0 4px;
+  padding: 0;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: 0.88rem;
+}
+
+.reference-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fafafa;
+  color: var(--text-strong);
+  font-family: var(--font-ui);
+  font-size: 0.84rem;
+  line-height: 1.2;
+}
+
+.reference-chip--selected {
+  border-color: color-mix(in srgb, var(--link) 28%, var(--line));
+  background: color-mix(in srgb, var(--link) 8%, #fff);
+}
+
+.reference-chip__remove {
+  padding: 0;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.reference-filters__select select:focus-visible,
+.reference-filters__clear:focus-visible,
+.reference-chip__remove:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--link) 55%, #fff);
+  outline-offset: 2px;
+}
+
+.reference-filters__clear:hover,
+.reference-chip__remove:hover {
+  color: var(--link-hover);
+}
+
+.reference-groups {
+  display: grid;
+  gap: 28px;
+  margin-top: 28px;
+}
+
+.reference-group h2 {
+  margin: 0 0 16px;
+  font-size: 1.5rem;
+}
+
+.reference-group__list {
+  display: grid;
+  gap: 20px;
+}
+
+.reference-entry {
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.reference-entry:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.reference-entry h3 {
+  margin: 0 0 8px;
+}
+
+.reference-entry p {
+  margin: 0;
+}
+
+.reference-entry__tag {
+  margin: 0;
+}
+
+.reference-empty {
+  padding-top: 10px;
+}
+
+@media (max-width: 640px) {
+  .reference-filters__controls {
+    align-items: stretch;
+  }
+
+  .reference-filters__select {
+    min-width: 100%;
+  }
 }
 
 .site-footer {
