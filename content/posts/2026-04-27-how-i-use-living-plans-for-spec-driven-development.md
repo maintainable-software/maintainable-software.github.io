@@ -42,17 +42,26 @@ Spec-driven development is the practice of making a written specification or
 plan constrain implementation work before code changes start. The version that
 works with AI coding agents is not "write everything up front." It is "make the
 next bounded change explicit enough that the agent can execute it, verify it,
-and reconcile it with reality."
+and reconcile it with reality." That puts it closer to the structured,
+multi-phase AI coding workflows now described by Thoughtworks and GitHub than to
+a one-shot prompt-to-code workflow. [[1]](#ref-1) [[2]](#ref-2) [[3]](#ref-3)
+[[4]](#ref-4) [[5]](#ref-5)
 
 A living plan is a plan file that changes as implementation teaches the team new
 facts. It records the current repository truth, the active implementation
 boundary, the checks that prove the step, and the implementation discoveries
-that should affect later work.
+that should affect later work. That maps to the same underlying lesson in
+OpenAI's and Anthropic's agent-harness writing: long-running coding agents need
+repo-local context, explicit work boundaries, validation loops, and durable
+progress artifacts. [[6]](#ref-6) [[7]](#ref-7) [[8]](#ref-8)
 
 Comprehension debt is the gap between the amount of code a team has accepted and
 the amount of that code the team can still explain, review, and evolve safely.
 Living plans reduce that debt by turning agent discoveries into project memory
-instead of leaving them in chat history.
+instead of leaving them in chat history. It is a narrower sibling of technical
+debt: the cost shows up when future changes require people or agents to
+rediscover intent, constraints, and design rationale before they can safely
+modify the system. [[9]](#ref-9) [[6]](#ref-6) [[10]](#ref-10) [[11]](#ref-11)
 
 The version I find useful is different. I use plan files as living execution
 contracts. They are grounded in the current repository, split into small
@@ -60,7 +69,10 @@ implementation slices, tied to checks, and updated after each meaningful step.
 Their job is not to replace engineering judgment. Their job is to keep the
 agent, the code, the tests, the docs, and the human reviewer aligned while the
 current repository, the actual task, and the shape of the work are being
-analyzed.
+analyzed. That is the same control problem described in current context
+engineering and harness engineering work: the agent needs relevant context,
+tools, guardrails, feedback, and human steering at the right level of the loop.
+[[6]](#ref-6) [[12]](#ref-12) [[13]](#ref-13) [[14]](#ref-14) [[10]](#ref-10)
 
 That matters because, unless we actively counteract it, agentic engineering
 creates comprehension debt: the widening gap between the volume of AI-generated
@@ -70,14 +82,21 @@ risk is that the codebase grows faster than the human mental model that should
 govern it. Working with a living plan allows us to reflect on implementation
 changes, intervene between different implementation steps, define what should be
 persisted in docs, what should be tested and - most importantly - we can
-influence the code itself in a much more straightforward way.
+influence the code itself in a much more straightforward way. OpenAI's Codex
+harness write-up makes the same operational point from the opposite direction:
+knowledge that is not visible in the repository is not visible to the agent.
+[[6]](#ref-6)
 
 This brings the creative work back to the developer while the coding agent's
 task is mostly writing the implementation for what was worked out while working
 on the living plan. The only "creative" parts that are left to the coding agent
-are minor implementation details.
+are minor implementation details. That keeps the human on the design and
+tradeoff loop while the agent works inside the bounded implementation loop.
+[[10]](#ref-10)
 
-## The problem with specs is not the specs themselves, it is stale specs
+## Why static specs fail with AI coding agents
+
+### Stale specs are the real problem
 
 The strongest objection to spec-driven development is not "documentation is
 bad." It is that documents drift.
@@ -86,7 +105,7 @@ That objection lands especially hard in AI-assisted work. A stale design doc may
 mislead a human who happens to read it. A stale spec can mislead an agent that
 executes it confidently. Augment's critique of spec-driven development makes
 that point well: if agents work from specifications, those specifications need a
-maintenance loop, not just an authoring loop. [[1]](#ref-1)
+maintenance loop, not just an authoring loop. [[15]](#ref-15)
 
 The workflow that deserves criticism looks like this:
 
@@ -102,12 +121,14 @@ big prompt
 That workflow creates too much text before there is enough evidence. It lets
 guesses harden into requirements. It produces review overload. It encourages the
 agent to treat the spec as authoritative even when the spec has not been checked
-against the repository.
+against the repository. Thoughtworks makes a related caution about emerging SDD
+tools: some workflows generate lengthy spec files that are hard to review, and
+the usefulness depends heavily on task size and type. [[4]](#ref-4)
 
 When implementation reveals that the plan was wrong, the document becomes worse
 than useless. It becomes a source of confident misdirection.
 
-## Bad spec-driven development is document-driven development
+### Bad spec-driven development is document-driven development
 
 I find it useful to separate spec-driven development (SDD) from document-driven
 development.
@@ -123,13 +144,18 @@ paths, permissions, environments, data shape surprises, and failure modes that
 were not obvious in the first prompt.
 
 If a process cannot absorb those discoveries, it is just waterfall with faster
-typing.
+typing. Requirements and validation work has always had to deal with
+correctness, completeness, clarity, consistency, traceability, and evidence; AI
+does not make those concerns disappear. [[16]](#ref-16)
 
 The useful version of spec-driven development treats the spec or plan as a
 working control surface. It is allowed to change when the repository teaches us
-something. It is useful only while it remains current enough to trust.
+something. It is useful only while it remains current enough to trust. GitHub's
+own Spec Kit process reflects the same concern by separating specification,
+clarification, planning, tasking, analysis, and implementation instead of asking
+one artifact to do every job at once. [[3]](#ref-3) [[5]](#ref-5)
 
-## Evolutionary design
+### Evolutionary design needs living documentation
 
 Before we dive deeper into SDD, I want to highlight a related topic which seems
 to have the same understanding issue that SDD currently has, although that topic
@@ -145,7 +171,8 @@ they have, only to discover later that the better shape of the system is visible
 only after some of it has been built. Fowler makes that point in his writing on
 software quality and evolutionary design: some cruft is inevitable, and design
 has to keep changing as the program changes. This seems to be exactly the same
-when coding agents write the code instead of teams. [[5]](#ref-5) [[6]](#ref-6)
+when coding agents write the code instead of teams. [[9]](#ref-9)
+[[17]](#ref-17)
 
 That does not mean every local implementation decision should simply become the
 design. Undisciplined evolutionary design degenerates into code-and-fix work:
@@ -161,18 +188,24 @@ sits between those extremes. It accepts that the design must change as
 understanding improves, but it also insists on the conditions that make change
 safe: clear concepts, cohesive modules, low coupling, tests, continuous
 verification, refactoring, and people who care enough to keep the design
-converging instead of letting it drift.
+converging instead of letting it drift. That is standard software-design ground:
+modularity improves comprehensibility and flexibility, automated tests support
+confident change, and protected variation keeps expected change from leaking
+through the whole system. [[18]](#ref-18) [[19]](#ref-19) [[20]](#ref-20)
 
 When practicing SDD, documentation should be included in the design space, as
 “documentation is often so tightly coupled to code that it should […] be treated
-as code.” [[7]](#ref-7)
+as code.” [[21]](#ref-21)
 
 This matters even more when working with coding agents. Agents can implement a
 large amount of code quickly, but that speed amplifies whichever design process
 is in place. If the process is ad hoc, the agent produces ad hoc design faster.
 If the spec is static, the agent can confidently preserve an outdated idea. If
 the plan is alive, the agent can help execute one step while the developer keeps
-the design work visible.
+the design work visible. Current agent-harness reports from OpenAI and Anthropic
+describe the same failure mode: without structure, agents try to do too much,
+lose or compress context poorly, or drift from the intended work. [[6]](#ref-6)
+[[8]](#ref-8) [[22]](#ref-22)
 
 That is how I use living plans. I use them to understand the current design,
 document the relevant parts for the current work/task, then work out what the
@@ -191,14 +224,19 @@ This is also why I treat specs and docs with the same seriousness as code. If a
 step changes the implemented reality, the plan should say what changed, tests
 should prove the important behavior, and durable docs should be updated when
 they describe repository truth. The design evolves, but the written model of the
-system evolves with it.
+system evolves with it. Google describes tests as executable documentation when
+they stay clear and behavior-focused, and its documentation guidance treats docs
+as part of maintaining repository knowledge over time. [[21]](#ref-21)
+[[18]](#ref-18) [[23]](#ref-23)
 
 For me, that is the practical link between evolutionary design and living plans:
 the plan is not a frozen design document. It is the control surface that lets me
 practice evolutionary design deliberately while a coding agent does the
 implementation work inside the next agreed boundary.
 
-## A good plan is an execution contract
+## What a living plan does
+
+### A good plan is an execution contract
 
 For application work with AI coding agents, I do not think the spec replaces
 code. The relationship is simpler:
@@ -211,7 +249,9 @@ code. The relationship is simpler:
 
 A plan in agentic engineering is not a wish list. It is an execution contract
 that lets a human or agent understand the current truth, make a bounded change,
-prove the result, and carry discovered truth forward.
+prove the result, and carry discovered truth forward. This is the practical
+shape of modern agent harnesses: plan, edit, run tools, observe results, repair
+failures, update docs or status, and repeat. [[6]](#ref-6) [[7]](#ref-7)
 
 This is also why I do not treat the final documentation as something I should
 fully write before implementation. The durable spec that lands in a repository's
@@ -220,9 +260,11 @@ after the code has revealed the real shape of the work.
 
 The plan comes earlier. It is more concrete than a product brief, less permanent
 than final docs, and specific enough to constrain one implementation slice at a
-time.
+time. Anthropic's long-running-agent work found that asking agents to work
+incrementally and leave structured progress artifacts was critical to avoiding
+one-shotting and undocumented half-finished work. [[8]](#ref-8)
 
-## What my plan files are for
+### What my plan files are for
 
 The plan files I use usually live in `plans/PLAN.*.md`. They are deliberately
 plain. Their job is to turn a vague change into a sequence of bounded,
@@ -247,8 +289,10 @@ This is the practical answer to the "you cannot know everything up front"
 critique. I agree. The point of the plan is not to know everything up front. The
 point is to make unknowns explicit, close the relevant unknowns before each
 implementation slice, and record the discoveries before the next slice starts.
+That is also why Spec Kit separates clarification and analysis from
+implementation instead of treating the first prompt as final. [[3]](#ref-3)
 
-## The structure of a useful plan file
+### The structure of a useful plan file
 
 Not every plan needs the same top-level sections. The exact headings can vary.
 The important part is that each section owns one kind of information.
@@ -318,14 +362,20 @@ there is no real generalization after all. If they do show one, I continue to
 work on the plan so it describes the current status quo, the intended
 generalization, where it should be used, which docs or technical specs need to
 change with it and eventually the steps how to get there from the status quo.
+That caution is not agent-specific; wrong abstractions are a known source of
+future change cost, and agent speed makes that cost easier to create at scale.
+[[9]](#ref-9) [[24]](#ref-24)
 
-## Each step has its own contract
+### Each implementation step has its own contract
 
 The most important section is the step-by-step implementation plan.
 
 That is where a plan stops being an essay and becomes agent-executable. Each
 step should be small enough that an agent can implement it, verify it, and stop
-without dragging unrelated work into the same change.
+without dragging unrelated work into the same change. That matches the pattern
+in Anthropic's long-running-agent experiments: choose one feature, make
+incremental progress, self-verify, and leave the environment clean for the next
+session. [[8]](#ref-8)
 
 I use a repeatable structure:
 
@@ -394,7 +444,9 @@ status, the plan names the docs that must change in the same pass.
 `Implementation discoveries` starts as `none yet`. After execution, it becomes
 the place where the agent records facts learned during implementation.
 
-## Pre-step discovery prevents fantasy planning
+## How living plans keep agent work grounded
+
+### Pre-step discovery prevents fantasy planning
 
 Many failures blamed on spec-driven development are really failures of fantasy
 planning.
@@ -402,7 +454,10 @@ planning.
 The agent writes a plan without reading the repository. It invents APIs that do
 not exist. It adds a new abstraction next to an existing one. It chooses a
 library that is not installed. It generates a folder structure that violates the
-project's boundaries. Then people blame the spec.
+project's boundaries. Then people blame the spec. Context engineering guidance
+from Anthropic and Fowler makes the same underlying point: the problem is often
+not the model's ability to write code, but the quality, relevance, and structure
+of the context it is asked to operate inside. [[13]](#ref-13) [[14]](#ref-14)
 
 But the spec was never grounded.
 
@@ -432,13 +487,15 @@ then reports the answer against the exact discovery item.
 
 The closure should not be "the agent thinks this is probably true." It should
 become a small decision with evidence: code research, docs research, test
-research, a planning decision, or a known current limitation.
+research, a planning decision, or a known current limitation. That is why code
+search, tests, and repository-local docs are part of the proof layer rather than
+optional background reading. [[21]](#ref-21) [[18]](#ref-18) [[25]](#ref-25)
 
 This is one of the main differences between useful SDD and fantasy planning. The
 plan does not pretend all answers are known up front. It records the questions
 that must be answered before the next slice may start.
 
-## Implementation boundaries prevent scope creep
+### Implementation boundaries prevent scope creep
 
 The implementation boundary is the section that prevents the agent from turning
 a small task into a broad rewrite.
@@ -466,14 +523,19 @@ presentation surface while keeping routing, authentication, transport, React
 Query hooks, route semantics, and mutation behavior intact.
 
 That distinction matters. Agents tend to solve across boundaries unless the
-boundary is explicit.
+boundary is explicit. Explicit module boundaries and protected variation are old
+software-design tools; with coding agents, they also become operational
+guardrails. [[6]](#ref-6) [[19]](#ref-19) [[20]](#ref-20)
 
-## Verification separates checks from test cases
+### Verification separates checks from test cases
 
 A spec that cannot fail is just prose.
 
 The central discipline is turning acceptance criteria into two different kinds
-of proof: the verification list and the expected test cases.
+of proof: the verification list and the expected test cases. NASA's software
+engineering handbook draws the same useful distinction between validating that
+the right system is being produced and verifying that the product is being
+produced correctly. [[16]](#ref-16)
 
 The verification list is the agent's end-of-step checklist. It says what must be
 true before the agent can call the step done: the intended behavior works, the
@@ -488,7 +550,10 @@ tests, contract tests, browser tests, migration checks, type checks, lint rules,
 snapshot tests, or architecture checks. They can be more detailed than the
 verification list because they do not need to describe every completion
 criterion. They describe what the test suite or automated checks should prove
-after implementation.
+after implementation. Google's testing guidance is useful here because it
+separates test size, test scope, determinism, behavior-focused unit tests, and
+the role of automated testing in making change safer. [[18]](#ref-18)
+[[23]](#ref-23)
 
 If the plan says `/users` must keep row navigation to `/users/:id`, the
 verification list might require the agent to confirm the route still works, run
@@ -503,16 +568,20 @@ Good plans distinguish proof from narrative. An agent can write a convincing
 summary while the system is still broken. The verification list forces the agent
 to reconcile the step with implementation, tests, and docs. Expected test cases
 make the durable proof explicit enough that future changes can break loudly.
+That fits the broader AI-risk-management principle that trustworthy AI use needs
+evaluation, validation, accountability, and evidence, not only plausible output.
+[[26]](#ref-26)
 
 Boeckeler's comparison of Kiro, GitHub Spec Kit, and Tessl makes a related
 point: the useful part of modern SDD tooling is not the existence of more
 generated Markdown, but the separation between specification, planning, task
-breakdown, validation, and implementation. [[2]](#ref-2) GitHub's Spec Kit
+breakdown, validation, and implementation. [[1]](#ref-1) GitHub's Spec Kit
 material applies that split through explicit phases and checkpoints.
-[[3]](#ref-3) [[4]](#ref-4) I do not think everyone needs that exact toolkit. I
-do think the separation of responsibilities is right.
+[[2]](#ref-2) [[3]](#ref-3) [[4]](#ref-4) [[5]](#ref-5) I do not think everyone
+needs that exact toolkit. I do think the separation of responsibilities is
+right.
 
-## Implementation discoveries keep the plan alive
+### Implementation discoveries keep the plan alive
 
 The plan becomes valuable after implementation only if it records what actually
 happened.
@@ -520,7 +589,10 @@ happened.
 After a step is implemented, I make the coding agent reconcile the plan with
 reality. A completed step should not merely say `Status: completed`. It should
 record what changed, what proved it, which checks ran, which docs were updated,
-which drift was accepted, and which discoveries matter for later steps.
+which drift was accepted, and which discoveries matter for later steps. This is
+the same kind of state handoff that Anthropic's progress-file pattern and
+OpenAI's repository-knowledge system are trying to make durable. [[6]](#ref-6)
+[[8]](#ref-8)
 
 > Update `./plans/PLAN.<plan-file-name>.md` and update the 6. step's status. If
 > you discovered or implemented anything in this step's implementation that's
@@ -539,7 +611,9 @@ be visible before another agent tries to implement it.
 I also let the coding agent do a docs coverage pass after substantial steps. The
 step already names `What to add to docs`. After implementation, the agent checks
 whether those docs were actually updated and whether the work revealed
-additional repository truth that should be documented.
+additional repository truth that should be documented. This is the practical
+maintenance loop that keeps documentation from drifting away from code.
+[[21]](#ref-21) [[6]](#ref-6)
 
 > Let's go through step 9 again, specifically what should be added to the docs.
 > Did those things get added to the docs? Now that step 9 has been implemented,
@@ -555,12 +629,19 @@ if an earlier step changed the practical constraints.
 
 The plan stays current by flowing discoveries forward. Discoveries close future
 pre-step questions, reshape implementation boundaries, change proof strategy, or
-mark planned work as no longer necessary.
+mark planned work as no longer necessary. Current long-horizon agent guidance
+points in the same direction: externalized state, status updates, and
+session-to-session handoff are what let work continue without re-solving the
+same context problem each time. [[7]](#ref-7) [[8]](#ref-8)
 
-## Plans reduce comprehension debt
+## Why living plans reduce comprehension debt
+
+### Plans reduce comprehension debt
 
 Comprehension debt is the widening gap between the volume of code produced by AI
-and the code a developer actually understands.
+and the code a developer actually understands. It matters for the same economic
+reason internal quality matters: future changes get slower and riskier when the
+system is harder to understand. [[9]](#ref-9)
 
 That gap grows when implementation moves faster than human comprehension. A
 session may leave behind correct code, passing tests, and a plausible summary,
@@ -574,7 +655,9 @@ developer's memory. Agentic engineering makes this worse because agents can move
 quickly through a large amount of context. They find local constraints, package
 quirks, test environment issues, old conventions, hidden ownership boundaries,
 and partial drift. If those discoveries are not written back, the human reviewer
-has to reconstruct the design after the code already exists.
+has to reconstruct the design after the code already exists. OpenAI describes
+the same repo-legibility constraint bluntly: information outside the agent's
+accessible context effectively does not exist to the agent. [[6]](#ref-6)
 
 A living plan reduces that debt by making the human mental model part of the
 work. The next agent does not need to reconstruct the whole story from old
@@ -585,14 +668,19 @@ updated, and which decisions constrain the next slice.
 This is the difference between a plan as ceremony and a plan as working memory.
 The plan is useful only if it remains current enough to trust, specific enough
 to constrain the next change, and honest enough to record when implementation
-changed what the plan originally believed.
+changed what the plan originally believed. Anthropic's long-running-agent work
+uses progress files and feature status for the same reason: the next session
+needs reliable externalized memory. [[8]](#ref-8)
 
-## The spec must update when reality contradicts it
+### The spec must update when reality contradicts it
 
 The best criticism of spec-driven development is spec drift.
 
 The best answer is not "engineers should remember to update the docs." That has
-never been reliable enough.
+never been reliable enough. Google calls out the tenuous relationship between
+software documentation and code when requirements become outdated or miss edge
+cases; relying on memory alone is exactly how that drift persists.
+[[18]](#ref-18)
 
 The workflow should include a reconciliation step at the end of each slice:
 
@@ -608,12 +696,14 @@ This is where the agent should help. If an agent can edit code, it can also
 propose updates to the plan, spec, or docs when it discovers a mismatch. The
 human still approves the change. But the maintenance work should not depend
 entirely on a tired engineer remembering to update a document after the hard
-part feels done.
+part feels done. OpenAI describes recurring doc-gardening agents that scan for
+stale or obsolete repository knowledge and open fix-up pull requests; the same
+principle applies at smaller scale inside a living plan. [[6]](#ref-6)
 
 A living spec is not a spec that magically stays correct. It is a spec with a
 mandatory repair path.
 
-## When this workflow is worth the overhead
+### When this workflow is worth the overhead
 
 A credible defense of spec-driven development has to concede that it is not
 free.
@@ -644,9 +734,11 @@ That concession makes the argument stronger, not weaker.
 
 Spec-driven development is not a universal ceremony. It is a risk-control
 mechanism. Use it when ambiguity, coordination cost, architectural risk, or
-agent autonomy is high enough to justify the added structure.
+agent autonomy is high enough to justify the added structure. That aligns with
+NIST's broader framing for generative AI: higher-risk uses need stronger
+governance, evidence, validation, and accountability. [[26]](#ref-26)
 
-## The practical workflow
+## A practical living-plan workflow
 
 The workflow worth defending is not:
 
@@ -688,21 +780,27 @@ The intent says what matters and why. Discovery prevents fantasy planning.
 Constraints prevent the agent from solving the wrong problem in a technically
 plausible way. The step contract makes implementation reviewable. Checks give
 the work a failure mode. Human review handles tradeoffs. Reconciliation keeps
-project memory current.
+project memory current. The same loop appears, in different language, in current
+agent practice: plan, implement, validate, repair, update docs or status, and
+repeat. [[7]](#ref-7) [[8]](#ref-8)
 
 Bad SDD produces Markdown.
 
 Good SDD produces alignment, constraints, checks, reviewable slices, and updated
 project memory.
 
-## Conclusion: SDD is useful when it becomes project memory
+## Conclusion: Living plans make spec-driven development project memory
 
 The backlash against spec-driven development is mostly a backlash against stale
 document-driven development.
 
 A static spec handed to an AI agent is brittle. It creates false confidence,
 review overload, and stale instructions that agents may execute confidently. If
-that is what someone means by SDD, the criticism lands.
+that is what someone means by SDD, the criticism lands. The critique is also
+consistent with the problems described by Thoughtworks, GitHub, OpenAI, and
+Anthropic: context can rot, agents need checkpoints, and generated artifacts
+need reviewable structure. [[15]](#ref-15) [[4]](#ref-4) [[6]](#ref-6)
+[[8]](#ref-8)
 
 But a small, living, repo-grounded, test-backed plan is not waterfall. It is a
 control system for AI-assisted software development.
@@ -710,7 +808,10 @@ control system for AI-assisted software development.
 The code remains the operational artifact. The tests provide executable truth.
 The docs record durable repository truth. The plan records the current execution
 contract. The human remains responsible for tradeoffs. The agent works inside a
-narrower, more reviewable boundary.
+narrower, more reviewable boundary. That division of labor is the through-line
+across harness engineering, context engineering, testing practice, and
+documentation practice. [[21]](#ref-21) [[6]](#ref-6) [[13]](#ref-13)
+[[18]](#ref-18)
 
 That is the version worth using.
 
@@ -721,48 +822,90 @@ That is the version worth using.
 A living plan is a repository file that constrains the next implementation step
 and is updated as implementation reveals new facts. It is not a permanent design
 document. It is the current execution contract between the human, the coding
-agent, the codebase, the tests, and the docs.
+agent, the codebase, the tests, and the docs. [[6]](#ref-6) [[7]](#ref-7)
+[[8]](#ref-8)
 
 ### How is a living plan different from a static spec?
 
 A static spec tries to stay authoritative after it is written. A living plan
 stays useful by changing when repository reality contradicts it. If discovery,
 implementation, checks, or review expose a wrong assumption, the plan records
-the new truth before later work depends on the old one.
+the new truth before later work depends on the old one. [[21]](#ref-21)
+[[16]](#ref-16)
 
 ### Why do living plans matter for AI coding agents?
 
 AI coding agents can move faster than the developer's mental model. Living plans
 slow the right parts down: discovery, boundaries, verification, and
 reconciliation. That keeps agent work reviewable and turns implementation
-discoveries into project memory.
+discoveries into project memory. [[6]](#ref-6) [[8]](#ref-8) [[10]](#ref-10)
 
 ### When should a team use living plans?
 
 Use living plans when ambiguity, coordination cost, architectural risk, or agent
 autonomy is high enough to justify the overhead. They are most useful for
 cross-file behavior changes, migrations, API changes, security-sensitive work,
-team-owned features, and agent-implemented features.
+team-owned features, and agent-implemented features. [[16]](#ref-16)
+[[26]](#ref-26)
 
 ### Do living plans replace tests or docs?
 
 No. The plan records the current execution contract. Tests provide executable
 truth. Durable docs record repository or product truth after implementation has
 settled. A good living plan connects those surfaces instead of replacing them.
+[[21]](#ref-21) [[18]](#ref-18)
 
 ## References
 
 1. <a id="ref-1"></a>
-   [Augment Code, "What spec-driven development gets wrong."](https://www.augmentcode.com/blog/what-spec-driven-development-gets-wrong)
-2. <a id="ref-2"></a>
    [Birgitta Boeckeler, "Understanding Spec-Driven-Development: Kiro, spec-kit, and Tessl."](https://martinfowler.com/articles/exploring-gen-ai/sdd-3-tools.html)
-3. <a id="ref-3"></a>
+2. <a id="ref-2"></a>
    [GitHub Blog, "Spec-driven development with AI: Get started with a new open source toolkit."](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/)
-4. <a id="ref-4"></a>
+3. <a id="ref-3"></a>
    [GitHub Spec Kit, "Quick Start Guide."](https://github.github.com/spec-kit/quickstart.html)
+4. <a id="ref-4"></a>
+   [Thoughtworks Technology Radar, "Spec-driven development."](https://www.thoughtworks.com/en-gb/radar/techniques/spec-driven-development)
 5. <a id="ref-5"></a>
-   [Martin Fowler, "Is High Quality Software Worth the Cost?"](https://martinfowler.com/articles/is-quality-worth-cost.html)
+   [GitHub Spec Kit, "Specification-Driven Development (SDD)."](https://github.com/github/spec-kit/blob/main/spec-driven.md)
 6. <a id="ref-6"></a>
-   [Martin Fowler, "Is Design Dead?"](https://martinfowler.com/articles/designDead.html)
+   [OpenAI, "Harness engineering: leveraging Codex in an agent-first world."](https://openai.com/index/harness-engineering/)
 7. <a id="ref-7"></a>
-   [Software Engineering at Google, Chapter 10: Documentation.](https://abseil.io/resources/swe-book/html/ch10.html)
+   [OpenAI Developers, "Run long horizon tasks with Codex."](https://developers.openai.com/blog/run-long-horizon-tasks-with-codex)
+8. <a id="ref-8"></a>
+   [Anthropic, "Effective harnesses for long-running agents."](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)
+9. <a id="ref-9"></a>
+   [Martin Fowler, "Is High Quality Software Worth the Cost?"](https://martinfowler.com/articles/is-quality-worth-cost.html)
+10. <a id="ref-10"></a>
+    [Martin Fowler and Birgitta Böckeler, "Humans and Agents in Software Engineering Loops."](https://www.martinfowler.com/articles/exploring-gen-ai/humans-and-agents.html)
+11. <a id="ref-11"></a>
+    [Martin Fowler, "Technical Debt Quadrant."](https://martinfowler.com/bliki/TechnicalDebtQuadrant.html)
+12. <a id="ref-12"></a>
+    [OpenAI Developers, "Building an AI-Native Engineering Team."](https://developers.openai.com/codex/guides/build-ai-native-engineering-team)
+13. <a id="ref-13"></a>
+    [Anthropic, "Effective context engineering for AI agents."](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)
+14. <a id="ref-14"></a>
+    [Martin Fowler and Birgitta Böckeler, "Context Engineering for Coding Agents."](https://martinfowler.com/articles/exploring-gen-ai/context-engineering-coding-agents.html)
+15. <a id="ref-15"></a>
+    [Augment Code, "What spec-driven development gets wrong."](https://www.augmentcode.com/blog/what-spec-driven-development-gets-wrong)
+16. <a id="ref-16"></a>
+    [NASA Software Engineering Handbook, "SWE-055 - Requirements Validation."](https://swehb.nasa.gov/spaces/SWEHBVC/pages/50888911/SWE-055+-+Requirements+Validation)
+17. <a id="ref-17"></a>
+    [Martin Fowler, "Is Design Dead?"](https://martinfowler.com/articles/designDead.html)
+18. <a id="ref-18"></a>
+    [Software Engineering at Google, Chapter 11: Testing Overview.](https://abseil.io/resources/swe-book/html/ch11.html)
+19. <a id="ref-19"></a>
+    [D. L. Parnas, "On the Criteria To Be Used in Decomposing Systems into Modules."](https://prl.khoury.northeastern.edu/img/p-tr-1971.pdf)
+20. <a id="ref-20"></a>
+    [Craig Larman, "Protected Variation: The Importance of Being Closed."](https://www.martinfowler.com/ieeeSoftware/protectedVariation.pdf)
+21. <a id="ref-21"></a>
+    [Software Engineering at Google, Chapter 10: Documentation.](https://abseil.io/resources/swe-book/html/ch10.html)
+22. <a id="ref-22"></a>
+    [Anthropic, "Harness design for long-running application development."](https://www.anthropic.com/engineering/harness-design-long-running-apps)
+23. <a id="ref-23"></a>
+    [Software Engineering at Google, Chapter 12: Unit Testing.](https://abseil.io/resources/swe-book/html/ch12.html)
+24. <a id="ref-24"></a>
+    [Sandi Metz, "The Wrong Abstraction."](https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction)
+25. <a id="ref-25"></a>
+    [Software Engineering at Google, Chapter 17: Code Search.](https://abseil.io/resources/swe-book/html/ch17.html)
+26. <a id="ref-26"></a>
+    [NIST, "Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile."](https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf)
