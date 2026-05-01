@@ -229,11 +229,7 @@ export function ReferenceDirectory({ groups }: ReferenceDirectoryProps) {
                   </ul>
 
                   <h3>
-                    <a
-                      href={entry.href}
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
+                    <a href={entry.href} rel="noopener" target="_blank">
                       {entry.title}
                     </a>
                   </h3>
@@ -272,11 +268,7 @@ export function ReferenceDirectory({ groups }: ReferenceDirectoryProps) {
                     </ul>
 
                     <h3>
-                      <a
-                        href={entry.href}
-                        rel="noopener noreferrer"
-                        target="_blank"
-                      >
+                      <a href={entry.href} rel="noopener" target="_blank">
                         {entry.title}
                       </a>
                     </h3>

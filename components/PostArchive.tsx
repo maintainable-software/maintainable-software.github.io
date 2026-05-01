@@ -40,7 +40,7 @@ export function PostArchive({
               <a
                 href="https://www.youtube.com/watch?v=SxdOUGdseq4"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener"
               >
                 Rich Hickey - Simple made easy
               </a>

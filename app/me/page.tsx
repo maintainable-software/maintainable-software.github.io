@@ -174,7 +174,7 @@ export default function MePage() {
             <a
               href="https://github.com/Mohammer5"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener"
             >
               GitHub
             </a>
@@ -183,7 +183,7 @@ export default function MePage() {
             <a
               href="https://www.linkedin.com/in/jan-gerke-salomon/"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener"
             >
               LinkedIn
             </a>
