@@ -11,6 +11,7 @@ published: true
 author: "Jan-Gerke Salomon"
 author_url: "/me/"
 canonical_url: "https://maintainable.software/how-i-use-living-plans-for-spec-driven-development/"
+image: "/assets/images/posts/how-i-use-living-plans-for-spec-driven-development.png"
 tags:
   [
     agentic-engineering,
@@ -37,6 +38,19 @@ The weak version of spec-driven development is easy to criticize: write a large
 document, hand it to an AI coding agent, wait for a large implementation, and
 then discover that the document did not survive contact with the real codebase.
 That deserves the criticism it gets.
+
+## The workflow in brief
+
+I use living plan files as execution contracts for AI coding agents:
+
+1. Discover the current repository reality before planning the change.
+2. Define the next bounded implementation slice.
+3. Make the expected checks explicit before or alongside the step.
+4. Let the agent implement only that slice.
+5. Reconcile the plan with what implementation revealed.
+6. Persist durable findings into tests, docs, or project memory.
+
+## What living plans are for
 
 Spec-driven development is the practice of making a written specification or
 plan constrain implementation work before code changes start. The version that

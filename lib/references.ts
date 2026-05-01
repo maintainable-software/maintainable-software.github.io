@@ -73,7 +73,7 @@ export const REFERENCE_GROUPS: ReferenceGroup[] = [
           "A strong guide to moving from ad hoc checks to a real eval program. It covers tasks, trials, graders, and the tradeoffs between deterministic, model-based, and human evaluation for multi-turn agents.",
         tags: ["agent workflows", "evaluation", "reliability", "testing"],
         corePath: true,
-        learningOrder: 9,
+        learningOrder: 10,
       },
       {
         title: "Effective harnesses for long-running agents",
@@ -216,6 +216,20 @@ export const REFERENCE_GROUPS: ReferenceGroup[] = [
     ],
   },
   {
+    source: "Augment Code",
+    entries: [
+      {
+        title: "What spec-driven development gets wrong",
+        href: "https://www.augmentcode.com/blog/what-spec-driven-development-gets-wrong",
+        description:
+          "Useful counterpoint on static specs, stale context, and why generated implementation plans still need feedback from the actual codebase.",
+        tags: ["agent workflows", "context engineering", "documentation"],
+        corePath: false,
+        learningOrder: 1,
+      },
+    ],
+  },
+  {
     source: "Bazel",
     entries: [
       {
@@ -239,7 +253,22 @@ export const REFERENCE_GROUPS: ReferenceGroup[] = [
           "Strong operational framing for coding agents: the harness is not just plumbing but the system that provides steering loops, maintainability checks, architecture fitness checks, and behavior feedback.",
         tags: ["agent workflows", "architecture", "reliability", "testing"],
         corePath: true,
-        learningOrder: 10,
+        learningOrder: 11,
+      },
+      {
+        title:
+          "Understanding Spec-Driven-Development: Kiro, spec-kit, and Tessl",
+        href: "https://martinfowler.com/articles/exploring-gen-ai/sdd-3-tools.html",
+        description:
+          "A careful comparison of modern spec-driven development tools and the tradeoff between generating implementation guidance and keeping intent understandable.",
+        tags: [
+          "agent workflows",
+          "context engineering",
+          "documentation",
+          "tools",
+        ],
+        corePath: true,
+        learningOrder: 7,
       },
       {
         title: "How far can we push AI autonomy in code generation?",
@@ -248,7 +277,7 @@ export const REFERENCE_GROUPS: ReferenceGroup[] = [
           "A useful closing corrective. It documents how autonomous coding loops overreach, rationalize failing tests, and invent extra behavior, which makes it a good final chapter on where supervision still matters.",
         tags: ["agent workflows", "evaluation", "reliability", "testing"],
         corePath: true,
-        learningOrder: 12,
+        learningOrder: 13,
       },
     ],
   },
@@ -379,7 +408,7 @@ export const REFERENCE_GROUPS: ReferenceGroup[] = [
           "A concrete memory chapter for coding agents: store repository-scoped facts with citations, verify them just in time before reuse, and let memories self-heal instead of turning stale notes into permanent steering errors.",
         tags: ["agent workflows", "memory", "reliability", "retrieval"],
         corePath: true,
-        learningOrder: 7,
+        learningOrder: 8,
       },
       {
         title:
@@ -408,6 +437,39 @@ export const REFERENCE_GROUPS: ReferenceGroup[] = [
           "context engineering",
           "documentation",
           "testing",
+          "tools",
+        ],
+        corePath: false,
+        learningOrder: 1,
+      },
+    ],
+  },
+  {
+    source: "GitHub Spec Kit",
+    entries: [
+      {
+        title: "Quick Start Guide",
+        href: "https://github.github.com/spec-kit/quickstart.html",
+        description:
+          "Concrete walkthrough of the Spec Kit loop, useful when turning high-level intent into specs, plans, and task artifacts an agent can execute.",
+        tags: [
+          "agent workflows",
+          "context engineering",
+          "documentation",
+          "tools",
+        ],
+        corePath: false,
+        learningOrder: 1,
+      },
+      {
+        title: "Specification-Driven Development (SDD)",
+        href: "https://github.com/github/spec-kit/blob/main/spec-driven.md",
+        description:
+          "Primary methodology document for Spec Kit, including the principles and artifacts behind its specification-driven workflow.",
+        tags: [
+          "agent workflows",
+          "context engineering",
+          "documentation",
           "tools",
         ],
         corePath: false,
@@ -658,6 +720,24 @@ export const REFERENCE_GROUPS: ReferenceGroup[] = [
         learningOrder: 1,
       },
       {
+        title: "Is Design Dead?",
+        href: "https://martinfowler.com/articles/designDead.html",
+        description:
+          "Durable framing for keeping design continuous and evolutionary instead of treating upfront plans as either complete or worthless.",
+        tags: ["architecture", "documentation", "modularity"],
+        corePath: false,
+        learningOrder: 1,
+      },
+      {
+        title: "Is High Quality Software Worth the Cost?",
+        href: "https://martinfowler.com/articles/is-quality-worth-cost.html",
+        description:
+          "A clear argument that internal quality pays for itself through cheaper, faster change, which matters when agents repeatedly modify the same codebase.",
+        tags: ["architecture", "reliability"],
+        corePath: false,
+        learningOrder: 1,
+      },
+      {
         title: "Linking Modular Architecture to Development Teams",
         href: "https://martinfowler.com/articles/linking-modular-arch.html",
         description:
@@ -681,6 +761,15 @@ export const REFERENCE_GROUPS: ReferenceGroup[] = [
         description:
           "Still one of the cleanest heuristics for placing verification where it is cheapest and most informative.",
         tags: ["reliability", "testing"],
+        corePath: false,
+        learningOrder: 1,
+      },
+      {
+        title: "Technical Debt Quadrant",
+        href: "https://martinfowler.com/bliki/TechnicalDebtQuadrant.html",
+        description:
+          "Useful vocabulary for distinguishing deliberate tradeoffs from careless debt, which keeps agent-produced shortcuts visible instead of accidental.",
+        tags: ["architecture", "reliability"],
         corePath: false,
         learningOrder: 1,
       },
@@ -759,6 +848,20 @@ export const REFERENCE_GROUPS: ReferenceGroup[] = [
     ],
   },
   {
+    source: "NASA Software Engineering Handbook",
+    entries: [
+      {
+        title: "SWE-055 - Requirements Validation",
+        href: "https://swehb.nasa.gov/spaces/SWEHBVC/pages/50888911/SWE-055+-+Requirements+Validation",
+        description:
+          "Authoritative requirements-validation guidance for checking that documented intent is correct, complete, consistent, and testable before implementation relies on it.",
+        tags: ["documentation", "reliability", "testing"],
+        corePath: false,
+        learningOrder: 1,
+      },
+    ],
+  },
+  {
     source: "Neal Ford",
     entries: [
       {
@@ -767,6 +870,21 @@ export const REFERENCE_GROUPS: ReferenceGroup[] = [
         description:
           "Good framework for using fitness functions and other checks to let an architecture evolve without losing control.",
         tags: ["architecture", "reliability", "testing"],
+        corePath: false,
+        learningOrder: 1,
+      },
+    ],
+  },
+  {
+    source: "NIST",
+    entries: [
+      {
+        title:
+          "Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile",
+        href: "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf",
+        description:
+          "Authoritative risk-management profile for generative AI systems, useful for grounding agent workflows in documented governance, evaluation, and human-oversight concerns.",
+        tags: ["agent workflows", "evaluation", "reliability", "safety"],
         corePath: false,
         learningOrder: 1,
       },
@@ -849,7 +967,7 @@ export const REFERENCE_GROUPS: ReferenceGroup[] = [
           "A compact operational guide to approval surfaces. Useful for deciding which checks should be automatic, where runs should pause for review, and how to separate validation from human authorization.",
         tags: ["agent workflows", "reliability", "safety", "tools"],
         corePath: true,
-        learningOrder: 8,
+        learningOrder: 9,
       },
       {
         title: "Testing Agent Skills Systematically with Evals",
@@ -906,7 +1024,7 @@ export const REFERENCE_GROUPS: ReferenceGroup[] = [
           "tools",
         ],
         corePath: true,
-        learningOrder: 11,
+        learningOrder: 12,
       },
     ],
   },
@@ -960,6 +1078,15 @@ export const REFERENCE_GROUPS: ReferenceGroup[] = [
         description:
           "A strong pattern for translating architectural goals into executable checks that run continuously.",
         tags: ["architecture", "reliability", "testing"],
+        corePath: false,
+        learningOrder: 1,
+      },
+      {
+        title: "Spec-driven development",
+        href: "https://www.thoughtworks.com/en-gb/radar/techniques/spec-driven-development",
+        description:
+          "Technology Radar entry that captures spec-driven development as an emerging technique for making AI-assisted implementation more traceable and intentional.",
+        tags: ["agent workflows", "context engineering", "documentation"],
         corePath: false,
         learningOrder: 1,
       },
