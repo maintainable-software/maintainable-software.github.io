@@ -26,26 +26,41 @@ teaser:
   implementation, checks, docs, and implementation discoveries stay connected.
 ---
 
-I wanted to write an article for how I use living plan files when working AI
-coding agents for quite some time now. Then a
-[video](https://www.youtube.com/watch?v=nnUMJX9013Y) popped up in my feed,
-arguing against spec-driven development. The critique is worth taking seriously,
-as it seems that lately a lot of developers haven't understood how specs can be
-leveraged without having the issues that were presented in said video.
+I wanted to write an article about how I use living plan files when working with
+AI coding agents for quite some time now. Then Awesome's video,
+["The new spec-driven workflow is a mess..."](https://www.youtube.com/watch?v=nnUMJX9013Y),
+popped up in my feed. The critique is worth taking seriously, as it seems that
+lately a lot of developers haven't understood how specs can be leveraged without
+having the issues that were presented there.
 
 The weak version of spec-driven development is easy to criticize: write a large
 document, hand it to an AI coding agent, wait for a large implementation, and
 then discover that the document did not survive contact with the real codebase.
 That deserves the criticism it gets.
 
+Spec-driven development is the practice of making a written specification or
+plan constrain implementation work before code changes start. The version that
+works with AI coding agents is not "write everything up front." It is "make the
+next bounded change explicit enough that the agent can execute it, verify it,
+and reconcile it with reality."
+
+A living plan is a plan file that changes as implementation teaches the team new
+facts. It records the current repository truth, the active implementation
+boundary, the checks that prove the step, and the implementation discoveries
+that should affect later work.
+
+Comprehension debt is the gap between the amount of code a team has accepted and
+the amount of that code the team can still explain, review, and evolve safely.
+Living plans reduce that debt by turning agent discoveries into project memory
+instead of leaving them in chat history.
+
 The version I find useful is different. I use plan files as living execution
 contracts. They are grounded in the current repository, split into small
 implementation slices, tied to checks, and updated after each meaningful step.
 Their job is not to replace engineering judgment. Their job is to keep the
-agent, the code, the tests, the docs, and the human reviewer aligned during the
-initial discovery phase, in which the current repository as well as the actual
-task at hand are being taken apart and analyzed and while the work changes
-shape.
+agent, the code, the tests, the docs, and the human reviewer aligned while the
+current repository, the actual task, and the shape of the work are being
+analyzed.
 
 That matters because, unless we actively counteract it, agentic engineering
 creates comprehension debt: the widening gap between the volume of AI-generated
@@ -55,12 +70,12 @@ risk is that the codebase grows faster than the human mental model that should
 govern it. Working with a living plan allows us to reflect on implementation
 changes, intervene between different implementation steps, define what should be
 persisted in docs, what should be tested and - most importantly - we can
-influence the code itself in a much more straight forward way.
+influence the code itself in a much more straightforward way.
 
 This brings the creative work back to the developer while the coding agent's
-task is mostly writing the implementation for what was worked out during while
-working on the livin gplan. The only "creative" parts that are left to the
-coding agent are minor implementation details.
+task is mostly writing the implementation for what was worked out while working
+on the living plan. The only "creative" parts that are left to the coding agent
+are minor implementation details.
 
 ## The problem with specs is not the specs themselves, it is stale specs
 
@@ -92,9 +107,9 @@ against the repository.
 When implementation reveals that the plan was wrong, the document becomes worse
 than useless. It becomes a source of confident misdirection.
 
-## Bad SDD is document-driven development
+## Bad spec-driven development is document-driven development
 
-I find it useful to separate spec-driven development from document-driven
+I find it useful to separate spec-driven development (SDD) from document-driven
 development.
 
 Document-driven development treats the document as the central artifact. The
@@ -139,7 +154,7 @@ too many places, and the system becomes harder to reason about. Planned design
 is an understandable reaction to that failure mode.
 
 The argument against planned design is very similar to the argument against SDD:
-They try to settle too much before the most important evidence exists.
+they try to settle too much before the most important evidence exists.
 
 Disciplined evolutionary design, and arguably disciplined spec-driven design,
 sits between those extremes. It accepts that the design must change as
@@ -165,9 +180,9 @@ code should look like after the next step. Not after every future step. Not
 after the imagined final architecture. Just after the next bounded change that
 is ready to be implemented.
 
-That one-step design question is important. It forces me to read the analyze
-codebase carefully enough to understand what is there, decide what the design
-should become next, and keep control over the direction of the code instead of
+That one-step design question is important. It forces me to analyze the codebase
+carefully enough to understand what is there, decide what the design should
+become next, and keep control over the direction of the code instead of
 outsourcing that judgment to the agent. The plan records the current findings,
 the next boundary, the checks that should prove the change, and the docs or
 specs that need to move with the implementation.
@@ -239,8 +254,8 @@ Not every plan needs the same top-level sections. The exact headings can vary.
 The important part is that each section owns one kind of information.
 
 `Purpose` or `Goal` says why the plan exists. It should be short and
-directional. For example: move an admin frontend from a JSX-heady UI to a
-simpler surface with a 3rd party UI library, or migrate plain text files with
+directional. For example: move an admin frontend from a JSX-heavy UI to a
+simpler surface with a third-party UI library, or migrate plain text files with
 instructions to structured JSONL files.
 
 `Current Findings` records evidence. This is where the plan says what the
@@ -288,10 +303,10 @@ Rules every step must obey.
 ```
 
 `Plan-Wide Execution Rules` is important because agents tend to generalize too
-early. If a plan should create several similar components but shouldn't create
-an generalized abstraction yet, that belongs in the plan-wide rules. If a
-workflow migration must fail closed instead of guessing how to reconstruct
-state, that belongs there too.
+early. If a plan should create several similar components but shouldn't create a
+generalized abstraction yet, that belongs in the plan-wide rules. If a workflow
+migration must fail closed instead of guessing how to reconstruct state, that
+belongs there too.
 
 The rule I use very often is: do not create a generalized abstraction inside the
 implementation plan just because similar code appears while the steps are being
@@ -489,10 +504,13 @@ summary while the system is still broken. The verification list forces the agent
 to reconcile the step with implementation, tests, and docs. Expected test cases
 make the durable proof explicit enough that future changes can break loudly.
 
-GitHub's Spec Kit material makes a related point by separating specification,
-planning, task breakdown, validation, and implementation into explicit phases
-and checkpoints. [[3]](#ref-3) [[4]](#ref-4) I do not think everyone needs that
-exact toolkit. I do think the separation of responsibilities is right.
+Boeckeler's comparison of Kiro, GitHub Spec Kit, and Tessl makes a related
+point: the useful part of modern SDD tooling is not the existence of more
+generated Markdown, but the separation between specification, planning, task
+breakdown, validation, and implementation. [[2]](#ref-2) GitHub's Spec Kit
+material applies that split through explicit phases and checkpoints.
+[[3]](#ref-3) [[4]](#ref-4) I do not think everyone needs that exact toolkit. I
+do think the separation of responsibilities is right.
 
 ## Implementation discoveries keep the plan alive
 
@@ -653,6 +671,17 @@ intent
 -> plan and docs reconciliation
 ```
 
+| Step                         | Purpose                                                     | Output                                                                          |
+| ---------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| Intent                       | State what matters and why the change exists.               | A clear problem statement and success direction.                                |
+| Repo-grounded discovery      | Replace assumptions with current repository evidence.       | Current findings, open questions, and known constraints.                        |
+| Explicit constraints         | Prevent the agent from solving the wrong problem.           | Non-negotiable requirements and out-of-scope work.                              |
+| Step contract                | Make the next implementation slice reviewable.              | A bounded step with discovery, boundaries, verification, and docs expectations. |
+| Implementation               | Let the agent change code inside the agreed boundary.       | A focused code change.                                                          |
+| Checks                       | Give the work a failure mode.                               | Test results, command output, manual checks, or review evidence.                |
+| Review                       | Let the human evaluate tradeoffs and design direction.      | Approval, correction, or a revised plan.                                        |
+| Plan and docs reconciliation | Keep project memory current after reality changes the plan. | Updated plan notes, durable docs, and implementation discoveries.               |
+
 Each step has a distinct job.
 
 The intent says what matters and why. Discovery prevents fantasy planning.
@@ -684,6 +713,42 @@ contract. The human remains responsible for tradeoffs. The agent works inside a
 narrower, more reviewable boundary.
 
 That is the version worth using.
+
+## FAQ about living plans and spec-driven development
+
+### What is a living plan in spec-driven development?
+
+A living plan is a repository file that constrains the next implementation step
+and is updated as implementation reveals new facts. It is not a permanent design
+document. It is the current execution contract between the human, the coding
+agent, the codebase, the tests, and the docs.
+
+### How is a living plan different from a static spec?
+
+A static spec tries to stay authoritative after it is written. A living plan
+stays useful by changing when repository reality contradicts it. If discovery,
+implementation, checks, or review expose a wrong assumption, the plan records
+the new truth before later work depends on the old one.
+
+### Why do living plans matter for AI coding agents?
+
+AI coding agents can move faster than the developer's mental model. Living plans
+slow the right parts down: discovery, boundaries, verification, and
+reconciliation. That keeps agent work reviewable and turns implementation
+discoveries into project memory.
+
+### When should a team use living plans?
+
+Use living plans when ambiguity, coordination cost, architectural risk, or agent
+autonomy is high enough to justify the overhead. They are most useful for
+cross-file behavior changes, migrations, API changes, security-sensitive work,
+team-owned features, and agent-implemented features.
+
+### Do living plans replace tests or docs?
+
+No. The plan records the current execution contract. Tests provide executable
+truth. Durable docs record repository or product truth after implementation has
+settled. A good living plan connects those surfaces instead of replacing them.
 
 ## References
 
