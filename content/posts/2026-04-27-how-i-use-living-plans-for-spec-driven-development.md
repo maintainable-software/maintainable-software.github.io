@@ -2,11 +2,11 @@
 layout: post
 title: "How I Use Living Plans for Spec-Driven Development"
 description:
-  "How I use living plan files as execution contracts for AI coding agents:
-  repo-grounded discovery, step boundaries, verification, reconciliation, and
-  project memory."
+  "How I use short-lived living plan files as temporary execution contracts for
+  AI coding agents: repo-grounded discovery, step boundaries, verification,
+  reconciliation, and durable docs handoff."
 date: 2026-05-01
-updated: 2026-05-01
+updated: 2026-05-02
 published: true
 author: "Jan-Gerke Salomon"
 author_url: "/me/"
@@ -23,8 +23,9 @@ tags:
   ]
 teaser:
   Spec-driven development is useful when the spec is not a stale document. I use
-  living plan files as execution contracts for coding agents so discovery,
-  implementation, checks, docs, and implementation discoveries stay connected.
+  short-lived living plan files as temporary execution contracts for one bounded
+  feature or change so discovery, implementation, checks, docs, and
+  implementation discoveries stay connected while the work is active.
 ---
 
 I wanted to write an article about how I use living plan files when working with
@@ -48,7 +49,10 @@ I use living plan files as execution contracts for AI coding agents:
 3. Make the expected checks explicit before or alongside the step.
 4. Let the agent implement only that slice.
 5. Reconcile the plan with what implementation revealed.
-6. Persist durable findings into tests, docs, or project memory.
+6. Move durable findings into tests, docs, specs, decision records, or code
+   comments.
+7. Mark the plan completed, abandoned, or superseded. After that, it is
+   historical only.
 
 ## What living plans are for
 
@@ -61,21 +65,27 @@ multi-phase AI coding workflows now described by Thoughtworks and GitHub than to
 a one-shot prompt-to-code workflow. [[1]](#ref-1) [[2]](#ref-2) [[3]](#ref-3)
 [[4]](#ref-4) [[5]](#ref-5)
 
-A living plan is a plan file that changes as implementation teaches the team new
-facts. It records the current repository truth, the active implementation
-boundary, the checks that prove the step, and the implementation discoveries
-that should affect later work. That maps to the same underlying lesson in
-OpenAI's and Anthropic's agent-harness writing: long-running coding agents need
-repo-local context, explicit work boundaries, validation loops, and durable
+A living plan is a short-lived plan file that changes as implementation teaches
+the team new facts. It records the repository facts relevant to the current
+feature or bounded change, the active implementation boundary, the checks that
+prove the step, and the implementation discoveries that should affect the
+remaining active work. It is authoritative only while that feature or change is
+being implemented. In my work, that usually means a few days, and sometimes up
+to a week. After the feature lands, is abandoned, or is superseded, the plan is
+historical only, not repository truth. That maps to the same underlying lesson
+in OpenAI's and Anthropic's agent-harness writing: long-running coding agents
+need repo-local context, explicit work boundaries, validation loops, and durable
 progress artifacts. [[6]](#ref-6) [[7]](#ref-7) [[8]](#ref-8)
 
 Comprehension debt is the gap between the amount of code a team has accepted and
 the amount of that code the team can still explain, review, and evolve safely.
-Living plans reduce that debt by turning agent discoveries into project memory
-instead of leaving them in chat history. It is a narrower sibling of technical
-debt: the cost shows up when future changes require people or agents to
-rediscover intent, constraints, and design rationale before they can safely
-modify the system. [[9]](#ref-9) [[6]](#ref-6) [[10]](#ref-10) [[11]](#ref-11)
+Living plans reduce that debt by forcing agent discoveries to be evaluated while
+the work is active. Temporary discoveries stay in the active plan for later
+steps. Future-facing discoveries must move into durable project artifacts before
+the plan expires. It is a narrower sibling of technical debt: the cost shows up
+when future changes require people or agents to rediscover intent, constraints,
+and design rationale before they can safely modify the system. [[9]](#ref-9)
+[[6]](#ref-6) [[10]](#ref-10) [[11]](#ref-11)
 
 The version I find useful is different. I use plan files as living execution
 contracts. They are grounded in the current repository, split into small
@@ -262,10 +272,11 @@ code. The relationship is simpler:
 - the agent is constrained by all of them
 
 A plan in agentic engineering is not a wish list. It is an execution contract
-that lets a human or agent understand the current truth, make a bounded change,
-prove the result, and carry discovered truth forward. This is the practical
-shape of modern agent harnesses: plan, edit, run tools, observe results, repair
-failures, update docs or status, and repeat. [[6]](#ref-6) [[7]](#ref-7)
+that lets a human or agent understand the current feature context, make a
+bounded change, prove the result, and carry discovered truth forward while the
+plan is active. This is the practical shape of modern agent harnesses: plan,
+edit, run tools, observe results, repair failures, update docs or status, and
+repeat. [[6]](#ref-6) [[7]](#ref-7)
 
 This is also why I do not treat the final documentation as something I should
 fully write before implementation. The durable spec that lands in a repository's
@@ -278,11 +289,29 @@ time. Anthropic's long-running-agent work found that asking agents to work
 incrementally and leave structured progress artifacts was critical to avoiding
 one-shotting and undocumented half-finished work. [[8]](#ref-8)
 
+### A living plan expires
+
+A living plan is temporary by design. It is useful while one feature or bounded
+change is being implemented. In my work, that usually means one or two days, and
+sometimes up to a week for a larger feature. It should remain current during
+that implementation window because the agent and reviewer are actively using it
+to decide what happens next.
+
+After the feature lands, is abandoned, or is superseded, the plan stops being
+authoritative. It can explain the history of a change, but it should not be used
+as repository truth or future research input unless it is revalidated against
+current code, tests, docs, specs, schemas, migrations, and relevant code
+comments. Anything important enough to guide future work must be moved into one
+of those durable surfaces before the plan is marked done.
+
 ### What my plan files are for
 
 The plan files I use usually live in `plans/PLAN.*.md`. They are deliberately
 plain. Their job is to turn a vague change into a sequence of bounded,
 reviewable implementation slices.
+
+Their expected lifetime is the implementation of one feature or bounded change.
+Once that work is merged, abandoned, or superseded, the plan is historical only.
 
 They are not meant to be pretty. They are meant to be operational.
 
@@ -297,7 +326,8 @@ A good plan tells the agent:
 - what may change during the step
 - what must not change during the step
 - what evidence is required before the step is done
-- what newly discovered facts must be written back
+- where newly discovered future-facing facts must be written back before the
+  plan expires
 
 This is the practical answer to the "you cannot know everything up front"
 critique. I agree. The point of the plan is not to know everything up front. The
@@ -335,6 +365,14 @@ The top of a plan often looks like this:
 ```markdown
 # Plan: <bounded change name>
 
+Status: active.
+
+Scope: one bounded feature or change.
+
+Authoritative while: this feature or change is being implemented.
+
+After completion: historical only; not repository truth.
+
 ## Purpose
 
 Why this change exists, what problem it solves, and what the plan is meant to
@@ -342,8 +380,8 @@ make possible.
 
 ## Current Findings
 
-The current repository truth: files, behavior, constraints, prior decisions,
-known gaps, and anything already discovered during investigation.
+Repository facts relevant to this change: files, behavior, constraints, prior
+decisions, known gaps, and anything already discovered during investigation.
 
 ## Explicit Requirements
 
@@ -365,6 +403,12 @@ early. If a plan should create several similar components but shouldn't create a
 generalized abstraction yet, that belongs in the plan-wide rules. If a workflow
 migration must fail closed instead of guessing how to reconstruct state, that
 belongs there too.
+
+Another plan-wide rule is the durable knowledge rule: if a step discovers or
+creates information future work needs, do not leave that information only in the
+plan. Move it into the relevant docs, specs, test, decision record, schema,
+migration note, or code comment before marking the step completed. Completed
+plans are historical only.
 
 The rule I use very often is: do not create a generalized abstraction inside the
 implementation plan just because similar code appears while the steps are being
@@ -418,9 +462,11 @@ Expected test cases:
 
 - <proof layer>: <behavior to verify>
 
-What to add to docs:
+Durable docs/specs to update before this step is done:
 
-- <docs that must be created or updated if the step changes repository truth>
+- <docs, specs, ADRs, README sections, schemas, migration notes, or code
+  comments that must be updated>
+- <or: none; this step changes no durable repository or product truth>
 
 Implementation discoveries:
 
@@ -428,9 +474,9 @@ Implementation discoveries:
 ```
 
 `Status` records whether the step is `pending`, `in progress`, `completed`, or
-`deferred`. This matters because plan files are living documents. A later agent
-should be able to distinguish planned work from completed work and deferred
-work.
+`deferred`. This matters because plan files are living documents while the work
+is active. A later agent in the same active feature should be able to
+distinguish planned work from completed work and deferred work.
 
 `Depends on` records sequencing. A step should say whether it depends on a
 previous step, a completed discovery item, a package behavior, a migration path,
@@ -443,20 +489,23 @@ start. A good discovery item is not a vague note. It has a closure condition.
 and what it must not touch.
 
 `Verification list` defines what must be true after the implementation. It is
-not limited to tests. It can include route behavior, file output, docs updates,
-migration safety, command behavior, conflict handling, and proof that a non-goal
-was not accidentally implemented.
+not limited to tests. It can include route behavior, file output, the required
+docs/specs handoff, migration safety, command behavior, conflict handling, and
+proof that a non-goal was not accidentally implemented.
 
 `Expected test cases` maps the verification list to proof layers. Some behavior
 belongs in unit tests. Some needs a browser. Some docs changes should be
 verified by review against a checklist rather than brittle tests over prose.
 
-`What to add to docs` keeps repository truth aligned. If the step changes a
-convention, route contract, command surface, dictionary term, or migration
-status, the plan names the docs that must change in the same pass.
+`Durable docs/specs to update before this step is done` is the handoff from
+temporary plan knowledge to durable repository knowledge. If the step changes a
+convention, route contract, command surface, dictionary term, migration status,
+ownership boundary, product behavior, or design rationale, the plan names where
+that truth must be written before the step can be marked completed. If there is
+nothing durable to update, the section should say `none` and why.
 
-`Implementation discoveries` starts as `none yet`. After execution, it becomes
-the place where the agent records facts learned during implementation.
+`Implementation discoveries` starts as `none yet`. After execution, it records
+facts learned during implementation that affect the remaining active plan.
 
 ## How living plans keep agent work grounded
 
@@ -553,10 +602,11 @@ produced correctly. [[16]](#ref-16)
 
 The verification list is the agent's end-of-step checklist. It says what must be
 true before the agent can call the step done: the intended behavior works, the
-required docs were updated, the expected tests were added or changed, the
-relevant commands ran, the full test suite passes when the step requires it, and
-any manual review happened. It can mention tests, but it is not only a test
-plan. It is the step's completion contract.
+required docs/specs handoff was completed or explicitly marked not applicable,
+the expected tests were added or changed, the relevant commands ran, the full
+test suite passes when the step requires it, and any manual review happened. It
+can mention tests, but it is not only a test plan. It is the step's completion
+contract.
 
 Expected test cases are narrower and more durable. They describe the behavior
 that should be covered by the repository's proof layers: unit tests, integration
@@ -580,11 +630,11 @@ test cases should say which migration test covers that conflict behavior.
 
 Good plans distinguish proof from narrative. An agent can write a convincing
 summary while the system is still broken. The verification list forces the agent
-to reconcile the step with implementation, tests, and docs. Expected test cases
-make the durable proof explicit enough that future changes can break loudly.
-That fits the broader AI-risk-management principle that trustworthy AI use needs
-evaluation, validation, accountability, and evidence, not only plausible output.
-[[26]](#ref-26)
+to reconcile the step with implementation, tests, and the durable docs/specs
+handoff. Expected test cases make the durable proof explicit enough that future
+changes can break loudly. That fits the broader AI-risk-management principle
+that trustworthy AI use needs evaluation, validation, accountability, and
+evidence, not only plausible output. [[26]](#ref-26)
 
 Boeckeler's comparison of Kiro, GitHub Spec Kit, and Tessl makes a related
 point: the useful part of modern SDD tooling is not the existence of more
@@ -595,44 +645,53 @@ material applies that split through explicit phases and checkpoints.
 needs that exact toolkit. I do think the separation of responsibilities is
 right.
 
-### Implementation discoveries keep the plan alive
+### Implementation discoveries keep the active plan honest
 
-The plan becomes valuable after implementation only if it records what actually
-happened.
+The active plan remains useful after implementation only if it records what
+actually happened.
 
 After a step is implemented, I make the coding agent reconcile the plan with
 reality. A completed step should not merely say `Status: completed`. It should
-record what changed, what proved it, which checks ran, which docs were updated,
-which drift was accepted, and which discoveries matter for later steps. This is
-the same kind of state handoff that Anthropic's progress-file pattern and
-OpenAI's repository-knowledge system are trying to make durable. [[6]](#ref-6)
-[[8]](#ref-8)
+record what changed, what proved it, which checks ran, which docs/specs were
+updated, which drift was accepted, which future-facing discoveries were moved
+into durable artifacts, and which discoveries still matter for later active
+steps. This is the same kind of state handoff that Anthropic's progress-file
+pattern and OpenAI's repository-knowledge system are trying to make durable.
+[[6]](#ref-6) [[8]](#ref-8)
 
 > Update `./plans/PLAN.<plan-file-name>.md` and update the 6. step's status. If
 > you discovered or implemented anything in this step's implementation that's
-> relevant for later steps but isn't part of docs or the plan file, add an
-> `Implementation discoveries` section to the 6. step in which you describe
-> those things.
+> relevant for later active steps, update the `Implementation discoveries`
+> section. If it should matter after this plan expires, move it into the
+> relevant docs, specs, tests, decision record, schema, migration note, or code
+> comment before marking the step completed.
 
-That reconciliation step is where facts become durable.
+That reconciliation step is where facts are either carried forward into the
+remaining active steps or moved into durable project artifacts.
 
 If a browser test required a host-specific route-entry pattern, that belongs in
-the plan. If a helper was implemented differently than originally expected, the
-plan should say so before the next agent session builds on an obsolete
-assumption. If a planned abstraction turned out to be unnecessary, that should
-be visible before another agent tries to implement it.
+the active plan while later steps need it. If the pattern should guide future
+browser tests after the feature lands, it belongs in durable docs or test-helper
+documentation. If a helper was implemented differently than originally expected,
+the plan should say so before the next active agent session builds on an
+obsolete assumption. If a planned abstraction turned out to be unnecessary, that
+should be visible before another agent tries to implement it.
 
 I also let the coding agent do a docs coverage pass after substantial steps. The
-step already names `What to add to docs`. After implementation, the agent checks
-whether those docs were actually updated and whether the work revealed
-additional repository truth that should be documented. This is the practical
-maintenance loop that keeps documentation from drifting away from code.
-[[21]](#ref-21) [[6]](#ref-6)
+step already names `Durable docs/specs to update before this step is done`.
+After implementation, the agent checks whether those updates were actually made
+and whether the work revealed additional repository truth that should be
+documented before the plan expires. This is the practical maintenance loop that
+keeps documentation from drifting away from code. [[21]](#ref-21) [[6]](#ref-6)
 
-> Let's go through step 9 again, specifically what should be added to the docs.
-> Did those things get added to the docs? Now that step 9 has been implemented,
-> are there other things that should be put into docs that have not been put
-> there?
+> Let's go through step 9 again, especially
+> `Durable docs/specs to update before this step is done`.
+>
+> Were all listed docs/specs updates actually made? Did implementation reveal
+> any additional facts, constraints, contracts, or design decisions that future
+> work would need? For each such fact, either move it into the relevant durable
+> artifact now or explain why it is intentionally plan-only historical context.
+> Do not mark the step completed until this handoff is done.
 
 Before moving to a later step, I make the agent read earlier implementation
 discoveries as inputs. A later step should not blindly follow the original plan
@@ -641,11 +700,11 @@ if an earlier step changed the practical constraints.
 > Given the `Implementation discoveries:` sections in steps prior to step 10,
 > does this affect the 10. step and other later steps in any way?
 
-The plan stays current by flowing discoveries forward. Discoveries close future
-pre-step questions, reshape implementation boundaries, change proof strategy, or
-mark planned work as no longer necessary. Current long-horizon agent guidance
-points in the same direction: externalized state, status updates, and
-session-to-session handoff are what let work continue without re-solving the
+The active plan stays current by flowing discoveries forward. Discoveries close
+future pre-step questions, reshape implementation boundaries, change proof
+strategy, or mark planned work as no longer necessary. Current long-horizon
+agent guidance points in the same direction: externalized state, status updates,
+and session-to-session handoff are what let work continue without re-solving the
 same context problem each time. [[7]](#ref-7) [[8]](#ref-8)
 
 ## Why living plans reduce comprehension debt
@@ -674,17 +733,18 @@ the same repo-legibility constraint bluntly: information outside the agent's
 accessible context effectively does not exist to the agent. [[6]](#ref-6)
 
 A living plan reduces that debt by making the human mental model part of the
-work. The next agent does not need to reconstruct the whole story from old
-conversations. It can read the current plan, see which discoveries are closed,
-which steps are completed, which checks proved the work, which docs were
-updated, and which decisions constrain the next slice.
+active work. While the feature is still being implemented, the next agent does
+not need to reconstruct the whole story from old conversations. It can read the
+current plan, see which discoveries are closed, which steps are completed, which
+checks proved the work, which docs were updated, and which decisions constrain
+the next slice.
 
 This is the difference between a plan as ceremony and a plan as working memory.
-The plan is useful only if it remains current enough to trust, specific enough
-to constrain the next change, and honest enough to record when implementation
-changed what the plan originally believed. Anthropic's long-running-agent work
-uses progress files and feature status for the same reason: the next session
-needs reliable externalized memory. [[8]](#ref-8)
+The plan is useful only if it remains current enough to trust while active,
+specific enough to constrain the next change, and honest enough to record when
+implementation changed what the plan originally believed. Anthropic's
+long-running-agent work uses progress files and feature status for the same
+reason: the next session needs reliable externalized memory. [[8]](#ref-8)
 
 ### The spec must update when reality contradicts it
 
@@ -775,18 +835,20 @@ intent
 -> checks
 -> review
 -> plan and docs reconciliation
+-> plan expiry
 ```
 
-| Step                         | Purpose                                                     | Output                                                                          |
-| ---------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| Intent                       | State what matters and why the change exists.               | A clear problem statement and success direction.                                |
-| Repo-grounded discovery      | Replace assumptions with current repository evidence.       | Current findings, open questions, and known constraints.                        |
-| Explicit constraints         | Prevent the agent from solving the wrong problem.           | Non-negotiable requirements and out-of-scope work.                              |
-| Step contract                | Make the next implementation slice reviewable.              | A bounded step with discovery, boundaries, verification, and docs expectations. |
-| Implementation               | Let the agent change code inside the agreed boundary.       | A focused code change.                                                          |
-| Checks                       | Give the work a failure mode.                               | Test results, command output, manual checks, or review evidence.                |
-| Review                       | Let the human evaluate tradeoffs and design direction.      | Approval, correction, or a revised plan.                                        |
-| Plan and docs reconciliation | Keep project memory current after reality changes the plan. | Updated plan notes, durable docs, and implementation discoveries.               |
+| Step                         | Purpose                                                       | Output                                                                                    |
+| ---------------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Intent                       | State what matters and why the change exists.                 | A clear problem statement and success direction.                                          |
+| Repo-grounded discovery      | Replace assumptions with current repository evidence.         | Current findings, open questions, and known constraints.                                  |
+| Explicit constraints         | Prevent the agent from solving the wrong problem.             | Non-negotiable requirements and out-of-scope work.                                        |
+| Step contract                | Make the next implementation slice reviewable.                | A bounded step with discovery, boundaries, verification, and docs expectations.           |
+| Implementation               | Let the agent change code inside the agreed boundary.         | A focused code change.                                                                    |
+| Checks                       | Give the work a failure mode.                                 | Test results, command output, manual checks, or review evidence.                          |
+| Review                       | Let the human evaluate tradeoffs and design direction.        | Approval, correction, or a revised plan.                                                  |
+| Plan and docs reconciliation | Keep the active plan honest and move durable truth out of it. | Updated active-plan notes, durable docs/specs/tests, and implementation discoveries.      |
+| Plan expiry                  | Prevent completed plans from becoming stale repository truth. | A completed, abandoned, or superseded plan that is historical only after durable handoff. |
 
 Each step has a distinct job.
 
@@ -794,16 +856,18 @@ The intent says what matters and why. Discovery prevents fantasy planning.
 Constraints prevent the agent from solving the wrong problem in a technically
 plausible way. The step contract makes implementation reviewable. Checks give
 the work a failure mode. Human review handles tradeoffs. Reconciliation keeps
-project memory current. The same loop appears, in different language, in current
-agent practice: plan, implement, validate, repair, update docs or status, and
-repeat. [[7]](#ref-7) [[8]](#ref-8)
+the active plan honest while durable truth moves into durable artifacts. Plan
+expiry prevents the completed artifact from masquerading as current repository
+truth. The same loop appears, in different language, in current agent practice:
+plan, implement, validate, repair, update docs or status, and repeat.
+[[7]](#ref-7) [[8]](#ref-8)
 
 Bad SDD produces Markdown.
 
-Good SDD produces alignment, constraints, checks, reviewable slices, and updated
-project memory.
+Good SDD produces alignment, constraints, checks, reviewable slices, and durable
+handoff.
 
-## Conclusion: Living plans make spec-driven development project memory
+## Conclusion: Living plans keep spec-driven development grounded
 
 The backlash against spec-driven development is mostly a backlash against stale
 document-driven development.
@@ -821,11 +885,14 @@ control system for AI-assisted software development.
 
 The code remains the operational artifact. The tests provide executable truth.
 The docs record durable repository truth. The plan records the current execution
-contract. The human remains responsible for tradeoffs. The agent works inside a
-narrower, more reviewable boundary. That division of labor is the through-line
-across harness engineering, context engineering, testing practice, and
-documentation practice. [[21]](#ref-21) [[6]](#ref-6) [[13]](#ref-13)
-[[18]](#ref-18)
+contract while one bounded feature or change is active. When that work is done,
+the plan loses authority; anything that should guide future work must already
+have moved into code, tests, docs, specs, decision records, schemas, migrations,
+or relevant code comments. The human remains responsible for tradeoffs. The
+agent works inside a narrower, more reviewable boundary. That division of labor
+is the through-line across harness engineering, context engineering, testing
+practice, and documentation practice. [[21]](#ref-21) [[6]](#ref-6)
+[[13]](#ref-13) [[18]](#ref-18)
 
 That is the version worth using.
 
@@ -833,26 +900,29 @@ That is the version worth using.
 
 ### What is a living plan in spec-driven development?
 
-A living plan is a repository file that constrains the next implementation step
-and is updated as implementation reveals new facts. It is not a permanent design
-document. It is the current execution contract between the human, the coding
-agent, the codebase, the tests, and the docs. [[6]](#ref-6) [[7]](#ref-7)
-[[8]](#ref-8)
+A living plan is a short-lived repository file that constrains one active
+feature or bounded implementation change. It is updated as implementation
+reveals new facts, usually over a few days and sometimes up to a week. It is not
+a permanent design document. Once the feature lands, is abandoned, or is
+superseded, the plan is historical only; durable truth belongs in code, tests,
+docs, specs, decision records, schemas, migrations, or relevant code comments.
+[[6]](#ref-6) [[7]](#ref-7) [[8]](#ref-8)
 
 ### How is a living plan different from a static spec?
 
 A static spec tries to stay authoritative after it is written. A living plan
 stays useful by changing when repository reality contradicts it. If discovery,
 implementation, checks, or review expose a wrong assumption, the plan records
-the new truth before later work depends on the old one. [[21]](#ref-21)
+the new truth before later active work depends on the old one. [[21]](#ref-21)
 [[16]](#ref-16)
 
 ### Why do living plans matter for AI coding agents?
 
 AI coding agents can move faster than the developer's mental model. Living plans
 slow the right parts down: discovery, boundaries, verification, and
-reconciliation. That keeps agent work reviewable and turns implementation
-discoveries into project memory. [[6]](#ref-6) [[8]](#ref-8) [[10]](#ref-10)
+reconciliation. That keeps agent work reviewable, turns implementation
+discoveries into active working memory, and forces durable handoff before the
+plan expires. [[6]](#ref-6) [[8]](#ref-8) [[10]](#ref-10)
 
 ### When should a team use living plans?
 
@@ -868,6 +938,24 @@ No. The plan records the current execution contract. Tests provide executable
 truth. Durable docs record repository or product truth after implementation has
 settled. A good living plan connects those surfaces instead of replacing them.
 [[21]](#ref-21) [[18]](#ref-18)
+
+### Should future agents use completed plans as repository truth?
+
+No. Completed, abandoned, or superseded plans are historical only. They can
+explain what was proposed or what happened during a past implementation, but
+they should not be treated as current repository truth. A future agent should
+use current code, tests, docs, specs, schemas, migrations, and decision records
+as authoritative. If an old plan seems relevant, it must be revalidated against
+those durable artifacts before it influences new work.
+
+### Where do important implementation findings go?
+
+Important findings may first appear in `Current Findings` or
+`Implementation discoveries` while the plan is active. Before a step or feature
+is completed, any finding that should matter to future work must be moved into a
+durable artifact: tests, docs, specs, decision records, schemas, migrations, or
+code comments. The plan should not be the final home for important repository
+knowledge.
 
 ## References
 
